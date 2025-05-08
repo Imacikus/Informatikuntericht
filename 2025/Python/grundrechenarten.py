@@ -21,6 +21,9 @@ def produkt(a, b):
 def devi(a, b):
     return a / b
 
+def quadrate(a, b):
+    return a**2, b**2
+
 # Werte in der Konsole abfragen
 a = float(input("Zahl 1: "))
 b = float(input("Zahl 2: "))
@@ -30,9 +33,12 @@ Summe = addi(a, b)
 Differenz = diferenz(a, b)
 Produkt = produkt(a, b)
 Dividenz = devi(a, b)
+Quadrat_a, Quadrat_b = quadrate(a, b)
 
 # Resultat printen
 print("Summe =", Summe)
 print("Differenz =", Differenz)
 print("Produkt =", Produkt)
 print("Dividenz =", Dividenz)
+print("Quadrat von Zahl 1 =", Quadrat_a)
+print("Quadrat von Zahl 2 =", Quadrat_b)
