@@ -24,6 +24,9 @@ def devi(a, b):
 def quadrate(a, b):
     return a**2, b**2
 
+def reziproke(a, b):
+    return 1/a, 1/b
+
 # Werte in der Konsole abfragen
 a = float(input("Zahl 1: "))
 b = float(input("Zahl 2: "))
@@ -34,6 +37,7 @@ Differenz = diferenz(a, b)
 Produkt = produkt(a, b)
 Dividenz = devi(a, b)
 Quadrat_a, Quadrat_b = quadrate(a, b)
+Reziproke_a, Reziproke_b = reziproke(a, b)
 
 # Resultat printen
 print("Summe =", Summe)
@@ -42,3 +46,5 @@ print("Produkt =", Produkt)
 print("Dividenz =", Dividenz)
 print("Quadrat von Zahl 1 =", Quadrat_a)
 print("Quadrat von Zahl 2 =", Quadrat_b)
+print("Reziproke von Zahl 1 =", Reziproke_a)
+print("Reziproke von Zahl 2 =", Reziproke_b)
