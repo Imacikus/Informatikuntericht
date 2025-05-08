@@ -13,4 +13,4 @@ median_wert = median(liste)
 # Ergebnisse ausgeben
 print("Aufsteigend sortiert:", liste_aufsteigend)
 print("Absteigend sortiert:", liste_absteigend)
-print("Median:", median_wert)
+print("Median:", median_wert) 
