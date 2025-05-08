@@ -8,6 +8,7 @@
 # Input:            a = 1. Summand
 #                   b = 2. Summand
 # Output            a + b
+
 def addi(a, b):
     return a + b
 
