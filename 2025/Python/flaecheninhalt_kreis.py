@@ -1,6 +1,5 @@
-import math         #Mathpaket importieren
+import math  # Mathpaket importieren
 
-radius = int(input("\nGebe zunächst den Radius an: "))
-A = math.pi * radius**2
-
-print("A = ", A)
+for radius in range(1, 11):
+    A = math.pi * radius**2
+    print(f"Radius: {radius} -> A = {A}")
