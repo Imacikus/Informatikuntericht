@@ -21,3 +21,6 @@ class schueler:
 
 schueler1 = schueler("Max Mustermann", 16, 1.80, "10c", "Programmieren")
 schueler2 = schueler("Max Musterfrau", 15, 1.71, "11c", "Tanzen")
+
+schueler1.vorstellen()
+schueler2.vorstellen()
