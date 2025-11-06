@@ -16,4 +16,8 @@ class schueler:
         print(f"Ich bin {self.groesse}m Groß.")
         print(f"Mein Hobby ist {self.hobby}.")
         print(f"Mein Nivau ist {self.nivau}")
-        
+
+# Instanzen einstellen
+
+schueler1 = schueler("Max Mustermann", 16, 1.80, "10c", "Programmieren")
+schueler2 = schueler("Max Musterfrau", 15, 1.71, "11c", "Tanzen")
