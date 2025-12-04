@@ -9,6 +9,17 @@ class Schueler:
         self.klasse = klasse
         self.hobby = hobby
 
+    def __str__(self):
+        """
+        Gibt eine lesbare String-Repräsentation des Schueler-Objekts zurück.
+        Wird automatisch aufgerufen, z.B. bei print(objekt).
+        """
+        # Wir können auch self.alters_status_pruefen() in diese Methode integrieren, 
+        # aber __str__ soll üblicherweise nur einen String zurückgeben, nicht direkt etwas drucken.
+        # Daher halten wir uns an die reine Rückgabe der Objektattribute.
+        return (f"Schüler(Name: {self.name}, Alter: {self.alter}, Größe: {self.groesse:.2f}m, "
+                f"Klasse: {self.klasse}, Hobby: {self.hobby})")
+
     def vorstellen(self):
         print(f"Hallo, ich bin {self.name}.")
         print(f"Ich bin {self.alter} Jahre alt.")
@@ -42,6 +53,12 @@ class Schueler:
 # Instanzen erstellen
 schueler1 = Schueler("Max Mustermann", 16, 1.80, "10c", "Programmieren")
 schueler2 = Schueler("Max Musterfrau", 17, 1.71, "11c", "Tanzen")
+
+## --- NEUE AUSGABE MIT __str__ ---
+print("--- String-Repräsentation mit print(objekt) ---")
+print(schueler1)
+print(schueler2)
+print("---------------------------------------------")
 
 print("--- Vor dem Geburtstag ---")
 # Methoden aufrufen
