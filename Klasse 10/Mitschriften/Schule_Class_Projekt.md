@@ -15,3 +15,28 @@ Beispiel im echten Leben:
 - und Methode --> fahren(), bremsen()
 
 In der OOP nennt man das eine Klasse.
+
+## Klassen und Objekte
+Eine Klasse ist eine Vorlage. 
+Ein Objekt ist ein Beispiel dieser Vorlage
+
+**Beispiel:** eine einfache Klasse
+```
+class Auto:
+	pass # die Klasse ist leer
+```
+#### Ein Objekt erstellen
+```
+mein_auto=Auto()
+```
+
+#### Der Konstruktor (```__init__```)
+Der Konstruktor wird benutzt, wenn ein neues Objekt erstellt wird. Hier definieren wir die Anfangswerte (Attribute).
+
+**Beispiel**:
+```
+class Auto:
+	def__init__(self, farbe, marke)
+		self.farbe = farbe
+		self.marke = marke
+```
