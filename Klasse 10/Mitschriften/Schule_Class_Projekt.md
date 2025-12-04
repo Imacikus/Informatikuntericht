@@ -57,3 +57,14 @@ class Auto:
 	def fahren(self):
 		print("Das Auto fährt los!")
 ```
+#### Die Methode ```__str__```
+Mit ```__str__``` beschreiben wir, wie das Objekt als Text aussieht.
+```
+class Auto:
+	def__init__(self, farbe, marke):
+		self.farbe = farbe
+		self.marke = marke
+	def__str__(self):
+		return f"{self.marke} in {self.farbe}"
+		
+print(auto1) # Ausgabe: BMW in rot
