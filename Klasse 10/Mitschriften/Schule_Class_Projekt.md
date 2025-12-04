@@ -17,8 +17,8 @@ Beispiel im echten Leben:
 In der OOP nennt man das eine Klasse.
 
 ## Klassen und Objekte
-Eine Klasse ist eine Vorlage. 
-Ein Objekt ist ein Beispiel dieser Vorlage
+Eine ==Klasse== ist eine Vorlage. 
+Ein ==Objekt== ist ein Beispiel dieser Vorlage
 
 **Beispiel:** eine einfache Klasse
 ```
