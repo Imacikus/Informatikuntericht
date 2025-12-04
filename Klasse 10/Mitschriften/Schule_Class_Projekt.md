@@ -40,3 +40,5 @@ class Auto:
 		self.farbe = farbe
 		self.marke = marke
 ```
+#### Ein Objekt erstellen:
+```
