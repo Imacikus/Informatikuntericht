@@ -27,7 +27,7 @@ class Schueler:
         print(f"Ich bin in der Klasse {self.klasse}.")
         print(f"Mein Hobby ist {self.hobby}.")
         
-        # Altersprüfung direkt nach der Vorstellung (optional)
+        # Altersprüfung direkt nach der Vorstellung
         self.alters_status_pruefen()
         print() # Zusätzliche Leerzeile für bessere Lesbarkeit
 
@@ -54,7 +54,7 @@ class Schueler:
 schueler1 = Schueler("Max Mustermann", 16, 1.80, "10c", "Programmieren")
 schueler2 = Schueler("Max Musterfrau", 17, 1.71, "11c", "Tanzen")
 
-## --- NEUE AUSGABE MIT __str__ ---
+## AUSGABE MIT __str__
 print("--- String-Repräsentation mit print(objekt) ---")
 print(schueler1)
 print(schueler2)
