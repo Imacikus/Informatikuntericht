@@ -46,3 +46,14 @@ auto1 = Auto("rot", "BMW")
 auto2 = Auto("blau", "Toyota")
 ```
 
+## Methoden (Funktion innerhalb einer Klasse)
+**Methoden** beschreiben, was ein Objekt tun kann.
+```
+class Auto:
+	def__init__(self, farbe, marke)
+		self.farbe = farbe
+		self.marke = marke
+		
+	def fahren(self):
+		print("Das Auto fährt los!")
+```
