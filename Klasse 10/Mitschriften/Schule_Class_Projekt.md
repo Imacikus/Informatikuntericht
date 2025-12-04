@@ -42,3 +42,7 @@ class Auto:
 ```
 #### Ein Objekt erstellen:
 ```
+auto1 = Auto("rot", "BMW")
+auto2 = Auto("blau", "Toyota")
+```
+
