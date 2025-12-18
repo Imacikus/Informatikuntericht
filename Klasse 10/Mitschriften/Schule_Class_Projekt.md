@@ -68,3 +68,18 @@ class Auto:
 		return f"{self.marke} in {self.farbe}"
 		
 print(auto1) # Ausgabe: BMW in rot
+```
+### Kapselung
+Kapselung bedeutet, dass einige Daten privat sind. In Python macht man das mit __ (doppelter Unterstrich).
+
+```
+class Konto:
+	def__init__(self,saldo):
+		self.__saldo = saldo #privat
+	
+	def einzahlen(self, betrag):
+		self.__saldo += betrag
+		
+	def get_saldo(self):
+		return self.__saldo
+```
