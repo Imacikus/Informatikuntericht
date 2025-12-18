@@ -3,39 +3,49 @@
 class Schueler:
     def __init__(self, name, alter, groesse, klasse, hobby):
         self.name = name
-        self.alter = alter
+        self.__alter = alter  # Nur das Alter ist privat (geschützt)
         self.groesse = groesse
         self.klasse = klasse
         self.hobby = hobby
 
     def __str__(self):
-        status = "erwachsen" if self.alter >= 18 else "minderjährig"
+        # Intern greifen wir auf self.__alter zu
+        status = "erwachsen" if self.__alter >= 18 else "minderjährig"
         return (
             f"╔════════════════════════════════════╗\n"
             f"  STECKBRIEF: {self.name}\n"
             f"╚════════════════════════════════════╝\n"
             f"  • Klasse:  {self.klasse}\n"
-            f"  • Alter:   {self.alter} Jahre ({status})\n"
+            f"  • Alter:   {self.__alter} Jahre ({status})\n"
             f"  • Größe:   {self.groesse:.2f}m\n"
             f"  • Hobby:   {self.hobby}\n"
             f"--------------------------------------"
         )
 
     def geburtstag(self):
-        self.alter += 1
-        # Hier printen wir nur eine kurze Info, keinen ganzen Steckbrief
+        # Das Alter kann nur über diese kontrollierte Methode erhöht werden
+        self.__alter += 1
         print(f"--- Info: {self.name} hatte Geburtstag! ---")
 
-# 1. Personen erstellen
+    def get_alter(self):
+        """Ermöglicht es, das Alter sicher auszulesen."""
+        return self.__alter
+
+# --- Test ---
+
 schueler1 = Schueler("Max Mustermann", 16, 1.80, "10c", "Programmieren")
 schueler2 = Schueler("Max Musterfrau", 17, 1.71, "11c", "Tanzen")
 
-# 2. Änderungen durchführen (bevor wir die Liste zeigen)
+# 1. Geburtstag feiern (ändert das private Attribut intern)
 schueler2.geburtstag()
-print() # Eine Leerzeile für die Optik
+print()
 
-# 3. Jetzt die finale Liste mit genau 2 Personen ausgeben
+# 2. Ausgabe der Liste
 meine_klasse = [schueler1, schueler2]
-
 for person in meine_klasse:
     print(person)
+
+# --- Erläuterung zum Zugriff ---
+# print(schueler1.name)      # Funktioniert (öffentlich)
+# print(schueler1.__alter)   # FEHLER! (privat)
+# print(schueler1.get_alter()) # Funktioniert (über die Getter-Methode)
