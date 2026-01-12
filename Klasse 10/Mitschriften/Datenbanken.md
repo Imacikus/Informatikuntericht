@@ -4,3 +4,23 @@
 - eine Datenbank für ein eigenes Projekt planen und aufmalen
 - Tabellen sinnvoll miteinander verbinden
 - mit einfachen Fragen genau das aus der Datenbank herausbekommen, was ich brauche
+
+# Was ist eine Datenbank?
+**Definition:**
+Eine **Datenbank** ist eine strukturie rte Sammlung von Daten, die gespeichert, geordnet, verändert und abgefragt werden können.
+
+**Zentrale Begriffe:**
+- Tabelle
+- Datensatz (eine Zeile)
+- Attribute (eine Spalte)
+- Primärschlüssel (eindeutige ID)
+# Beispiel
+![[E2E7A463-EDBE-47A1-90F2-B746B7118F4F_1_201_a.jpeg]]
+### Die 3 wichtigsten Vorteile einer Datenbank:
+1. Weniger/keine Redundanz
+	- Daten werden nicht unnötig oft gespeichert
+2. Schneller Zugriff
+	- Auch bei riesigen Datenmengen sehr schnell
+3. Sichere & konsistente Struktur 
+	- Weniger Fehler durch Regeln & Beziehungen
+	- Änderungen wirken überall sofort richtig
