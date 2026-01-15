@@ -16,6 +16,8 @@ Eine **Datenbank** ist eine strukturie rte Sammlung von Daten, die gespeichert, 
 - Primärschlüssel (eindeutige ID)
 # Beispiel
 ![[E2E7A463-EDBE-47A1-90F2-B746B7118F4F_1_201_a.jpeg]]
+ID, Nachname, Vorname sind Attribute
+1, Schmid
 ### Die 3 wichtigsten Vorteile einer Datenbank:
 1. Weniger/keine Redundanz
 	- Daten werden nicht unnötig oft gespeichert
@@ -24,3 +26,10 @@ Eine **Datenbank** ist eine strukturie rte Sammlung von Daten, die gespeichert, 
 3. Sichere & konsistente Struktur 
 	- Weniger Fehler durch Regeln & Beziehungen
 	- Änderungen wirken überall sofort richtig
+# Planung & Modellierung einer Datenbank
+**Problem:**
+Eine Schule will Schüler, Klassen und Lehrer speichern - wie anfangen?
+1. Entitäten finden z.b.:
+	- Name
+	- Klassen
+	- Lehrer
