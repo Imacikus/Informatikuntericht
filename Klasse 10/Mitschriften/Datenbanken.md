@@ -44,10 +44,34 @@ Schüler
 3. Primärschlüssel erklären
 Ein **Primärschlüssel** ist ein eindeutiges Merkmal, z.B. eine ID, die jeden Datensatz eindeutig identifiziert.
 ##### Entity-Relationship-Modell (Entitäten-Beziehungs-Modell oder kurz ERM)
-| Schüler     | Klasse       |
-|:-----------:|:------------:|
-| -           | -            |
-| -           | -            |
-| -           | -            |
-| SchülerID   | Klassen ID   |
-| Name        | Klassenname  |
+|  Schüler  |   Klasse    |
+| :-------: | :---------: |
+| SchülerID | Klassen ID  |
+|   Name    | Klassenname |
+
+![ERM-Diagramm](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/ERM.png)
+## Übungsaufgabe:
+Plane eine Datenbank für eine Bibliothek (Bücher & Ausleihe)
+#### Bibliothek - Datenbank-Planung
+1. Entitäten finden
+	- Buch / Titel
+	- Exemplar
+	- Leser / Person
+	- Ausleihe
+2. Wichtigste Attribute notieren
+	1. Leser
+	- Schüler ID
+	- Name
+	- Geburtsdatum
+- Klasse
+1. Beziehungen zeichnen (Pfeile + 1 / n)
+	--> Ziel: Redundanz vermeiden + leicht abfragen können
+	- Welche Bücher hat Max gerade ausgeliehen?
+	- Welche Bücher sind überfällig?
+
+### Beziehungen und Beziehungstypen (ERM)
+| Kardinalität | Symbol | Bedeutung (ganz einfach gesagt) | Bibliotheks-Beispiel |
+|-------------|--------|----------------------------------|----------------------|
+| 1:1 | 1-1 | Genau eine links gehört zu genau einer rechts | Jede Person hat genau einen Bibliotheksausweis |
+| 1:n | 1-n | Eine links kann zu vielen rechts gehören | Eine Person kann viele Bücher ausleihen |
+| n:m | n-m | Viele links können zu vielen rechts gehören (beliebig) | Viele Bücher können von vielen Personen ausgeliehen werden (nacheinander) |
