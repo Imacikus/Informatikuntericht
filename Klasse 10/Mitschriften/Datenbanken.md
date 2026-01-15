@@ -51,3 +51,4 @@ Ein **Primärschlüssel** ist ein eindeutiges Merkmal, z.B. eine ID, die jeden D
 | -           | -            |
 | SchülerID   | Klassen ID   |
 | Name        | Klassenname  |
+![ERM-Diagramm](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/ERM.png)
