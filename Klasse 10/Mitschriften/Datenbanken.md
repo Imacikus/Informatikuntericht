@@ -15,7 +15,7 @@ Eine **Datenbank** ist eine strukturie rte Sammlung von Daten, die gespeichert, 
 - Attribute (eine Spalte)
 - Primärschlüssel (eindeutige ID)
 # Beispiel
-![[E2E7A463-EDBE-47A1-90F2-B746B7118F4F_1_201_a.jpeg]]
+![Beispiel-Datenbank](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/E2E7A463-EDBE-47A1-90F2-B746B7118F4F_1_201_a.jpeg)
 ID, Nachname, Vorname sind Attribute
 1, Schmid
 ### Die 3 wichtigsten Vorteile einer Datenbank:
@@ -33,3 +33,10 @@ Eine Schule will Schüler, Klassen und Lehrer speichern - wie anfangen?
 	- Name
 	- Klassen
 	- Lehrer
+
+2. Attribute bestimmen
+Schüler
+- Schüler ID
+- Name
+- Geburtsdatum
+- Klasse
