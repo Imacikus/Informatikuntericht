@@ -40,3 +40,14 @@ Schüler
 - Name
 - Geburtsdatum
 - Klasse
+
+3. Primärschlüssel erklären
+Ein **Primärschlüssel** ist ein eindeutiges Merkmal, z.B. eine ID, die jeden Datensatz eindeutig identifiziert.
+##### Entity-Relationship-Modell (Entitäten-Beziehungs-Modell oder kurz ERM)
+| Schüler     | Klasse       |
+|:-----------:|:------------:|
+| -           | -            |
+| -           | -            |
+| -           | -            |
+| SchülerID   | Klassen ID   |
+| Name        | Klassenname  |
