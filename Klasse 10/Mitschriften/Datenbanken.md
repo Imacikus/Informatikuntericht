@@ -59,7 +59,19 @@ Plane eine Datenbank für eine Bibliothek (Bücher & Ausleihe)
 	- Leser / Person
 	- Ausleihe
 2. Wichtigste Attribute notieren
-3. Beziehungen zeichnen (Pfeile + 1 / n)
+	1. Leser
+	- Schüler ID
+	- Name
+	- Geburtsdatum
+- Klasse
+1. Beziehungen zeichnen (Pfeile + 1 / n)
 	--> Ziel: Redundanz vermeiden + leicht abfragen können
 	- Welche Bücher hat Max gerade ausgeliehen?
 	- Welche Bücher sind überfällig?
+
+### Beziehungen und Beziehungstypen (ERM)
+| Kardinalität | Symbol | Bedeutung (ganz einfach gesagt) | Bibliotheks-Beispiel |
+|-------------|--------|----------------------------------|----------------------|
+| 1:1 | 1-1 | Genau eine links gehört zu genau einer rechts | Jede Person hat genau einen Bibliotheksausweis |
+| 1:n | 1-n | Eine links kann zu vielen rechts gehören | Eine Person kann viele Bücher ausleihen |
+| n:m | n-m | Viele links können zu vielen rechts gehören (beliebig) | Viele Bücher können von vielen Personen ausgeliehen werden (nacheinander) |
