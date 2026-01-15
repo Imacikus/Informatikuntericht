@@ -44,11 +44,11 @@ Schüler
 3. Primärschlüssel erklären
 Ein **Primärschlüssel** ist ein eindeutiges Merkmal, z.B. eine ID, die jeden Datensatz eindeutig identifiziert.
 ##### Entity-Relationship-Modell (Entitäten-Beziehungs-Modell oder kurz ERM)
-| Schüler     | Klasse       |
-|:-----------:|:------------:|
-| -           | -            |
-| -           | -            |
-| -           | -            |
-| SchülerID   | Klassen ID   |
-| Name        | Klassenname  |
+|  Schüler  |   Klasse    |
+| :-------: | :---------: |
+| SchülerID | Klassen ID  |
+|   Name    | Klassenname |
+
 ![ERM-Diagramm](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/ERM.png)
+## Übungsaufgabe:
+Plane eine Datenbank für eine Bibliothek (Bücher & Ausleihe)
