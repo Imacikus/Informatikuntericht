@@ -52,3 +52,14 @@ Ein **Primärschlüssel** ist ein eindeutiges Merkmal, z.B. eine ID, die jeden D
 ![ERM-Diagramm](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/ERM.png)
 ## Übungsaufgabe:
 Plane eine Datenbank für eine Bibliothek (Bücher & Ausleihe)
+#### Bibliothek - Datenbank-Planung
+1. Entitäten finden
+	- Buch / Titel
+	- Exemplar
+	- Leser / Person
+	- Ausleihe
+2. Wichtigste Attribute notieren
+3. Beziehungen zeichnen (Pfeile + 1 / n)
+	--> Ziel: Redundanz vermeiden + leicht abfragen können
+	- Welche Bücher hat Max gerade ausgeliehen?
+	- Welche Bücher sind überfällig?
