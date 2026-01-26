@@ -75,3 +75,18 @@ Plane eine Datenbank für eine Bibliothek (Bücher & Ausleihe)
 | 1:1 | 1-1 | Genau eine links gehört zu genau einer rechts | Jede Person hat genau einen Bibliotheksausweis |
 | 1:n | 1-n | Eine links kann zu vielen rechts gehören | Eine Person kann viele Bücher ausleihen |
 | n:m | n-m | Viele links können zu vielen rechts gehören (beliebig) | Viele Bücher können von vielen Personen ausgeliehen werden (nacheinander) |
+
+![ERM-Übung](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/ERM%20%C3%9Cbung.jpeg)
+
+# Wichtige Datentypen für eine Bibliothek
+
+| Feld               | Datentyp          | Hinweis                     |
+|--------------------|-------------------|-----------------------------|
+| Buch-Titel         | VARCHAR(150)      |                             |
+| Autor              | VARCHAR(100)      |                             |
+| Erscheinungsjahr   | INTEGER (SMALLINT)|                             |
+| ISBN               | VARCHAR(13)       | Immer als Text speichern    |
+| Ausleihdatum       | DATE              |                             |
+| Fällig am          | DATE              |                             |
+| Ist überfällig?    | BOOLEAN           |                             |
+| Verspätungsgebühr  | DECIMAL(6,2)      | z.B. 3,50€                  |
