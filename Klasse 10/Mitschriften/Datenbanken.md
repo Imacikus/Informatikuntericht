@@ -101,3 +101,5 @@ Ein **Relationenschema** beschreibt den Aufbau einer Tabelle:
 - Attribute haben eindeutige Bedeutung
 - Alle Relationenschemata einer DB nennt man **Datenbankschma**
 ### 3. Entititätstypen
+Um ein ERM als Datenbank zu implementieren, kann man zunächst für jeden Entitätstyp eine eigene Tabelle anlegen. Dabei wird für jedes Attribut des Entitätstyps eine Spalte in die Tabelle geplant.
+Jede Tabelle benötigt außerdem einen Primärschlüssel, mit dem jeder Datensatz eindeutig identifiziert werden kann.
