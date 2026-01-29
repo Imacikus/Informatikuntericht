@@ -119,3 +119,6 @@ Wo kommt der Fremdschlüssel hin?
 - Immer auf der n-Seite ! 
 (Die Seite, auf der "viele" möglich sind)
 
+- Jeder Schüler kennt nur eine Klasse (Fremdschlüssel in Schüler-Tabelle) 
+- Eine Klasse kennt viele Schüler (über die n-Seite gefunden)
+
