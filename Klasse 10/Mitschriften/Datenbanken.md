@@ -80,13 +80,24 @@ Plane eine Datenbank für eine Bibliothek (Bücher & Ausleihe)
 
 # Wichtige Datentypen für eine Bibliothek
 
-| Feld               | Datentyp          | Hinweis                     |
-|--------------------|-------------------|-----------------------------|
-| Buch-Titel         | VARCHAR(150)      |                             |
-| Autor              | VARCHAR(100)      |                             |
-| Erscheinungsjahr   | INTEGER (SMALLINT)|                             |
-| ISBN               | VARCHAR(13)       | Immer als Text speichern    |
-| Ausleihdatum       | DATE              |                             |
-| Fällig am          | DATE              |                             |
-| Ist überfällig?    | BOOLEAN           |                             |
-| Verspätungsgebühr  | DECIMAL(6,2)      | z.B. 3,50€                  |
+| Feld              | Datentyp           | Hinweis                  |
+| ----------------- | ------------------ | ------------------------ |
+| Buch-Titel        | VARCHAR(150)       |                          |
+| Autor             | VARCHAR(100)       |                          |
+| Erscheinungsjahr  | INTEGER (SMALLINT) |                          |
+| ISBN              | VARCHAR(13)        | Immer als Text speichern |
+| Ausleihdatum      | DATE               |                          |
+| Fällig am         | DATE               |                          |
+| Ist überfällig?   | BOOLEAN            |                          |
+| Verspätungsgebühr | DECIMAL(6,2)       | z.B. 3,50€               |
+# Eine Datenbank anlegen - gute Relationen
+### 1. Relationschemata
+Ein **Relationenschema** beschreibt den Aufbau einer Tabelle:
+
+![Relationsschema](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/Relationsschema.jpeg)
+
+### 2. Relationen Entitätstypen
+- Jede Tabelle hat einen Primäschlüssel (z.B. lehrID)
+- Attribute haben eindeutige Bedeutung
+- Alle Relationenschemata einer DB nennt man **Datenbankschma**
+
