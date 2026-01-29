@@ -94,10 +94,10 @@ Plane eine Datenbank für eine Bibliothek (Bücher & Ausleihe)
 ### 1. Relationschemata
 Ein **Relationenschema** beschreibt den Aufbau einer Tabelle:
 
-![Relationsschema](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/Relationsschema.jpeg)
+![Relationsschema](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/Relationschemata.jpeg)
 
 ### 2. Relationen Entitätstypen
 - Jede Tabelle hat einen Primäschlüssel (z.B. lehrID)
 - Attribute haben eindeutige Bedeutung
 - Alle Relationenschemata einer DB nennt man **Datenbankschma**
-
+### 3. Entititätstypen
