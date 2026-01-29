@@ -110,4 +110,12 @@ Im Folgenden betrachten wir die zwei wichtigsten Beziehungstypen und wie man sie
 - Primärschlüssel (PK) --> eindeutige ID einer Zeile
 - Fremdschlüssel (FK) --> verweist auf den PK einer anderen Tabelle 
 - Beziehungen = Verknüpfungen zwischen Tabellen über Schlüssel
+
 --> 1 : n Beziehung
+**Definition**
+Eine Entität A steht mit genau einer Entität B in Beziehung
+- aber Entität B kann beliebig viele Entitäten A in Beziehung stehen (1 --> viele / n)
+Wo kommt der Fremdschlüssel hin?
+- Immer auf der n-Seite ! 
+(Die Seite, auf der "viele" möglich sind)
+
