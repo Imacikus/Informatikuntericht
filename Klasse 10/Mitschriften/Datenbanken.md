@@ -103,3 +103,11 @@ Ein **Relationenschema** beschreibt den Aufbau einer Tabelle:
 ### 3. Entititätstypen
 Um ein ERM als Datenbank zu implementieren, kann man zunächst für jeden Entitätstyp eine eigene Tabelle anlegen. Dabei wird für jedes Attribut des Entitätstyps eine Spalte in die Tabelle geplant.
 Jede Tabelle benötigt außerdem einen Primärschlüssel, mit dem jeder Datensatz eindeutig identifiziert werden kann.
+### 4. Beziehungstypen umsetzen
+Im Folgenden betrachten wir die zwei wichtigsten Beziehungstypen und wie man sie korrekt in Tabellen umsetzt: 1:n und n:m.
+
+--> Grundbegriffe
+- Primärschlüssel (PK) --> eindeutige ID einer Zeile
+- Fremdschlüssel (FK) --> verweist auf den PK einer anderen Tabelle 
+- Beziehungen = Verknüpfungen zwischen Tabellen über Schlüssel
+--> 1 : n Beziehung
