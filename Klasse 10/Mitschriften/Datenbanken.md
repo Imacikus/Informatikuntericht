@@ -80,13 +80,45 @@ Plane eine Datenbank für eine Bibliothek (Bücher & Ausleihe)
 
 # Wichtige Datentypen für eine Bibliothek
 
-| Feld               | Datentyp          | Hinweis                     |
-|--------------------|-------------------|-----------------------------|
-| Buch-Titel         | VARCHAR(150)      |                             |
-| Autor              | VARCHAR(100)      |                             |
-| Erscheinungsjahr   | INTEGER (SMALLINT)|                             |
-| ISBN               | VARCHAR(13)       | Immer als Text speichern    |
-| Ausleihdatum       | DATE              |                             |
-| Fällig am          | DATE              |                             |
-| Ist überfällig?    | BOOLEAN           |                             |
-| Verspätungsgebühr  | DECIMAL(6,2)      | z.B. 3,50€                  |
+| Feld              | Datentyp           | Hinweis                  |
+| ----------------- | ------------------ | ------------------------ |
+| Buch-Titel        | VARCHAR(150)       |                          |
+| Autor             | VARCHAR(100)       |                          |
+| Erscheinungsjahr  | INTEGER (SMALLINT) |                          |
+| ISBN              | VARCHAR(13)        | Immer als Text speichern |
+| Ausleihdatum      | DATE               |                          |
+| Fällig am         | DATE               |                          |
+| Ist überfällig?   | BOOLEAN            |                          |
+| Verspätungsgebühr | DECIMAL(6,2)       | z.B. 3,50€               |
+# Eine Datenbank anlegen - gute Relationen
+### 1. Relationschemata
+Ein **Relationenschema** beschreibt den Aufbau einer Tabelle:
+
+![Relationsschema](https://raw.githubusercontent.com/Imacikus/Informatikuntericht/main/Klasse%2010/Mitschriften/Relationschemata.jpeg)
+
+### 2. Relationen Entitätstypen
+- Jede Tabelle hat einen Primäschlüssel (z.B. lehrID)
+- Attribute haben eindeutige Bedeutung
+- Alle Relationenschemata einer DB nennt man **Datenbankschma**
+### 3. Entititätstypen
+Um ein ERM als Datenbank zu implementieren, kann man zunächst für jeden Entitätstyp eine eigene Tabelle anlegen. Dabei wird für jedes Attribut des Entitätstyps eine Spalte in die Tabelle geplant.
+Jede Tabelle benötigt außerdem einen Primärschlüssel, mit dem jeder Datensatz eindeutig identifiziert werden kann.
+### 4. Beziehungstypen umsetzen
+Im Folgenden betrachten wir die zwei wichtigsten Beziehungstypen und wie man sie korrekt in Tabellen umsetzt: 1:n und n:m.
+
+--> Grundbegriffe
+- Primärschlüssel (PK) --> eindeutige ID einer Zeile
+- Fremdschlüssel (FK) --> verweist auf den PK einer anderen Tabelle 
+- Beziehungen = Verknüpfungen zwischen Tabellen über Schlüssel
+
+--> 1 : n Beziehung
+**Definition**
+Eine Entität A steht mit genau einer Entität B in Beziehung
+- aber Entität B kann beliebig viele Entitäten A in Beziehung stehen (1 --> viele / n)
+Wo kommt der Fremdschlüssel hin?
+- Immer auf der n-Seite ! 
+(Die Seite, auf der "viele" möglich sind)
+
+- Jeder Schüler kennt nur eine Klasse (Fremdschlüssel in Schüler-Tabelle) 
+- Eine Klasse kennt viele Schüler (über die n-Seite gefunden)
+
