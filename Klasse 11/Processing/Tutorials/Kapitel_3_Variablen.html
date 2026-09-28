@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Schülergerechtes Processing-Tutorial zu Variablen, Datentypen, Verarbeitung, Animation sowie globalen und lokalen Variablen.">
+  <title>Processing-Tutorial: Kapitel 3 – Variablen</title>
+  <style>
+    :root {
+      --navy: #102a43;
+      --blue: #1769aa;
+      --blue-dark: #0e4f82;
+      --cyan: #18a6b8;
+      --sky: #e9f4ff;
+      --ink: #1c2b39;
+      --muted: #526778;
+      --line: #d8e4ee;
+      --paper: #ffffff;
+      --code: #0d2033;
+      --code-text: #eaf5ff;
+      --gold: #ffbf47;
+      --green: #16866b;
+      --red: #c84a4a;
+      --violet: #7057a8;
+      --radius: 18px;
+      --shadow: 0 14px 35px rgba(16, 42, 67, .11);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(24, 166, 184, .09), transparent 24rem),
+        linear-gradient(#f8fbfe, #edf4f8);
+      font-family: Inter, Calibri, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    a { color: var(--blue-dark); }
+    code, pre { font-family: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    code:not(pre code) {
+      padding: .12rem .35rem;
+      border: 1px solid #cee0ee;
+      border-radius: .35rem;
+      color: #0f507e;
+      background: #edf7ff;
+      font-size: .94em;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      color: white;
+      background: linear-gradient(130deg, #0b253d 0%, #0e568c 58%, #1598ad 100%);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 34rem;
+      height: 34rem;
+      right: -12rem;
+      top: -15rem;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4rem rgba(255,255,255,.035), 0 0 0 9rem rgba(255,255,255,.025);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 4.8rem 1.5rem 4.4rem;
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: .55rem;
+      align-items: center;
+      padding: .35rem .72rem;
+      margin: 0 0 1.2rem;
+      border: 1px solid rgba(255,255,255,.32);
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      font-size: .82rem;
+      font-weight: 750;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: .55rem;
+      height: .55rem;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 .25rem rgba(255,191,71,.16);
+    }
+    h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(2.2rem, 6vw, 4.65rem);
+      line-height: 1.03;
+      letter-spacing: -.045em;
+    }
+    .hero-lead {
+      max-width: 800px;
+      margin: 1.3rem 0 0;
+      color: #dceeff;
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .7rem;
+      margin-top: 1.8rem;
+    }
+    .hero-meta span {
+      padding: .4rem .75rem;
+      border-radius: .55rem;
+      color: #eaf7ff;
+      background: rgba(5, 25, 42, .28);
+      font-size: .9rem;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 2rem;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 5rem;
+    }
+    .toc-wrap { position: relative; }
+    .toc {
+      position: sticky;
+      top: 1.25rem;
+      max-height: calc(100vh - 2.5rem);
+      overflow-y: auto;
+      padding: 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 8px 24px rgba(16,42,67,.07);
+      backdrop-filter: blur(10px);
+    }
+    .toc-title {
+      margin: 0 0 .7rem;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .toc ol { list-style: none; padding: 0; margin: 0; }
+    .toc > ol > li + li { margin-top: .2rem; }
+    .toc a, .toc-toggle {
+      display: block;
+      width: 100%;
+      padding: .55rem .65rem;
+      border: 0;
+      border-radius: .55rem;
+      color: var(--navy);
+      background: transparent;
+      font-family: inherit;
+      text-decoration: none;
+      text-align: left;
+      font-size: .92rem;
+      font-weight: 650;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+    .toc a:hover, .toc a:focus-visible,
+    .toc-toggle:hover, .toc-toggle:focus-visible { background: var(--sky); outline: none; }
+    .toc-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .6rem;
+    }
+    .toc-chevron {
+      flex: 0 0 auto;
+      width: .62rem;
+      height: .62rem;
+      border-right: 2px solid var(--blue-dark);
+      border-bottom: 2px solid var(--blue-dark);
+      transform: rotate(45deg) translate(-2px, 2px);
+      transition: transform .18s ease;
+    }
+    .toc-toggle[aria-expanded="true"] { color: var(--blue-dark); background: var(--sky); }
+    .toc-toggle[aria-expanded="true"] .toc-chevron { transform: rotate(225deg) translate(-1px, -1px); }
+    .toc-sub {
+      margin: .25rem 0 .55rem .65rem !important;
+      padding-left: .6rem !important;
+      border-left: 2px solid #d5e7f4;
+    }
+    .toc-sub[hidden] { display: none !important; }
+    .toc-sub li + li { margin-top: .08rem; }
+    .toc-sub a {
+      padding: .4rem .55rem;
+      color: var(--muted);
+      font-size: .84rem;
+      font-weight: 600;
+    }
+
+    main { min-width: 0; }
+    .intro-card, .chapter, .summary {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .intro-card { padding: 1.5rem; margin-bottom: 2rem; }
+    .intro-card h2 { margin-top: 0; }
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem;
+      margin-top: 1rem;
+    }
+    .goal {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+      padding: .85rem;
+      border: 1px solid #d9e9f5;
+      border-radius: .85rem;
+      background: #f7fbff;
+    }
+    .goal strong {
+      display: grid;
+      flex: 0 0 1.65rem;
+      width: 1.65rem;
+      height: 1.65rem;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--blue);
+      font-size: .82rem;
+    }
+
+    .chapter { overflow: hidden; margin-bottom: 2rem; }
+    .chapter-head {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 1.55rem 1.65rem;
+      color: white;
+      background: linear-gradient(120deg, var(--navy), var(--blue-dark));
+    }
+    .chapter-number {
+      display: grid;
+      flex: 0 0 3.15rem;
+      width: 3.15rem;
+      height: 3.15rem;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.32);
+      border-radius: .9rem;
+      background: rgba(255,255,255,.1);
+      font-weight: 850;
+    }
+    .chapter-head h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); line-height: 1.2; }
+    .chapter-body { padding: 1.65rem; }
+    .lesson + .lesson {
+      margin-top: 2.15rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+    .lesson h3 { margin: 0 0 .7rem; color: var(--navy); font-size: 1.28rem; line-height: 1.3; }
+    .lesson h4 { margin: 1.4rem 0 .45rem; color: var(--blue-dark); font-size: 1.05rem; }
+    .lesson p { margin: .55rem 0 1rem; }
+
+    .variable-model {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .75rem;
+      margin: 1.2rem 0;
+    }
+    .variable-part {
+      padding: 1rem;
+      border: 1px solid #cfe2ef;
+      border-radius: .85rem;
+      background: #f6fbff;
+      text-align: center;
+    }
+    .variable-part span {
+      display: block;
+      margin-bottom: .25rem;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .variable-part strong { color: var(--blue-dark); font-size: 1.1rem; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: .55rem;
+      align-items: stretch;
+      margin: 1.25rem 0;
+    }
+    .flow-box {
+      padding: .85rem .7rem;
+      border: 1px solid #cfe2ef;
+      border-radius: .85rem;
+      background: #f6fbff;
+      text-align: center;
+    }
+    .flow-box strong { display: block; color: var(--blue-dark); }
+    .flow-arrow { align-self: center; color: var(--cyan); font-size: 1.45rem; font-weight: 900; }
+
+    .code-card {
+      overflow: hidden;
+      margin: 1.1rem 0 1.25rem;
+      border: 1px solid #153b5c;
+      border-radius: .9rem;
+      background: var(--code);
+      box-shadow: 0 8px 18px rgba(13,32,51,.12);
+    }
+    .code-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      padding: .55rem .8rem;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      color: #b9d7ed;
+      background: #102c46;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .copy-code {
+      padding: .28rem .55rem;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: .4rem;
+      color: #eaf5ff;
+      background: rgba(255,255,255,.07);
+      font: inherit;
+      cursor: pointer;
+    }
+    .copy-code:hover, .copy-code:focus-visible { background: rgba(255,255,255,.15); outline: none; }
+    pre {
+      overflow-x: auto;
+      margin: 0;
+      padding: 1rem;
+      color: var(--code-text);
+      font-size: .9rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+    .kw { color: #82d2ff; }
+    .fn { color: #ffd479; }
+    .num { color: #9ee493; }
+    .string { color: #f4b9dc; }
+    .com { color: #91a9ba; font-style: italic; }
+
+    .explain {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .7rem;
+      margin: .9rem 0 1.2rem;
+    }
+    .explain div {
+      padding: .8rem .9rem;
+      border-left: 4px solid var(--cyan);
+      border-radius: .4rem .75rem .75rem .4rem;
+      background: #f3f9fc;
+    }
+    .explain strong { color: var(--navy); }
+
+    .process-steps {
+      display: grid;
+      gap: .65rem;
+      margin: 1rem 0 1.25rem;
+      counter-reset: step;
+    }
+    .process-step {
+      position: relative;
+      padding: .8rem .9rem .8rem 3.1rem;
+      border: 1px solid #d7e7f1;
+      border-radius: .8rem;
+      background: #f8fcff;
+    }
+    .process-step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: .85rem;
+      top: .72rem;
+      display: grid;
+      width: 1.55rem;
+      height: 1.55rem;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--blue);
+      font-weight: 800;
+      font-size: .82rem;
+    }
+
+    .note, .warning, .remember {
+      position: relative;
+      margin: 1.1rem 0;
+      padding: 1rem 1rem 1rem 3.2rem;
+      border-radius: .85rem;
+    }
+    .note::before, .warning::before, .remember::before {
+      position: absolute;
+      left: 1rem;
+      top: .9rem;
+      font-size: 1.25rem;
+    }
+    .note { border: 1px solid #cbe1f1; background: #eff8ff; }
+    .note::before { content: "i"; display: grid; width: 1.35rem; height: 1.35rem; place-items: center; border-radius: 50%; color: white; background: var(--blue); font-weight: 850; font-size: .85rem; }
+    .warning { border: 1px solid #efcaca; background: #fff5f5; }
+    .warning::before { content: "!"; color: var(--red); font-weight: 900; }
+    .remember { border: 1px solid #c6e5da; background: #f0fbf7; }
+    .remember::before { content: "✓"; color: var(--green); font-weight: 900; }
+    .note strong, .warning strong, .remember strong { color: var(--navy); }
+
+    .command-table { width: 100%; margin: 1rem 0 1.3rem; border-collapse: collapse; font-size: .94rem; }
+    .command-table th, .command-table td { padding: .72rem .75rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .command-table th { color: white; background: var(--blue-dark); }
+    .command-table tr:nth-child(even) td { background: #f6fafd; }
+    .command-table .center { text-align: center; }
+
+    .mistakes { display: grid; gap: .85rem; }
+    .mistake {
+      padding: 1rem;
+      border: 1px solid #ead8d8;
+      border-radius: .85rem;
+      background: #fffafa;
+    }
+    .mistake h3 { margin: 0 0 .35rem; color: #943c3c; font-size: 1.02rem; }
+    .mistake p { margin: 0; }
+
+    .summary { padding: 1.6rem; }
+    .summary h2 { margin-top: 0; color: var(--navy); }
+    .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .8rem; }
+    .summary-item { padding: 1rem; border: 1px solid #d8e8f2; border-radius: .85rem; background: #f8fcff; }
+    .summary-item strong { display: block; margin-bottom: .25rem; color: var(--blue-dark); }
+
+    .source { max-width: 1120px; margin: -2.5rem auto 0; padding: 0 1.5rem 3rem; color: var(--muted); font-size: .85rem; }
+    .back-top { display: inline-block; margin-top: 1rem; font-weight: 700; text-decoration: none; }
+
+    @media (max-width: 820px) {
+      .hero-inner { padding-top: 3.6rem; padding-bottom: 3.3rem; }
+      .page { grid-template-columns: 1fr; gap: 1.2rem; }
+      .toc { position: static; max-height: none; }
+      .goal-grid, .explain, .summary-grid { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr; }
+      .flow-arrow { transform: rotate(90deg); justify-self: center; }
+    }
+
+    @media (max-width: 520px) {
+      .page { padding-inline: .8rem; }
+      .hero-inner { padding-inline: 1rem; }
+      .chapter-head, .chapter-body, .intro-card, .summary { padding: 1.15rem; }
+      .chapter-number { flex-basis: 2.7rem; width: 2.7rem; height: 2.7rem; }
+      .variable-model { grid-template-columns: 1fr; }
+      pre { font-size: .82rem; }
+      .command-table { display: block; overflow-x: auto; }
+    }
+
+    @media print {
+      body { background: white; font-size: 10.5pt; }
+      .hero { background: var(--navy) !important; print-color-adjust: exact; }
+      .hero-inner { padding: 2rem 1.5rem; }
+      .page { display: block; max-width: none; padding-top: 1rem; }
+      .toc-wrap, .copy-code, .back-top { display: none !important; }
+      .intro-card, .chapter, .summary, .code-card { box-shadow: none; break-inside: avoid; }
+      .chapter { break-inside: auto; }
+      .lesson, .code-card, .mistake, .variable-model { break-inside: avoid; }
+      .source { margin-top: 0; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Processing · Kapitel 3</p>
+      <h1>Variablen</h1>
+      <p class="hero-lead">Werte speichern, gezielt verändern und in mehreren Code-Blöcken verwenden.</p>
+      <div class="hero-meta">
+        <span>Klasse 10</span>
+        <span>Datentypen</span>
+        <span>Animation</span>
+        <span>Globale &amp; lokale Variablen</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="page">
+    <aside class="toc-wrap" aria-label="Seitennavigation">
+      <nav class="toc">
+        <p class="toc-title">Inhalt</p>
+        <ol>
+          <li>
+            <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-31">
+              <span>3.1 Variablen verstehen</span><span class="toc-chevron" aria-hidden="true"></span>
+            </button>
+            <ol class="toc-sub" id="toc-31" hidden>
+              <li><a href="#sec-311">3.1.1 Das Grundprinzip</a></li>
+              <li><a href="#sec-312">3.1.2 Deklaration</a></li>
+              <li><a href="#sec-313">3.1.3 Zuweisung</a></li>
+              <li><a href="#sec-314">3.1.4 Verwendung</a></li>
+              <li><a href="#sec-315">3.1.5 Gute Namen</a></li>
+            </ol>
+          </li>
+          <li>
+            <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-32">
+              <span>3.2 Datentypen</span><span class="toc-chevron" aria-hidden="true"></span>
+            </button>
+            <ol class="toc-sub" id="toc-32" hidden>
+              <li><a href="#sec-321">3.2.1 int und float</a></li>
+              <li><a href="#sec-322">3.2.2 boolean und char</a></li>
+              <li><a href="#sec-323">3.2.3 String</a></li>
+              <li><a href="#sec-324">3.2.4 Typen umwandeln</a></li>
+            </ol>
+          </li>
+          <li>
+            <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-33">
+              <span>3.3 Werte verarbeiten</span><span class="toc-chevron" aria-hidden="true"></span>
+            </button>
+            <ol class="toc-sub" id="toc-33" hidden>
+              <li><a href="#sec-331">3.3.1 Zuweisungen auflösen</a></li>
+              <li><a href="#sec-332">3.3.2 Werte verändern</a></li>
+              <li><a href="#sec-333">3.3.3 Ausführungsreihenfolge</a></li>
+              <li><a href="#sec-334">3.3.4 Animation</a></li>
+              <li><a href="#sec-335">3.3.5 Werte durch Events ändern</a></li>
+            </ol>
+          </li>
+          <li>
+            <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-34">
+              <span>3.4 Gültigkeitsbereiche</span><span class="toc-chevron" aria-hidden="true"></span>
+            </button>
+            <ol class="toc-sub" id="toc-34" hidden>
+              <li><a href="#sec-341">3.4.1 Globale Variablen</a></li>
+              <li><a href="#sec-342">3.4.2 Lokale Variablen</a></li>
+              <li><a href="#sec-343">3.4.3 Skopus</a></li>
+              <li><a href="#sec-344">3.4.4 Überschatten</a></li>
+            </ol>
+          </li>
+          <li><a href="#sec-35">3.5 Typische Fehler</a></li>
+          <li><a href="#sec-36">3.6 Kurzfassung</a></li>
+        </ol>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="intro-card" aria-labelledby="ziele">
+        <h2 id="ziele">Was lernst du in diesem Kapitel?</h2>
+        <p>In Kapitel 2 hast du bereits Variablen wie <code>mouseX</code> und <code>mouseY</code> verwendet. Jetzt legst du eigene Variablen an und steuerst damit Positionen, Größen, Farben und Bewegungen.</p>
+        <div class="goal-grid">
+          <div class="goal"><strong>1</strong><span>Variablen deklarieren, initialisieren und verwenden</span></div>
+          <div class="goal"><strong>2</strong><span>passende Datentypen auswählen</span></div>
+          <div class="goal"><strong>3</strong><span>Variablenwerte berechnen und verändern</span></div>
+          <div class="goal"><strong>4</strong><span>globale und lokale Variablen unterscheiden</span></div>
+        </div>
+        <div class="note"><strong>Vorwissen:</strong> Du solltest Formen und Farben aus Kapitel 1 sowie <code>setup()</code>, <code>draw()</code> und Ereignisfunktionen aus Kapitel 2 kennen.</div>
+      </section>
+
+      <section class="chapter" id="sec-31">
+        <div class="chapter-head">
+          <span class="chapter-number">3.1</span>
+          <h2>Variablen verstehen</h2>
+        </div>
+        <div class="chapter-body">
+          <section class="lesson" id="sec-311">
+            <h3>3.1.1 Das Grundprinzip</h3>
+            <p>Eine Variable ist ein <strong>benannter Speicherplatz</strong>. Dort kann ein Programm einen Wert ablegen und später wieder verwenden. Der gespeicherte Wert darf sich während des Programmlaufs ändern.</p>
+            <div class="variable-model" aria-label="Bestandteile einer Variablen">
+              <div class="variable-part"><span>Datentyp</span><strong><code>int</code></strong></div>
+              <div class="variable-part"><span>Name</span><strong><code>kreisX</code></strong></div>
+              <div class="variable-part"><span>Wert</span><strong><code>120</code></strong></div>
+            </div>
+            <p>Die vollständige Zeile <code>int kreisX = 120;</code> bedeutet: Lege eine Variable für ganze Zahlen an, nenne sie <code>kreisX</code> und speichere darin den Wert 120.</p>
+            <div class="remember"><strong>Merke:</strong> Jede Variable besitzt mindestens einen Datentyp und einen Namen. Sobald ihr ein Wert zugewiesen wurde, besitzt sie zusätzlich einen aktuellen Inhalt.</div>
+          </section>
+
+          <section class="lesson" id="sec-312">
+            <h3>3.1.2 Eine Variable deklarieren</h3>
+            <p>Bevor eine eigene Variable verwendet werden kann, muss sie angelegt werden. Dieser Schritt heißt <strong>Deklaration</strong>.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Deklaration</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">int</span> kreisX;          <span class="com">// Variable für eine ganze Zahl</span>
+<span class="kw">float</span> geschwindigkeit; <span class="com">// Variable für eine Kommazahl</span></code></pre>
+            </div>
+            <p>Das allgemeine Muster lautet:</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Allgemeiner Aufbau</span></div>
+              <pre><code>DATENTYP variablenName;</code></pre>
+            </div>
+            <p>Durch die Deklaration weiß Processing, wie die Variable heißt und welche Art von Wert dort gespeichert werden darf.</p>
+          </section>
+
+          <section class="lesson" id="sec-313">
+            <h3>3.1.3 Einen Wert zuweisen und initialisieren</h3>
+            <p>Mit einer <strong>Zuweisung</strong> wird ein Wert in einer Variablen gespeichert. Links steht immer die Variable, rechts der neue Wert oder eine Rechnung.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Zuweisungen</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code>kreisX = <span class="num">120</span>;                <span class="com">// einfacher Wert</span>
+geschwindigkeit = <span class="num">1.5</span>;     <span class="com">// Kommazahl mit Punkt</span>
+kreisX = <span class="num">50</span> + <span class="num">20</span> * <span class="num">2</span>;      <span class="com">// zuerst rechnen, dann speichern</span></code></pre>
+            </div>
+            <div class="warning"><strong>Das Gleichheitszeichen ist hier kein Vergleich:</strong> <code>kreisX = 120;</code> bedeutet nicht „kreisX ist gleich 120“, sondern „Speichere 120 in kreisX“.</div>
+            <p>Deklaration und erste Zuweisung können in einer Zeile stehen. Diese erste Wertvergabe nennt man <strong>Initialisierung</strong>.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Deklaration und Initialisierung</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">int</span> kreisX = <span class="num">120</span>;
+<span class="kw">float</span> geschwindigkeit = <span class="num">1.5</span>;</code></pre>
+            </div>
+          </section>
+
+          <section class="lesson" id="sec-314">
+            <h3>3.1.4 Eine Variable verwenden</h3>
+            <p>Steht ein Variablenname in einem Befehl, setzt Processing an dieser Stelle den <strong>aktuellen Wert</strong> der Variable ein. Dies nennt man auch Substitution.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Variablen steuern eine Zeichnung</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">int</span> kreisX = <span class="num">120</span>;
+<span class="kw">int</span> kreisY = <span class="num">150</span>;
+<span class="kw">int</span> durchmesser = <span class="num">80</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">background</span>(<span class="num">235</span>);
+  <span class="fn">fill</span>(<span class="num">35</span>, <span class="num">145</span>, <span class="num">210</span>);
+  <span class="fn">ellipse</span>(kreisX, kreisY, durchmesser, durchmesser);
+}</code></pre>
+            </div>
+            <p>Beim Ausführen der Ellipse setzt Processing beispielsweise 120 für <code>kreisX</code> und 80 für <code>durchmesser</code> ein. Ändert sich später ein Wert, verwendet der nächste Durchlauf automatisch den neuen Wert.</p>
+          </section>
+
+          <section class="lesson" id="sec-315">
+            <h3>3.1.5 Erlaubte und sinnvolle Variablennamen</h3>
+            <p>Ein guter Name verrät, wofür eine Variable verwendet wird. <code>ballGeschwindigkeit</code> ist deshalb hilfreicher als <code>bg</code>.</p>
+            <table class="command-table">
+              <thead><tr><th>Regel</th><th>Beispiel</th></tr></thead>
+              <tbody>
+                <tr><td>mit einem Kleinbuchstaben beginnen</td><td><code>kreisX</code></td></tr>
+                <tr><td>keine Leerzeichen oder Bindestriche verwenden</td><td><code>ballGroesse</code></td></tr>
+                <tr><td>nicht mit einer Ziffer beginnen</td><td><code>spieler2</code>, nicht <code>2spieler</code></td></tr>
+                <tr><td>keine reservierten Wörter wie <code>int</code> verwenden</td><td><code>anzahl</code></td></tr>
+                <tr><td>Groß- und Kleinschreibung beachten</td><td><code>kreisX</code> ist nicht <code>kreisx</code></td></tr>
+                <tr><td>Umlaute und ß im Code vermeiden</td><td><code>groesse</code> statt <code>größe</code></td></tr>
+                <tr><td>mehrere Wörter in lowerCamelCase verbinden</td><td><code>hintergrundFarbe</code></td></tr>
+              </tbody>
+            </table>
+            <div class="note"><strong>Konvention:</strong> Namen wie <code>kreisX</code> oder <code>maximaleGeschwindigkeit</code> sind nicht nur erlaubt, sondern auch gut lesbar. Unterstriche und Dollarzeichen wären teilweise möglich, werden in unserem Kurs aber nicht benötigt.</div>
+          </section>
+        </div>
+      </section>
+
+      <section class="chapter" id="sec-32">
+        <div class="chapter-head">
+          <span class="chapter-number">3.2</span>
+          <h2>Datentypen</h2>
+        </div>
+        <div class="chapter-body">
+          <section class="lesson" id="sec-321">
+            <h3>3.2.1 Ganze Zahlen und Kommazahlen</h3>
+            <p>Der Datentyp legt fest, welche Werte in einer Variablen gespeichert werden dürfen. Für unsere Programme sind zunächst zwei Zahlentypen besonders wichtig:</p>
+            <table class="command-table">
+              <thead><tr><th>Datentyp</th><th>Geeignet für</th><th>Beispiele</th></tr></thead>
+              <tbody>
+                <tr><td><code>int</code></td><td>ganze Zahlen ohne Nachkommastellen</td><td><code>-3</code>, <code>0</code>, <code>250</code></td></tr>
+                <tr><td><code>float</code></td><td>Zahlen mit Nachkommastellen</td><td><code>1.5</code>, <code>-0.25</code>, <code>80.0</code></td></tr>
+              </tbody>
+            </table>
+            <div class="code-card">
+              <div class="code-bar"><span>int und float</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">int</span> anzahlKreise = <span class="num">4</span>;
+<span class="kw">float</span> tempo = <span class="num">1.5</span>;
+<span class="kw">float</span> mitte = <span class="num">75.0</span> / <span class="num">2</span>;</code></pre>
+            </div>
+            <div class="warning"><strong>Kommazahlen mit Punkt:</strong> Schreibe im Programm <code>1.5</code> und nicht <code>1,5</code>. Das Komma trennt in Processing die Parameter eines Befehls.</div>
+            <div class="note"><strong>Weitere Zahlentypen:</strong> Es gibt unter anderem <code>byte</code>, <code>short</code>, <code>long</code> und <code>double</code>. Für unsere aktuellen Processing-Programme genügen meistens <code>int</code> und <code>float</code>.</div>
+          </section>
+
+          <section class="lesson" id="sec-322">
+            <h3>3.2.2 Wahrheitswerte und einzelne Zeichen</h3>
+            <table class="command-table">
+              <thead><tr><th>Datentyp</th><th>Bedeutung</th><th>Beispiel</th></tr></thead>
+              <tbody>
+                <tr><td><code>boolean</code></td><td>Wahrheitswert: wahr oder falsch</td><td><code>boolean lichtAn = true;</code></td></tr>
+                <tr><td><code>char</code></td><td>genau ein Zeichen</td><td><code>char taste = 'a';</code></td></tr>
+              </tbody>
+            </table>
+            <div class="code-card">
+              <div class="code-bar"><span>boolean und char ausgeben</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">boolean</span> programmLaeuft = <span class="kw">true</span>;
+<span class="kw">char</span> startTaste = <span class="string">'s'</span>;
+
+<span class="fn">println</span>(programmLaeuft);
+<span class="fn">println</span>(startTaste);</code></pre>
+            </div>
+            <p>Ein <code>char</code> steht in <strong>einfachen</strong> Anführungszeichen. Wahrheitswerte werden im nächsten Kapitel besonders wichtig, wenn Bedingungen hinzukommen.</p>
+          </section>
+
+          <section class="lesson" id="sec-323">
+            <h3>3.2.3 Text mit <code>String</code></h3>
+            <p>Ein <code>String</code> speichert eine Zeichenkette, also Text. Der Typ beginnt mit einem Großbuchstaben und der Text steht in doppelten Anführungszeichen.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Text speichern und verbinden</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">String</span> objektName = <span class="string">"Ball"</span>;
+<span class="kw">int</span> positionX = <span class="num">120</span>;
+
+<span class="fn">println</span>(objektName + <span class="string">" steht bei x = "</span> + positionX);</code></pre>
+            </div>
+            <p>Das Pluszeichen verbindet hier Textstücke und Variablenwerte. Die Konsole zeigt:</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Ausgabe</span></div>
+              <pre><code>Ball steht bei x = 120</code></pre>
+            </div>
+            <p>Das Verbinden von Zeichenketten nennt man <strong>String-Konkatenation</strong>.</p>
+          </section>
+
+          <section class="lesson" id="sec-324">
+            <h3>3.2.4 Datentypen umwandeln</h3>
+            <p>Manchmal besitzt ein Wert nicht den benötigten Datentyp. Mit <code>int()</code> und <code>float()</code> kann ein Zahlenwert gezielt umgewandelt werden.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Zahlen umwandeln</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">float</span> zufallsWert = <span class="fn">random</span>(<span class="num">100</span>); <span class="com">// zum Beispiel 63.84</span>
+<span class="kw">int</span> ganzeZahl = <span class="fn">int</span>(zufallsWert); <span class="com">// daraus wird 63</span>
+
+<span class="kw">int</span> anzahl = <span class="num">5</span>;
+<span class="kw">float</span> haelfte = <span class="fn">float</span>(anzahl) / <span class="num">2</span>; <span class="com">// ergibt 2.5</span></code></pre>
+            </div>
+            <p><code>int()</code> schneidet den Nachkommaanteil ab; es wird nicht automatisch auf die nächste ganze Zahl gerundet.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="chapter" id="sec-33">
+        <div class="chapter-head">
+          <span class="chapter-number">3.3</span>
+          <h2>Variablenwerte verarbeiten und verändern</h2>
+        </div>
+        <div class="chapter-body">
+          <section class="lesson" id="sec-331">
+            <h3>3.3.1 So wird eine Zuweisung verarbeitet</h3>
+            <p>Bei einer Zuweisung arbeitet Processing immer in derselben Reihenfolge: Zuerst werden die Variablen auf der rechten Seite durch ihre aktuellen Werte ersetzt. Danach wird gerechnet. Erst zuletzt wird das Ergebnis links gespeichert.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Beispiel</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">int</span> a = <span class="num">5</span>;
+<span class="kw">int</span> b = <span class="num">0</span>;
+
+b = a + <span class="num">10</span>;</code></pre>
+            </div>
+            <div class="process-steps" aria-label="Verarbeitung der Zuweisung">
+              <div class="process-step"><strong>Variablenwert einsetzen:</strong> Aus <code>b = a + 10;</code> wird <code>b = 5 + 10;</code>.</div>
+              <div class="process-step"><strong>Rechnung ausführen:</strong> Aus <code>b = 5 + 10;</code> wird <code>b = 15;</code>.</div>
+              <div class="process-step"><strong>Ergebnis speichern:</strong> Die Variable <code>b</code> erhält den neuen Wert 15.</div>
+            </div>
+            <p>Bei längeren Rechnungen gelten die bekannten Regeln: Klammern sowie Punktrechnung werden vor Strichrechnung verarbeitet.</p>
+          </section>
+
+          <section class="lesson" id="sec-332">
+            <h3>3.3.2 Einen vorhandenen Wert verändern</h3>
+            <p>Damit eine Variable beispielsweise um 1 wächst, muss der berechnete neue Wert wieder in derselben Variable gespeichert werden.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Wert erhöhen</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">int</span> x = <span class="num">10</span>;
+x = x + <span class="num">1</span>;  <span class="com">// x erhält den neuen Wert 11</span></code></pre>
+            </div>
+            <div class="explain">
+              <div><strong>Keine Veränderung</strong><br><code>x + 1;</code> berechnet zwar einen Wert, speichert ihn aber nirgends.</div>
+              <div><strong>Wert verändert</strong><br><code>x = x + 1;</code> berechnet den neuen Wert und weist ihn wieder <code>x</code> zu.</div>
+            </div>
+            <div class="note"><strong>Kurzschreibweise:</strong> <code>x++;</code> erhöht <code>x</code> ebenfalls um 1. Für den Anfang ist <code>x = x + 1;</code> oft verständlicher, weil die Zuweisung sichtbar bleibt.</div>
+          </section>
+
+          <section class="lesson" id="sec-333">
+            <h3>3.3.3 Ausführungsreihenfolge im aktiven Modus</h3>
+            <p>Globale Variablen ergänzen den bekannten Ablauf aus Kapitel 2. Processing verarbeitet ein aktives Programm in dieser Reihenfolge:</p>
+            <div class="flow" aria-label="Ausführungsreihenfolge im aktiven Modus">
+              <div class="flow-box"><strong>1. Globale Variablen</strong>anlegen und initialisieren</div>
+              <div class="flow-arrow" aria-hidden="true">→</div>
+              <div class="flow-box"><strong>2. <code>setup()</code></strong>einmal ausführen</div>
+              <div class="flow-arrow" aria-hidden="true">→</div>
+              <div class="flow-box"><strong>3. <code>draw()</code></strong>immer wieder ausführen</div>
+            </div>
+            <div class="code-card">
+              <div class="code-bar"><span>Werte Schritt für Schritt verfolgen</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">int</span> punktestand = <span class="num">0</span>; <span class="com">// zuerst: globale Initialisierung</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">println</span>(punktestand); <span class="com">// Ausgabe: 0</span>
+  punktestand = punktestand + <span class="num">1</span>;
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">println</span>(punktestand); <span class="com">// 1, danach 101, 201, ...</span>
+  punktestand = punktestand + <span class="num">100</span>;
+}</code></pre>
+            </div>
+            <div class="remember"><strong>Merke:</strong> Eine globale Initialisierung geschieht nur einmal beim Programmstart. Eine Zuweisung in <code>draw()</code> wird dagegen in jedem Frame erneut ausgeführt.</div>
+          </section>
+
+          <section class="lesson" id="sec-334">
+            <h3>3.3.4 Animation mit einer Variablen</h3>
+            <p>Eine Animation entsteht, wenn <code>draw()</code> ein Objekt zeichnet und anschließend eine seiner Eigenschaften verändert. Im nächsten Frame wird das Objekt mit dem neuen Wert gezeichnet.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Ein Ball bewegt sich nach rechts</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">float</span> ballX = <span class="num">0</span>;
+<span class="kw">float</span> tempo = <span class="num">1.5</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">background</span>(<span class="num">235</span>);           <span class="com">// altes Bild löschen</span>
+  <span class="fn">fill</span>(<span class="num">240</span>, <span class="num">100</span>, <span class="num">60</span>);
+  <span class="fn">ellipse</span>(ballX, <span class="num">150</span>, <span class="num">50</span>, <span class="num">50</span>);
+  ballX = ballX + tempo;       <span class="com">// Position für den nächsten Frame</span>
+}</code></pre>
+            </div>
+            <div class="explain">
+              <div><strong><code>ballX</code></strong><br>speichert die aktuelle x-Koordinate des Balls.</div>
+              <div><strong><code>tempo</code></strong><br>legt fest, um wie viele Pixel sich die Position pro Frame verändert.</div>
+            </div>
+            <p>Die häufig benötigte Geschwindigkeit steht nur an einer Stelle. Wird <code>tempo</code> auf 4 gesetzt, bewegt sich der Ball schneller.</p>
+          </section>
+
+          <section class="lesson" id="sec-335">
+            <h3>3.3.5 Variablen durch Events verändern</h3>
+            <p>Ereignisfunktionen können Variablen verändern. <code>draw()</code> verwendet danach in allen folgenden Frames die neuen Werte.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Tastatur und Maus ändern den Hintergrund</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">int</span> rot = <span class="num">230</span>;
+<span class="kw">int</span> gruen = <span class="num">230</span>;
+<span class="kw">int</span> blau = <span class="num">230</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">background</span>(rot, gruen, blau); <span class="com">// aktuelle Werte verwenden</span>
+  <span class="fn">fill</span>(<span class="num">255</span>);
+  <span class="fn">rect</span>(<span class="num">190</span>, <span class="num">100</span>, <span class="num">120</span>, <span class="num">100</span>);
+}
+
+<span class="kw">void</span> <span class="fn">keyPressed</span>() {
+  rot = <span class="num">210</span>; gruen = <span class="num">50</span>; blau = <span class="num">50</span>; <span class="com">// rot</span>
+}
+
+<span class="kw">void</span> <span class="fn">mousePressed</span>() {
+  rot = <span class="num">45</span>; gruen = <span class="num">170</span>; blau = <span class="num">90</span>; <span class="com">// grün</span>
+}</code></pre>
+            </div>
+            <p>Die Ereignisfunktionen zeichnen hier nichts. Sie verändern nur Daten. Die gesamte Darstellung bleibt in <code>draw()</code> und wird dort mit den jeweils aktuellen Farbwerten aufgebaut.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="chapter" id="sec-34">
+        <div class="chapter-head">
+          <span class="chapter-number">3.4</span>
+          <h2>Globale und lokale Variablen</h2>
+        </div>
+        <div class="chapter-body">
+          <section class="lesson" id="sec-341">
+            <h3>3.4.1 Globale Variablen</h3>
+            <p>Eine globale Variable wird außerhalb von <code>setup()</code>, <code>draw()</code> und den Ereignisfunktionen deklariert – üblicherweise ganz oben im Programm. Sie kann in allen Code-Blöcken verwendet und verändert werden.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Eine Variable in mehreren Code-Blöcken</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">float</span> ballX = <span class="num">0</span>; <span class="com">// global: überall sichtbar</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">background</span>(<span class="num">245</span>);
+  <span class="fn">ellipse</span>(ballX, <span class="num">150</span>, <span class="num">50</span>, <span class="num">50</span>);
+  ballX = ballX + <span class="num">2</span>;
+}
+
+<span class="kw">void</span> <span class="fn">keyPressed</span>() {
+  ballX = <span class="num">0</span>; <span class="com">// Ball zurücksetzen</span>
+}</code></pre>
+            </div>
+            <p><code>ballX</code> muss global sein, weil <code>draw()</code> und <code>keyPressed()</code> auf denselben gespeicherten Wert zugreifen.</p>
+          </section>
+
+          <section class="lesson" id="sec-342">
+            <h3>3.4.2 Lokale Variablen</h3>
+            <p>Eine lokale Variable wird innerhalb eines Code-Blocks deklariert. Sie ist nur dort verfügbar und eignet sich für Zwischenergebnisse, die außerhalb dieses Blocks nicht benötigt werden.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Lokales Zwischenergebnis in draw()</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">float</span> ballX = <span class="num">20</span>; <span class="com">// global</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">background</span>(<span class="num">235</span>);
+  <span class="kw">float</span> durchmesser = ballX / <span class="num">2</span> + <span class="num">20</span>; <span class="com">// lokal</span>
+  <span class="fn">ellipse</span>(ballX, <span class="num">150</span>, durchmesser, durchmesser);
+  ballX = ballX + <span class="num">1</span>;
+}</code></pre>
+            </div>
+            <p><code>durchmesser</code> wird nur für die Zeichnung in <code>draw()</code> benötigt. Nach jedem Durchlauf endet seine Gültigkeit; im nächsten Frame wird die lokale Variable neu angelegt und neu berechnet.</p>
+          </section>
+
+          <section class="lesson" id="sec-343">
+            <h3>3.4.3 Skopus: Wo gilt eine Variable?</h3>
+            <p>Der <strong>Skopus</strong> – englisch <em>scope</em> – ist der Bereich, in dem eine Variable sichtbar und verwendbar ist.</p>
+            <table class="command-table">
+              <thead><tr><th>Variable</th><th>Deklaration</th><th>Skopus</th></tr></thead>
+              <tbody>
+                <tr><td>global</td><td>außerhalb aller Code-Blöcke</td><td>gesamtes Programm</td></tr>
+                <tr><td>lokal</td><td>innerhalb eines Code-Blocks</td><td>von der Deklaration bis zur schließenden Klammer des Blocks</td></tr>
+              </tbody>
+            </table>
+            <div class="code-card">
+              <div class="code-bar"><span>Außerhalb des Skopus</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="kw">int</span> startX = <span class="num">50</span>; <span class="com">// nur in setup() bekannt</span>
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">ellipse</span>(startX, <span class="num">100</span>, <span class="num">40</span>, <span class="num">40</span>);
+  <span class="com">// Fehler: startX ist hier unbekannt</span>
+}</code></pre>
+            </div>
+            <p>Soll <code>startX</code> sowohl in <code>setup()</code> als auch in <code>draw()</code> benutzt werden, muss die Variable global deklariert werden.</p>
+          </section>
+
+          <section class="lesson" id="sec-344">
+            <h3>3.4.4 Überschatten vermeiden</h3>
+            <p>Wird innerhalb eines Blocks eine neue lokale Variable mit demselben Namen wie eine globale Variable deklariert, verdeckt die lokale Variable vorübergehend die globale. Dies nennt man <strong>Überschatten</strong>.</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Fehler durch Überschatten</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">float</span> ballX = <span class="num">0</span>; <span class="com">// globale Variable</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+  <span class="kw">float</span> ballX = <span class="num">100</span>; <span class="com">// neue lokale Variable!</span>
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">ellipse</span>(ballX, <span class="num">150</span>, <span class="num">40</span>, <span class="num">40</span>);
+  <span class="com">// Verwendet weiterhin das globale ballX mit dem Wert 0</span>
+}</code></pre>
+            </div>
+            <p>In <code>setup()</code> wurde versehentlich ein zweites <code>ballX</code> angelegt. Die globale Variable bleibt unverändert. Richtig ist eine normale Zuweisung ohne erneuten Datentyp:</p>
+            <div class="code-card">
+              <div class="code-bar"><span>Korrektur</span><button class="copy-code" type="button">Code kopieren</button></div>
+              <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+  ballX = <span class="num">100</span>; <span class="com">// vorhandene globale Variable verändern</span>
+}</code></pre>
+            </div>
+            <div class="remember"><strong>Merke:</strong> Der Datentyp steht nur dort, wo eine neue Variable deklariert wird. Bei einer späteren Zuweisung wird nur der Variablenname geschrieben.</div>
+          </section>
+        </div>
+      </section>
+
+      <section class="chapter" id="sec-35">
+        <div class="chapter-head">
+          <span class="chapter-number">3.5</span>
+          <h2>Typische Fehler</h2>
+        </div>
+        <div class="chapter-body mistakes">
+          <article class="mistake">
+            <h3>Die Variable wurde nicht deklariert</h3>
+            <p>Bevor du <code>tempo</code> verwendest, muss eine passende Deklaration wie <code>float tempo = 2.5;</code> vorhanden sein.</p>
+          </article>
+          <article class="mistake">
+            <h3>Der Datentyp passt nicht zum Wert</h3>
+            <p><code>int tempo = 1.5;</code> funktioniert nicht, weil <code>int</code> keine Nachkommastellen speichert. Verwende <code>float</code>.</p>
+          </article>
+          <article class="mistake">
+            <h3>Eine Kommazahl wurde mit Komma geschrieben</h3>
+            <p>Schreibe <code>1.5</code> statt <code>1,5</code>. Das Dezimaltrennzeichen im Programmcode ist der Punkt.</p>
+          </article>
+          <article class="mistake">
+            <h3>Der Wert wird berechnet, aber nicht gespeichert</h3>
+            <p><code>x + 1;</code> verändert <code>x</code> nicht. Benötigt wird die Zuweisung <code>x = x + 1;</code>.</p>
+          </article>
+          <article class="mistake">
+            <h3>Eine lokale Variable wird außerhalb ihres Blocks verwendet</h3>
+            <p>Prüfe die geschweiften Klammern. Eine in <code>setup()</code> deklarierte lokale Variable ist in <code>draw()</code> nicht sichtbar.</p>
+          </article>
+          <article class="mistake">
+            <h3>Eine globale Variable wird versehentlich überschattet</h3>
+            <p>Schreibe bei einer späteren Zuweisung nicht erneut den Datentyp. <code>ballX = 100;</code> verändert die vorhandene Variable; <code>float ballX = 100;</code> legt eine neue lokale Variable an.</p>
+          </article>
+          <article class="mistake">
+            <h3>Groß- und Kleinschreibung wurden vertauscht</h3>
+            <p><code>kreisX</code>, <code>KreisX</code> und <code>kreisx</code> sind drei verschiedene Namen. Verwende einen Namen im gesamten Programm einheitlich.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="summary" id="sec-36">
+        <h2>3.6 Kurzfassung</h2>
+        <div class="summary-grid">
+          <div class="summary-item"><strong>Variable</strong>Ein benannter Speicherplatz für einen veränderbaren Wert.</div>
+          <div class="summary-item"><strong>Deklaration</strong><code>int x;</code> legt eine neue Variable mit Datentyp und Namen an.</div>
+          <div class="summary-item"><strong>Initialisierung</strong><code>int x = 10;</code> deklariert die Variable und weist ihr den ersten Wert zu.</div>
+          <div class="summary-item"><strong>Zuweisung</strong>Erst wird die rechte Seite ausgewertet, dann wird das Ergebnis links gespeichert.</div>
+          <div class="summary-item"><strong>Wichtige Datentypen</strong><code>int</code>, <code>float</code>, <code>boolean</code>, <code>char</code> und <code>String</code>.</div>
+          <div class="summary-item"><strong>Animation</strong>Eine globale Variable wird in <code>draw()</code> gezeichnet und anschließend verändert.</div>
+          <div class="summary-item"><strong>Globale Variable</strong>Steht außerhalb der Code-Blöcke und ist im gesamten Programm sichtbar.</div>
+          <div class="summary-item"><strong>Lokale Variable</strong>Gilt nur von ihrer Deklaration bis zum Ende des zugehörigen Code-Blocks.</div>
+          <div class="summary-item"><strong>Skopus</strong>Der Bereich, in dem eine Variable gültig und verwendbar ist.</div>
+          <div class="summary-item"><strong>Überschatten</strong>Eine lokale Variable verdeckt eine gleichnamige globale Variable. Gleiche Namen deshalb vermeiden.</div>
+        </div>
+        <a class="back-top" href="#top">↑ Zurück nach oben</a>
+      </section>
+    </main>
+  </div>
+
+  
+
+  <script>
+    document.querySelectorAll('.toc-toggle').forEach((button) => {
+      button.addEventListener('click', () => {
+        const wasOpen = button.getAttribute('aria-expanded') === 'true';
+
+        document.querySelectorAll('.toc-toggle').forEach((otherButton) => {
+          otherButton.setAttribute('aria-expanded', 'false');
+          document.getElementById(otherButton.getAttribute('aria-controls')).hidden = true;
+        });
+
+        if (!wasOpen) {
+          button.setAttribute('aria-expanded', 'true');
+          document.getElementById(button.getAttribute('aria-controls')).hidden = false;
+        }
+      });
+    });
+
+    document.querySelectorAll('.toc-sub a').forEach((link) => {
+      link.addEventListener('click', () => {
+        const list = link.closest('.toc-sub');
+        const button = document.querySelector(`[aria-controls="${list.id}"]`);
+        button.setAttribute('aria-expanded', 'false');
+        list.hidden = true;
+      });
+    });
+
+    document.querySelectorAll('.copy-code').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const code = button.closest('.code-card').querySelector('code').innerText;
+        try {
+          await navigator.clipboard.writeText(code);
+          const oldLabel = button.textContent;
+          button.textContent = 'Kopiert';
+          window.setTimeout(() => { button.textContent = oldLabel; }, 1300);
+        } catch (error) {
+          button.textContent = 'Markieren & kopieren';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

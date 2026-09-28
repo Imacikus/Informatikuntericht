@@ -1,0 +1,3155 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Schülergerechtes Processing-Tutorial: Formen und Farben, Interaktion, Variablen sowie Bedingungen und Entscheidungen in einem Dokument.">
+  <title>Processing-Tutorial: Kapitel 1 bis 4</title>
+  <style>
+:root {
+      --navy: #102a43;
+      --blue: #1769aa;
+      --blue-dark: #0e4f82;
+      --cyan: #18a6b8;
+      --sky: #e9f4ff;
+      --ink: #1c2b39;
+      --muted: #526778;
+      --line: #d8e4ee;
+      --paper: #ffffff;
+      --code: #0d2033;
+      --code-text: #eaf5ff;
+      --gold: #ffbf47;
+      --green: #16866b;
+      --red: #c84a4a;
+      --violet: #7057a8;
+      --radius: 18px;
+      --shadow: 0 14px 35px rgba(16, 42, 67, .11);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(24, 166, 184, .09), transparent 24rem),
+        linear-gradient(#f8fbfe, #edf4f8);
+      font-family: Inter, Calibri, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    a { color: var(--blue-dark); }
+    code, pre {
+      font-family: "Cascadia Mono", "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-variant-ligatures: none;
+      font-feature-settings: "liga" 0, "calt" 0;
+    }
+    code:not(pre code) {
+      padding: .12rem .35rem;
+      border: 1px solid #cee0ee;
+      border-radius: .35rem;
+      color: #0f507e;
+      background: #edf7ff;
+      font-size: .94em;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      color: white;
+      background: linear-gradient(130deg, #0b253d 0%, #0e568c 58%, #1598ad 100%);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 34rem;
+      height: 34rem;
+      right: -12rem;
+      top: -15rem;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4rem rgba(255,255,255,.035), 0 0 0 9rem rgba(255,255,255,.025);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 4.8rem 1.5rem 4.4rem;
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: .55rem;
+      align-items: center;
+      padding: .35rem .72rem;
+      margin: 0 0 1.2rem;
+      border: 1px solid rgba(255,255,255,.32);
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      font-size: .82rem;
+      font-weight: 750;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: .55rem;
+      height: .55rem;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 .25rem rgba(255,191,71,.16);
+    }
+    h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(2.2rem, 6vw, 4.65rem);
+      line-height: 1.03;
+      letter-spacing: -.045em;
+    }
+    .hero-lead {
+      max-width: 800px;
+      margin: 1.3rem 0 0;
+      color: #dceeff;
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .7rem;
+      margin-top: 1.8rem;
+    }
+    .hero-meta span {
+      padding: .4rem .75rem;
+      border-radius: .55rem;
+      color: #eaf7ff;
+      background: rgba(5, 25, 42, .28);
+      font-size: .9rem;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 2rem;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 5rem;
+    }
+    .toc-wrap { position: relative; }
+    .toc {
+      position: sticky;
+      top: 1.25rem;
+      max-height: calc(100vh - 2.5rem);
+      overflow-y: auto;
+      padding: 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 8px 24px rgba(16,42,67,.07);
+      backdrop-filter: blur(10px);
+    }
+    .toc-title {
+      margin: 0 0 .7rem;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .toc ol { list-style: none; padding: 0; margin: 0; }
+    .toc > ol > li + li { margin-top: .2rem; }
+    .toc a, .toc-toggle {
+      display: block;
+      width: 100%;
+      padding: .55rem .65rem;
+      border: 0;
+      border-radius: .55rem;
+      color: var(--navy);
+      background: transparent;
+      font-family: inherit;
+      text-decoration: none;
+      text-align: left;
+      font-size: .92rem;
+      font-weight: 650;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+    .toc a:hover, .toc a:focus-visible,
+    .toc-toggle:hover, .toc-toggle:focus-visible { background: var(--sky); outline: none; }
+    .toc-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .6rem;
+    }
+    .toc-chevron {
+      flex: 0 0 auto;
+      width: .62rem;
+      height: .62rem;
+      border-right: 2px solid var(--blue-dark);
+      border-bottom: 2px solid var(--blue-dark);
+      transform: rotate(45deg) translate(-2px, 2px);
+      transition: transform .18s ease;
+    }
+    .toc-toggle[aria-expanded="true"] { color: var(--blue-dark); background: var(--sky); }
+    .toc-toggle[aria-expanded="true"] .toc-chevron { transform: rotate(225deg) translate(-1px, -1px); }
+    .toc-sub {
+      margin: .25rem 0 .55rem .65rem !important;
+      padding-left: .6rem !important;
+      border-left: 2px solid #d5e7f4;
+    }
+    .toc-sub[hidden] { display: none !important; }
+    .toc-sub li + li { margin-top: .08rem; }
+    .toc-sub a {
+      padding: .4rem .55rem;
+      color: var(--muted);
+      font-size: .84rem;
+      font-weight: 600;
+    }
+
+    main { min-width: 0; }
+    .intro-card, .chapter, .summary {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .intro-card { padding: 1.5rem; margin-bottom: 2rem; }
+    .intro-card h2 { margin-top: 0; }
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem;
+      margin-top: 1rem;
+    }
+    .goal {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+      padding: .85rem;
+      border: 1px solid #d9e9f5;
+      border-radius: .85rem;
+      background: #f7fbff;
+    }
+    .goal strong {
+      display: grid;
+      flex: 0 0 1.65rem;
+      width: 1.65rem;
+      height: 1.65rem;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--blue);
+      font-size: .82rem;
+    }
+
+    .chapter { overflow: hidden; margin-bottom: 2rem; }
+    .chapter-head {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 1.55rem 1.65rem;
+      color: white;
+      background: linear-gradient(120deg, var(--navy), var(--blue-dark));
+    }
+    .chapter-number {
+      display: grid;
+      flex: 0 0 3.15rem;
+      width: 3.15rem;
+      height: 3.15rem;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.32);
+      border-radius: .9rem;
+      background: rgba(255,255,255,.1);
+      font-weight: 850;
+    }
+    .chapter-head h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 1.8rem); line-height: 1.2; }
+    .chapter-body { padding: 1.65rem; }
+    .lesson + .lesson {
+      margin-top: 2.15rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+    .lesson h3 { margin: 0 0 .7rem; color: var(--navy); font-size: 1.28rem; line-height: 1.3; }
+    .lesson h4 { margin: 1.4rem 0 .45rem; color: var(--blue-dark); font-size: 1.05rem; }
+    .lesson p { margin: .55rem 0 1rem; }
+
+    .variable-model {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .75rem;
+      margin: 1.2rem 0;
+    }
+    .variable-part {
+      padding: 1rem;
+      border: 1px solid #cfe2ef;
+      border-radius: .85rem;
+      background: #f6fbff;
+      text-align: center;
+    }
+    .variable-part span {
+      display: block;
+      margin-bottom: .25rem;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .variable-part strong { color: var(--blue-dark); font-size: 1.1rem; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: .55rem;
+      align-items: stretch;
+      margin: 1.25rem 0;
+    }
+    .flow-box {
+      padding: .85rem .7rem;
+      border: 1px solid #cfe2ef;
+      border-radius: .85rem;
+      background: #f6fbff;
+      text-align: center;
+    }
+    .flow-box strong { display: block; color: var(--blue-dark); }
+    .flow-arrow { align-self: center; color: var(--cyan); font-size: 1.45rem; font-weight: 900; }
+
+    .flowchart {
+      overflow: hidden;
+      margin: 1.25rem 0 1.5rem;
+      break-inside: avoid;
+      border: 1px solid #cfe0ec;
+      border-radius: 1rem;
+      background: #fbfdff;
+      box-shadow: 0 8px 20px rgba(16,42,67,.07);
+    }
+    .flowchart-scroll {
+      overflow-x: auto;
+      padding: 1rem;
+      background:
+        linear-gradient(rgba(233,244,255,.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(233,244,255,.5) 1px, transparent 1px),
+        #fbfdff;
+      background-size: 24px 24px;
+    }
+    .flowchart svg {
+      display: block;
+      width: 100%;
+      min-width: 680px;
+      height: auto;
+      margin: 0 auto;
+    }
+    .flowchart .fc-start,
+    .flowchart .fc-process,
+    .flowchart .fc-end,
+    .flowchart .fc-decision {
+      stroke-width: 2.5;
+    }
+    .flowchart .fc-start { fill: #e9f4ff; stroke: #1769aa; }
+    .flowchart .fc-process { fill: #ffffff; stroke: #18a6b8; }
+    .flowchart .fc-end { fill: #eefaf5; stroke: #16866b; }
+    .flowchart .fc-decision { fill: #fff7df; stroke: #d29116; }
+    .flowchart .fc-line {
+      fill: none;
+      stroke: #43657e;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .flowchart .fc-arrow { fill: #43657e; }
+    .flowchart text {
+      fill: #102a43;
+      font-family: Inter, Calibri, ui-sans-serif, system-ui, sans-serif;
+      font-size: 17px;
+      font-weight: 650;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+    .flowchart .fc-small { font-size: 14px; font-weight: 600; }
+    .flowchart .fc-label {
+      fill: #0e4f82;
+      font-size: 14px;
+      font-weight: 850;
+      paint-order: stroke;
+      stroke: #fbfdff;
+      stroke-width: 5px;
+      stroke-linejoin: round;
+    }
+    .flowchart figcaption {
+      padding: .8rem 1rem;
+      border-top: 1px solid #d9e6ef;
+      color: #526778;
+      background: #f4f9fc;
+      font-size: .88rem;
+    }
+
+    .code-card {
+      overflow: hidden;
+      margin: 1.1rem 0 1.25rem;
+      border: 1px solid #153b5c;
+      border-radius: .9rem;
+      background: var(--code);
+      box-shadow: 0 8px 18px rgba(13,32,51,.12);
+    }
+    .code-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      padding: .55rem .8rem;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      color: #b9d7ed;
+      background: #102c46;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .copy-code {
+      padding: .28rem .55rem;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: .4rem;
+      color: #eaf5ff;
+      background: rgba(255,255,255,.07);
+      font: inherit;
+      cursor: pointer;
+    }
+    .copy-code:hover, .copy-code:focus-visible { background: rgba(255,255,255,.15); outline: none; }
+    pre {
+      overflow-x: auto;
+      margin: 0;
+      padding: 1rem;
+      color: var(--code-text);
+      font-size: .9rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+    .kw { color: #82d2ff; }
+    .fn { color: #ffd479; }
+    .num { color: #9ee493; }
+    .string { color: #f4b9dc; }
+    .com { color: #91a9ba; font-style: italic; }
+
+    .explain {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .7rem;
+      margin: .9rem 0 1.2rem;
+    }
+    .explain div {
+      padding: .8rem .9rem;
+      border-left: 4px solid var(--cyan);
+      border-radius: .4rem .75rem .75rem .4rem;
+      background: #f3f9fc;
+    }
+    .explain strong { color: var(--navy); }
+
+    .process-steps {
+      display: grid;
+      gap: .65rem;
+      margin: 1rem 0 1.25rem;
+      counter-reset: step;
+    }
+    .process-step {
+      position: relative;
+      padding: .8rem .9rem .8rem 3.1rem;
+      border: 1px solid #d7e7f1;
+      border-radius: .8rem;
+      background: #f8fcff;
+    }
+    .process-step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: .85rem;
+      top: .72rem;
+      display: grid;
+      width: 1.55rem;
+      height: 1.55rem;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--blue);
+      font-weight: 800;
+      font-size: .82rem;
+    }
+
+    .note, .warning, .remember {
+      position: relative;
+      margin: 1.1rem 0;
+      padding: 1rem 1rem 1rem 3.2rem;
+      border-radius: .85rem;
+    }
+    .note::before, .warning::before, .remember::before {
+      position: absolute;
+      left: 1rem;
+      top: .9rem;
+      font-size: 1.25rem;
+    }
+    .note { border: 1px solid #cbe1f1; background: #eff8ff; }
+    .note::before { content: "i"; display: grid; width: 1.35rem; height: 1.35rem; place-items: center; border-radius: 50%; color: white; background: var(--blue); font-weight: 850; font-size: .85rem; }
+    .warning { border: 1px solid #efcaca; background: #fff5f5; }
+    .warning::before { content: "!"; color: var(--red); font-weight: 900; }
+    .remember { border: 1px solid #c6e5da; background: #f0fbf7; }
+    .remember::before { content: "✓"; color: var(--green); font-weight: 900; }
+    .note strong, .warning strong, .remember strong { color: var(--navy); }
+
+    .command-table { width: 100%; margin: 1rem 0 1.3rem; border-collapse: collapse; font-size: .94rem; }
+    .command-table th, .command-table td { padding: .72rem .75rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .command-table th { color: white; background: var(--blue-dark); }
+    .command-table tr:nth-child(even) td { background: #f6fafd; }
+    .command-table .center { text-align: center; }
+
+    .mistakes { display: grid; gap: .85rem; }
+    .mistake {
+      padding: 1rem;
+      border: 1px solid #ead8d8;
+      border-radius: .85rem;
+      background: #fffafa;
+    }
+    .mistake h3 { margin: 0 0 .35rem; color: #943c3c; font-size: 1.02rem; }
+    .mistake p { margin: 0; }
+
+    .summary { padding: 1.6rem; }
+    .summary h2 { margin-top: 0; color: var(--navy); }
+    .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .8rem; }
+    .summary-item { padding: 1rem; border: 1px solid #d8e8f2; border-radius: .85rem; background: #f8fcff; }
+    .summary-item strong { display: block; margin-bottom: .25rem; color: var(--blue-dark); }
+
+    .source { max-width: 1120px; margin: -2.5rem auto 0; padding: 0 1.5rem 3rem; color: var(--muted); font-size: .85rem; }
+    .back-top { display: inline-block; margin-top: 1rem; font-weight: 700; text-decoration: none; }
+
+    @media (max-width: 820px) {
+      .hero-inner { padding-top: 3.6rem; padding-bottom: 3.3rem; }
+      .page { grid-template-columns: 1fr; gap: 1.2rem; }
+      .toc { position: static; max-height: none; }
+      .goal-grid, .explain, .summary-grid { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr; }
+      .flow-arrow { transform: rotate(90deg); justify-self: center; }
+    }
+
+    @media (max-width: 520px) {
+      .page { padding-inline: .8rem; }
+      .hero-inner { padding-inline: 1rem; }
+      .chapter-head, .chapter-body, .intro-card, .summary { padding: 1.15rem; }
+      .chapter-number { flex-basis: 2.7rem; width: 2.7rem; height: 2.7rem; }
+      .variable-model { grid-template-columns: 1fr; }
+      pre { font-size: .82rem; }
+      .command-table { display: block; overflow-x: auto; }
+    }
+
+    @media print {
+      body { background: white; font-size: 10.5pt; }
+      .hero { background: var(--navy) !important; print-color-adjust: exact; }
+      .hero-inner { padding: 2rem 1.5rem; }
+      .page { display: block; max-width: none; padding-top: 1rem; }
+      .toc-wrap, .copy-code, .back-top { display: none !important; }
+      .intro-card, .chapter, .summary, .code-card { box-shadow: none; break-inside: avoid; }
+      .chapter { break-inside: auto; }
+      .lesson, .code-card, .mistake, .variable-model { break-inside: avoid; }
+      .source { margin-top: 0; }
+    }
+
+    /* ===== Zusammenführung: Kapitelbereiche, Navigation, Inhaltsverzeichnis ===== */
+    .part { margin-bottom: 3.2rem; }
+    .part-head {
+      margin: 0 0 1.6rem;
+      padding: 1.4rem 1.6rem;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--cyan);
+      border-radius: var(--radius);
+      background: linear-gradient(120deg, #ffffff, #eef7fd);
+      box-shadow: var(--shadow);
+    }
+    .part-eyebrow {
+      margin: 0 0 .35rem;
+      color: var(--blue-dark);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .part-title { margin: 0; font-size: clamp(1.5rem, 2.6vw, 2.05rem); }
+    .part-lead { max-width: 72ch; margin: .6rem 0 0; color: var(--muted); }
+    .part-nav { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
+    .part-nav a {
+      display: inline-block;
+      padding: .6rem .95rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--blue-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .part-nav a:hover, .part-nav a:focus-visible { background: var(--sky); }
+    .toc a.is-active { background: var(--sky); color: var(--blue-dark); }
+    @media (max-width: 820px) {
+      .toc > ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .25rem; }
+    }
+    @media (max-width: 520px) {
+      .toc > ol { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .part { break-before: page; }
+      .part-head { box-shadow: none; break-after: avoid; }
+      .part-nav, .copy, .copy-code { display: none !important; }
+    }
+
+    /* ===== Kapitel 1: eigener Stilbereich ===== */
+.k1 { --navy: #102a43; --blue: #1769aa; --blue-dark: #0e4f82; --cyan: #18a6b8; --sky: #e9f4ff; --ink: #1c2b39; --muted: #526778; --line: #d8e4ee; --paper: #ffffff; --canvas: #f4f8fb; --code: #0d2033; --code-text: #eaf5ff; --gold: #ffbf47; --green: #16866b; --red: #c84a4a; --radius: 18px; --shadow: 0 14px 35px rgba(16, 42, 67, .11); }
+.k1 * { box-sizing: border-box; }
+.k1 a { color: var(--blue-dark); }
+.k1 code,
+.k1 pre { font-family: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+.k1 code:not(pre code) { padding: .12rem .35rem;
+      border: 1px solid #cee0ee;
+      border-radius: .35rem;
+      color: #0f507e;
+      background: #edf7ff;
+      font-size: .94em; }
+.k1 .eyebrow { display: inline-flex;
+      gap: .55rem;
+      align-items: center;
+      padding: .35rem .72rem;
+      margin: 0 0 1.2rem;
+      border: 1px solid rgba(255,255,255,.32);
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      font-size: .82rem;
+      font-weight: 750;
+      letter-spacing: .04em;
+      text-transform: uppercase; }
+.k1 .eyebrow::before { content: "";
+      width: .55rem;
+      height: .55rem;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 .25rem rgba(255,191,71,.16); }
+.k1 h1 { max-width: 820px;
+      margin: 0;
+      font-size: clamp(2.2rem, 6vw, 4.65rem);
+      line-height: 1.03;
+      letter-spacing: -.045em; }
+.k1 main { min-width: 0; }
+.k1 .intro-card,
+.k1 .chapter,
+.k1 .summary { border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow); }
+.k1 .intro-card { padding: 1.5rem; margin-bottom: 2rem; }
+.k1 .intro-card h2 { margin-top: 0; }
+.k1 .goal-grid { display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem;
+      margin-top: 1rem; }
+.k1 .goal { display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+      padding: .85rem;
+      border: 1px solid #d9e9f5;
+      border-radius: .85rem;
+      background: #f7fbff; }
+.k1 .goal strong { display: grid;
+      flex: 0 0 1.65rem;
+      width: 1.65rem;
+      height: 1.65rem;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--blue);
+      font-size: .82rem; }
+.k1 .chapter { overflow: hidden; margin-bottom: 2rem; }
+.k1 .chapter-head { display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 1.55rem 1.65rem;
+      color: white;
+      background: linear-gradient(120deg, var(--navy), var(--blue-dark)); }
+.k1 .chapter-number { display: grid;
+      flex: 0 0 3.15rem;
+      width: 3.15rem;
+      height: 3.15rem;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 1rem;
+      background: rgba(255,255,255,.1);
+      font-weight: 850; }
+.k1 .chapter-head h2 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.15rem); }
+.k1 .chapter-head p { margin: .15rem 0 0; color: #cfe8fa; }
+.k1 .chapter-body { padding: 1.75rem; }
+.k1 h2,
+.k1 h3,
+.k1 h4 { color: var(--navy); line-height: 1.22; }
+.k1 h2 { font-size: 1.75rem; }
+.k1 h3 { margin-top: 2.4rem; font-size: 1.42rem; }
+.k1 h4 { margin: 1.5rem 0 .45rem; font-size: 1.06rem; }
+.k1 p { margin: .65rem 0 1rem; }
+.k1 .callout { display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .8rem;
+      padding: 1rem 1.1rem;
+      margin: 1.2rem 0;
+      border-left: 5px solid var(--cyan);
+      border-radius: .75rem;
+      background: #edfafa; }
+.k1 .callout.warning { border-color: var(--gold); background: #fff8e9; }
+.k1 .callout.error { border-color: var(--red); background: #fff2f2; }
+.k1 .callout .icon { display: grid;
+      width: 1.75rem;
+      height: 1.75rem;
+      place-items: center;
+      border-radius: .5rem;
+      color: white;
+      background: var(--cyan);
+      font-size: .85rem;
+      font-weight: 900; }
+.k1 .callout.warning .icon { color: #593700; background: var(--gold); }
+.k1 .callout.error .icon { background: var(--red); }
+.k1 .callout p { margin: 0; }
+.k1 .visual { overflow: hidden;
+      margin: 1.3rem 0;
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      background: var(--canvas); }
+.k1 .visual-title { padding: .7rem 1rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      background: white;
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase; }
+.k1 .visual svg { display: block; width: 100%; height: auto; }
+.k1 .visual-note { padding: .65rem 1rem; margin: 0; color: var(--muted); background: white; font-size: .88rem; }
+.k1 .syntax-grid { display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9rem;
+      margin: 1.2rem 0; }
+.k1 .syntax-card { padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: .9rem;
+      background: #fbfdff; }
+.k1 .syntax-card h4 { margin: 0 0 .55rem; }
+.k1 .syntax-card p { margin: .55rem 0 0; color: var(--muted); font-size: .92rem; }
+.k1 .syntax-line { overflow-x: auto;
+      padding: .62rem .72rem;
+      border-radius: .55rem;
+      color: #ebf7ff;
+      background: var(--code);
+      font-size: .88rem;
+      white-space: nowrap; }
+.k1 .codebox { overflow: hidden;
+      margin: 1.15rem 0;
+      border: 1px solid #143c5d;
+      border-radius: 1rem;
+      background: var(--code);
+      box-shadow: 0 9px 22px rgba(13,32,51,.13); }
+.k1 .codebar { display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: .62rem .75rem .62rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      color: #a9c7dc;
+      background: #102a43;
+      font-size: .8rem;
+      font-weight: 700; }
+.k1 .copy { appearance: none;
+      padding: .38rem .65rem;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: .48rem;
+      color: #eaf6ff;
+      background: rgba(255,255,255,.07);
+      font: inherit;
+      cursor: pointer; }
+.k1 .copy:hover,
+.k1 .copy:focus-visible { background: rgba(255,255,255,.15); outline: none; }
+.k1 pre { overflow-x: auto;
+      margin: 0;
+      padding: 1rem 1.1rem 1.15rem;
+      color: var(--code-text);
+      font-size: .9rem;
+      line-height: 1.65;
+      tab-size: 2; }
+.k1 .fn { color: #74d9ff; }
+.k1 .num { color: #ffd479; }
+.k1 .const { color: #c5a3ff; }
+.k1 .comment { color: #85a7bb; font-style: italic; }
+.k1 .table-wrap { overflow-x: auto; margin: 1rem 0; }
+.k1 table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+.k1 th,
+.k1 td { padding: .72rem .75rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.k1 th { color: var(--navy); background: #edf5fb; }
+.k1 td:first-child { white-space: nowrap; }
+.k1 .compare { display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .8rem;
+      margin: 1rem 0; }
+.k1 .compare-card { padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: .85rem;
+      background: #fbfdff; }
+.k1 .compare-card strong { display: block; color: var(--navy); }
+.k1 .compare-card p { margin: .45rem 0 0; color: var(--muted); font-size: .9rem; }
+.k1 .swatches { display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: .7rem;
+      margin: 1rem 0; }
+.k1 .swatch { min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      border: 1px solid rgba(16,42,67,.16);
+      border-radius: .85rem;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); }
+.k1 .swatch span { padding: .48rem .55rem;
+      color: var(--navy);
+      background: rgba(255,255,255,.9);
+      font: 700 .78rem/1.25 "Cascadia Code", Consolas, monospace; }
+.k1 .red { background: rgb(255,0,0); }
+.k1 .green { background: rgb(0,255,0); }
+.k1 .blue { background: rgb(0,0,255); }
+.k1 .mix { background: rgb(128,60,210); }
+.k1 .mistakes { display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem; }
+.k1 .mistake { padding: .9rem 1rem;
+      border: 1px solid #f0d2d2;
+      border-radius: .8rem;
+      background: #fff8f8; }
+.k1 .mistake strong { color: #973838; }
+.k1 .mistake p { margin: .35rem 0 0; font-size: .92rem; }
+.k1 .summary { overflow: hidden; }
+.k1 .summary h2 { margin: 0; padding: 1.35rem 1.5rem; color: white; background: linear-gradient(120deg, #12644f, #16866b); }
+.k1 .summary-body { padding: 1.4rem 1.5rem; }
+.k1 .summary ul { columns: 2; gap: 2.4rem; margin-bottom: 0; padding-left: 1.2rem; }
+.k1 .summary li { break-inside: avoid; margin-bottom: .55rem; }
+.k1 .source { margin-top: 2rem;
+      padding: 1rem 1.15rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .88rem; }
+@media (max-width: 860px) {
+.k1 main { order: 1; }
+.k1 .compare { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+.k1 .chapter-body,
+.k1 .intro-card { padding: 1.15rem; }
+.k1 .chapter-head { padding: 1.2rem; }
+.k1 .goal-grid,
+.k1 .syntax-grid,
+.k1 .mistakes { grid-template-columns: 1fr; }
+.k1 .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.k1 .summary ul { columns: 1; }
+}
+@media print {
+.k1 .copy { display: none !important; }
+.k1 .eyebrow { color: var(--navy); border-color: var(--line); }
+.k1 .chapter,
+.k1 .intro-card,
+.k1 .summary { box-shadow: none; break-inside: avoid-page; }
+.k1 .chapter-head { color: white; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.k1 .codebox,
+.k1 .swatch,
+.k1 .summary h2 { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.k1 a { color: inherit; text-decoration: none; }
+}
+  </style>
+</head>
+<body id="top">
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Processing · Tutorial</p>
+      <h1>Processing von Grund auf: Kapitel 1 bis 4</h1>
+      <p class="hero-lead">Formen und Farben, Interaktion, Variablen, Bedingungen und Entscheidungen – ein Nachschlage-Tutorial mit zahlreichen Codebeispielen.</p>
+      <div class="hero-meta" aria-label="Kapitelübersicht">
+        <span>Kapitel 1 · Grundformen · Vielecke · RGB &amp; Transparenz</span>
+        <span>Kapitel 2 · Aktiver Modus · Maus · Tastatur</span>
+        <span>Kapitel 3 · Datentypen · Animation · Globale &amp; lokale Variablen</span>
+        <span>Kapitel 4 · if &amp; else · Boolesche Ausdrücke · Tastatur &amp; Maus</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="page">
+    <aside class="toc-wrap" aria-label="Inhaltsverzeichnis">
+      <nav class="toc">
+        <p class="toc-title">Inhalt</p>
+        <ol>
+          <li><a href="#tutorial-ueberblick">Überblick</a></li>
+          <li>
+            <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-part-1">
+              <span>Kapitel 1: Formen zeichnen und gestalten</span><span class="toc-chevron" aria-hidden="true"></span>
+            </button>
+            <ol class="toc-sub" id="toc-part-1" hidden>
+              <li><a href="#ueberblick">Überblick &amp; Lernziele</a></li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-11">
+                          <span>1.1 Grundformen</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-11" hidden>
+                          <li><a href="#koordinaten">1.1.1 Koordinaten</a></li>
+                          <li><a href="#befehle">1.1.2 Befehle</a></li>
+                          <li><a href="#grundformen">1.1.3 Grundformen</a></li>
+                          <li><a href="#reihenfolge">1.1.4 Reihenfolge</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-12">
+                          <span>1.2 Weitere Formen</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-12" hidden>
+                          <li><a href="#ellipsensegmente">1.2.1 Ellipsensegmente</a></li>
+                          <li><a href="#vielecke">1.2.2 Vielecke</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-13">
+                          <span>1.3 Farben</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-13" hidden>
+                          <li><a href="#graustufen">1.3.1 Graustufen</a></li>
+                          <li><a href="#fuellung-kontur">1.3.2 Füllung &amp; Kontur</a></li>
+                          <li><a href="#zeichenflaeche">1.3.3 Zeichenfläche</a></li>
+                          <li><a href="#rgb">1.3.4 RGB-Farben</a></li>
+                          <li><a href="#transparenz">1.3.5 Transparenz</a></li>
+                          <li><a href="#farbbeispiel">1.3.6 Farbbeispiel</a></li>
+                        </ol>
+                      </li>
+                      <li><a href="#fehler">1.4 Typische Fehler</a></li>
+                      <li><a href="#kurzfassung">1.5 Kurzfassung</a></li>
+        
+            </ol>
+          </li>
+          <li>
+            <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-part-2">
+              <span>Kapitel 2: Interaktion</span><span class="toc-chevron" aria-hidden="true"></span>
+            </button>
+            <ol class="toc-sub" id="toc-part-2" hidden>
+              <li><a href="#ziele-2">Was lernst du in diesem Kapitel?</a></li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-21">
+                          <span>2.1 Programmablauf</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-21" hidden>
+                          <li><a href="#sec-211">2.1.1 Statischer Modus</a></li>
+                          <li><a href="#sec-212">2.1.2 Aktiver Modus</a></li>
+                          <li><a href="#sec-213">2.1.3 Code-Blöcke</a></li>
+                          <li><a href="#sec-214">2.1.4 Frame Rate</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-22">
+                          <span>2.2 Maus</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-22" hidden>
+                          <li><a href="#sec-221">2.2.1 Mausposition</a></li>
+                          <li><a href="#sec-222">2.2.2 Bewegung oder Spur</a></li>
+                          <li><a href="#sec-223">2.2.3 Vorherige Position</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-23">
+                          <span>2.3 Tasten &amp; Klicks</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-23" hidden>
+                          <li><a href="#sec-231">2.3.1 Tastendruck</a></li>
+                          <li><a href="#sec-232">2.3.2 Mausklick</a></li>
+                          <li><a href="#sec-233">2.3.3 Zwei Arten der Interaktion</a></li>
+                        </ol>
+                      </li>
+                      <li><a href="#sec-24">2.4 Typische Fehler</a></li>
+                      <li><a href="#sec-25">2.5 Kurzfassung</a></li>
+        
+            </ol>
+          </li>
+          <li>
+            <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-part-3">
+              <span>Kapitel 3: Variablen</span><span class="toc-chevron" aria-hidden="true"></span>
+            </button>
+            <ol class="toc-sub" id="toc-part-3" hidden>
+              <li><a href="#ziele-3">Was lernst du in diesem Kapitel?</a></li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-31">
+                          <span>3.1 Variablen verstehen</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-31" hidden>
+                          <li><a href="#sec-311">3.1.1 Das Grundprinzip</a></li>
+                          <li><a href="#sec-312">3.1.2 Deklaration</a></li>
+                          <li><a href="#sec-313">3.1.3 Zuweisung</a></li>
+                          <li><a href="#sec-314">3.1.4 Verwendung</a></li>
+                          <li><a href="#sec-315">3.1.5 Gute Namen</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-32">
+                          <span>3.2 Datentypen</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-32" hidden>
+                          <li><a href="#sec-321">3.2.1 int und float</a></li>
+                          <li><a href="#sec-322">3.2.2 boolean und char</a></li>
+                          <li><a href="#sec-323">3.2.3 String</a></li>
+                          <li><a href="#sec-324">3.2.4 Typen umwandeln</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-33">
+                          <span>3.3 Werte verarbeiten</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-33" hidden>
+                          <li><a href="#sec-331">3.3.1 Zuweisungen auflösen</a></li>
+                          <li><a href="#sec-332">3.3.2 Werte verändern</a></li>
+                          <li><a href="#sec-333">3.3.3 Ausführungsreihenfolge</a></li>
+                          <li><a href="#sec-334">3.3.4 Animation</a></li>
+                          <li><a href="#sec-335">3.3.5 Werte durch Events ändern</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-34">
+                          <span>3.4 Gültigkeitsbereiche</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-34" hidden>
+                          <li><a href="#sec-341">3.4.1 Globale Variablen</a></li>
+                          <li><a href="#sec-342">3.4.2 Lokale Variablen</a></li>
+                          <li><a href="#sec-343">3.4.3 Skopus</a></li>
+                          <li><a href="#sec-344">3.4.4 Überschatten</a></li>
+                        </ol>
+                      </li>
+                      <li><a href="#sec-35">3.5 Typische Fehler</a></li>
+                      <li><a href="#sec-36">3.6 Kurzfassung</a></li>
+        
+            </ol>
+          </li>
+          <li>
+            <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-part-4">
+              <span>Kapitel 4: Bedingungen und Entscheidungen</span><span class="toc-chevron" aria-hidden="true"></span>
+            </button>
+            <ol class="toc-sub" id="toc-part-4" hidden>
+              <li><a href="#ziele-4">Was lernst du in diesem Kapitel?</a></li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-41">
+                          <span>4.1 if und else</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-41" hidden>
+                          <li><a href="#sec-411">4.1.1 Kontrollfluss</a></li>
+                          <li><a href="#sec-412">4.1.2 Aufbau von if</a></li>
+                          <li><a href="#sec-413">4.1.3 Vergleichsoperatoren</a></li>
+                          <li><a href="#sec-414">4.1.4 Code-Blöcke</a></li>
+                          <li><a href="#sec-415">4.1.5 if–else</a></li>
+                          <li><a href="#sec-416">4.1.6 Fliegender Ball</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-42">
+                          <span>4.2 Mehrere Fälle</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-42" hidden>
+                          <li><a href="#sec-421">4.2.1 else if</a></li>
+                          <li><a href="#sec-422">4.2.2 Reihenfolge</a></li>
+                          <li><a href="#sec-423">4.2.3 Drei Bildschirmbereiche</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-43">
+                          <span>4.3 Boolesche Ausdrücke</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-43" hidden>
+                          <li><a href="#sec-431">4.3.1 Logisches UND</a></li>
+                          <li><a href="#sec-432">4.3.2 Logisches ODER</a></li>
+                          <li><a href="#sec-433">4.3.3 Logisches NICHT</a></li>
+                          <li><a href="#sec-434">4.3.4 Klammern und Priorität</a></li>
+                          <li><a href="#sec-435">4.3.5 Abprallender Ball</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-44">
+                          <span>4.4 Boolesche Variablen</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-44" hidden>
+                          <li><a href="#sec-441">4.4.1 true und false speichern</a></li>
+                          <li><a href="#sec-442">4.4.2 Direkt als Bedingung</a></li>
+                          <li><a href="#sec-443">4.4.3 Zustände umschalten</a></li>
+                          <li><a href="#sec-444">4.4.4 Ergebnisse speichern</a></li>
+                        </ol>
+                      </li>
+                      <li>
+                        <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-45">
+                          <span>4.5 Tasten unterscheiden</span><span class="toc-chevron" aria-hidden="true"></span>
+                        </button>
+                        <ol class="toc-sub" id="toc-45" hidden>
+                          <li><a href="#sec-451">4.5.1 Einmalig oder dauerhaft</a></li>
+                          <li><a href="#sec-452">4.5.2 Buchstabentasten</a></li>
+                          <li><a href="#sec-453">4.5.3 Pfeiltasten</a></li>
+                          <li><a href="#sec-454">4.5.4 Maustasten</a></li>
+                        </ol>
+                      </li>
+                      <li><a href="#sec-46">4.6 Typische Fehler</a></li>
+                      <li><a href="#sec-47">4.7 Kurzfassung</a></li>
+        
+            </ol>
+          </li>
+        </ol>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="intro-card" id="tutorial-ueberblick">
+        <h2>Was dieses Tutorial enthält</h2>
+        <p>Dieses Dokument führt die vier Kapitel des Processing-Tutorials zusammen. Jedes Kapitel ist in Abschnitte unterteilt; das Inhaltsverzeichnis links führt direkt zu jedem Thema.</p>
+        <div class="goal-grid">
+        <div class="goal"><strong>1</strong><span><a href="#teil-1">Formen zeichnen und gestalten</a> – Formen, Füllungen und Farben zeichnen</span></div>
+        <div class="goal"><strong>2</strong><span><a href="#teil-2">Interaktion</a> – auf Maus und Tastatur reagieren</span></div>
+        <div class="goal"><strong>3</strong><span><a href="#teil-3">Variablen</a> – Werte speichern und verändern</span></div>
+        <div class="goal"><strong>4</strong><span><a href="#teil-4">Bedingungen und Entscheidungen</a> – mit if und else entscheiden</span></div>
+        </div>
+        <div class="note"><strong>So ist das Tutorial gedacht:</strong> Es erklärt Begriffe und vorhandene Codebeispiele. Die Übungen erhältst du getrennt von deiner Lehrkraft.</div>
+      </section>
+
+      <section class="part k1" id="teil-1">
+        <header class="part-head">
+          <p class="part-eyebrow">Kapitel 1 von 4</p>
+          <h2 class="part-title">Formen zeichnen und gestalten</h2>
+          <p class="part-lead">Ein Nachschlage-Tutorial zu Koordinaten, Grundformen, Vielecken, Konturen, Füllungen und Farben.</p>
+        </header>
+              <section class="intro-card" id="ueberblick">
+                <h2>So nutzt du Kapitel 1</h2>
+                <p>Processing führt Zeichenbefehle nacheinander aus. Mit wenigen Befehlen entstehen so Punkte, Linien und Flächen. Zahlen in den Klammern legen fest, <strong>wo</strong> und <strong>wie groß</strong> eine Form gezeichnet wird. Weitere Befehle steuern Füllung, Kontur und Farbe.</p>
+                <div class="goal-grid">
+                  <div class="goal"><strong>1</strong><span>Das Bildschirm-Koordinatensystem verstehen</span></div>
+                  <div class="goal"><strong>2</strong><span>Aufbau und Parameter von Zeichenbefehlen lesen</span></div>
+                  <div class="goal"><strong>3</strong><span>Grundformen, Kreisbögen und Vielecke unterscheiden</span></div>
+                  <div class="goal"><strong>4</strong><span>Füllung, Kontur, RGB-Farbe und Transparenz erklären</span></div>
+                </div>
+                <div class="callout">
+                  <span class="icon">i</span>
+                  <p><strong>So ist das Tutorial gedacht:</strong> Es erklärt Begriffe und vorhandene Codebeispiele. Die Übungen erhältst du getrennt von deiner Lehrkraft.</p>
+                </div>
+              </section>
+
+              <article class="chapter" id="kapitel-11">
+                <header class="chapter-head">
+                  <span class="chapter-number">1.1</span>
+                  <div>
+                    <h2>Grundformen zeichnen</h2>
+                    <p>Pixel, Koordinaten, Befehle und Zeichenreihenfolge</p>
+                  </div>
+                </header>
+                <div class="chapter-body">
+                  <h3 id="koordinaten">1.1.1 Der Bildschirm besteht aus Pixeln</h3>
+                  <p>Ein digitales Bild setzt sich aus vielen kleinen Bildpunkten zusammen. Diese Bildpunkte heißen <strong>Pixel</strong>. Damit Processing jeden Ort im Zeichenfenster eindeutig findet, besitzt jeder Punkt zwei Koordinaten:</p>
+                  <ul>
+                    <li><strong>x</strong> beschreibt die Position von links nach rechts.</li>
+                    <li><strong>y</strong> beschreibt die Position von oben nach unten.</li>
+                  </ul>
+
+                  <div class="visual">
+                    <div class="visual-title">Das Koordinatensystem in Processing</div>
+                    <svg viewBox="0 0 700 420" role="img" aria-labelledby="coord-title coord-desc">
+                      <title id="coord-title">Processing-Koordinatensystem</title>
+                      <desc id="coord-desc">Der Ursprung liegt links oben. Die x-Achse verläuft nach rechts, die y-Achse nach unten.</desc>
+                      <defs>
+                        <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                          <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#cfdee9" stroke-width="1"/>
+                        </pattern>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                          <path d="M0,0 L0,6 L9,3 z" fill="#1769aa"/>
+                        </marker>
+                      </defs>
+                      <rect x="90" y="50" width="500" height="300" rx="6" fill="url(#grid)" stroke="#9bb4c7" stroke-width="2"/>
+                      <line x1="90" y1="50" x2="625" y2="50" stroke="#1769aa" stroke-width="4" marker-end="url(#arrow)"/>
+                      <line x1="90" y1="50" x2="90" y2="385" stroke="#1769aa" stroke-width="4" marker-end="url(#arrow)"/>
+                      <circle cx="90" cy="50" r="7" fill="#102a43"/>
+                      <circle cx="390" cy="200" r="10" fill="#e05252" stroke="white" stroke-width="4"/>
+                      <line x1="390" y1="50" x2="390" y2="200" stroke="#e05252" stroke-dasharray="7 7" stroke-width="2"/>
+                      <line x1="90" y1="200" x2="390" y2="200" stroke="#e05252" stroke-dasharray="7 7" stroke-width="2"/>
+                      <g font-family="system-ui, sans-serif" fill="#102a43">
+                        <text x="53" y="38" font-size="18" font-weight="700">(0, 0)</text>
+                        <text x="635" y="56" font-size="20" font-weight="800">x</text>
+                        <text x="83" y="410" font-size="20" font-weight="800">y</text>
+                        <text x="404" y="193" font-size="18" font-weight="750">(300, 150)</text>
+                        <text x="360" y="40" font-size="15">300 Pixel nach rechts</text>
+                        <text x="103" y="143" font-size="15" transform="rotate(90 103 143)">150 Pixel nach unten</text>
+                      </g>
+                    </svg>
+                    <p class="visual-note">Anders als im Mathematikunterricht liegt der Ursprung links oben. Die y-Werte werden nach unten größer.</p>
+                  </div>
+
+                  <div class="callout warning">
+                    <span class="icon">!</span>
+                    <p><strong>Bei 600 × 400 Pixeln:</strong> Die sichtbaren x-Positionen reichen von 0 bis 599, die y-Positionen von 0 bis 399. Die Zählung beginnt bei 0.</p>
+                  </div>
+
+                  <h3 id="befehle">1.1.2 Anweisungen und Programme</h3>
+                  <p>Eine <strong>Anweisung</strong> ist ein präziser Befehl an den Computer. Ein <strong>Programm</strong> ist eine geordnete Folge solcher Anweisungen. Processing arbeitet den Code von oben nach unten ab.</p>
+
+                  <div class="codebox">
+                    <div class="codebar"><span>Aufbau einer Anweisung</span><button class="copy" type="button">Code kopieren</button></div>
+                    <pre><code><span class="fn">point</span>(<span class="num">120</span>, <span class="num">80</span>);</code></pre>
+                  </div>
+
+                  <div class="compare">
+                    <div class="compare-card"><strong><code>point</code></strong><p>Name des Befehls: Processing soll einen Punkt zeichnen.</p></div>
+                    <div class="compare-card"><strong><code>(120, 80)</code></strong><p>Parameter: Sie legen die x- und y-Position des Punktes fest.</p></div>
+                    <div class="compare-card"><strong><code>;</code></strong><p>Semikolon: Es beendet die Anweisung.</p></div>
+                  </div>
+
+                  <h3 id="grundformen">1.1.3 Die wichtigsten Grundformen</h3>
+                  <div class="syntax-grid">
+                    <section class="syntax-card">
+                      <h4>Punkt</h4>
+                      <div class="syntax-line">point(x, y);</div>
+                      <p>Ein einzelner Punkt an der Position <code>(x, y)</code>.</p>
+                    </section>
+                    <section class="syntax-card">
+                      <h4>Linie</h4>
+                      <div class="syntax-line">line(x1, y1, x2, y2);</div>
+                      <p>Verbindet einen Startpunkt mit einem Endpunkt.</p>
+                    </section>
+                    <section class="syntax-card">
+                      <h4>Dreieck</h4>
+                      <div class="syntax-line">triangle(x1, y1, x2, y2, x3, y3);</div>
+                      <p>Die drei Punktpaare bestimmen die drei Ecken.</p>
+                    </section>
+                    <section class="syntax-card">
+                      <h4>Rechteck</h4>
+                      <div class="syntax-line">rect(x, y, breite, hoehe);</div>
+                      <p>Normalerweise: linke obere Ecke, dann Breite und Höhe.</p>
+                    </section>
+                    <section class="syntax-card">
+                      <h4>Kreis</h4>
+                      <div class="syntax-line">circle(x, y, durchmesser);</div>
+                      <p>Mittelpunkt und Durchmesser bestimmen den Kreis.</p>
+                    </section>
+                    <section class="syntax-card">
+                      <h4>Ellipse</h4>
+                      <div class="syntax-line">ellipse(x, y, breite, hoehe);</div>
+                      <p>Mittelpunkt, waagerechter und senkrechter Durchmesser.</p>
+                    </section>
+                  </div>
+
+                  <div class="codebox">
+                    <div class="codebar"><span>Beispiel: mehrere Grundformen</span><button class="copy" type="button">Code kopieren</button></div>
+                    <pre><code><span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+        <span class="fn">background</span>(<span class="num">245</span>);
+
+        <span class="fn">point</span>(<span class="num">40</span>, <span class="num">40</span>);
+        <span class="fn">line</span>(<span class="num">70</span>, <span class="num">40</span>, <span class="num">190</span>, <span class="num">90</span>);
+        <span class="fn">triangle</span>(<span class="num">230</span>, <span class="num">100</span>, <span class="num">300</span>, <span class="num">100</span>, <span class="num">265</span>, <span class="num">35</span>);
+        <span class="fn">rect</span>(<span class="num">50</span>, <span class="num">150</span>, <span class="num">130</span>, <span class="num">80</span>);
+        <span class="fn">circle</span>(<span class="num">270</span>, <span class="num">190</span>, <span class="num">90</span>);
+        <span class="fn">ellipse</span>(<span class="num">410</span>, <span class="num">190</span>, <span class="num">120</span>, <span class="num">70</span>);</code></pre>
+                  </div>
+
+                  <h3 id="reihenfolge">1.1.4 Die Zeichenreihenfolge entscheidet</h3>
+                  <p>Processing zeichnet wie auf Papier: Was später gezeichnet wird, liegt weiter vorn und kann frühere Formen verdecken.</p>
+
+                  <div class="codebox">
+                    <div class="codebar"><span>Beispiel: Haus aus Grundformen</span><button class="copy" type="button">Code kopieren</button></div>
+                    <pre><code><span class="fn">size</span>(<span class="num">360</span>, <span class="num">300</span>);
+        <span class="fn">background</span>(<span class="num">235</span>);
+
+        <span class="comment">// Zuerst der Hauskörper</span>
+        <span class="fn">rect</span>(<span class="num">90</span>, <span class="num">120</span>, <span class="num">180</span>, <span class="num">130</span>);
+
+        <span class="comment">// Das Dach wird danach davor gezeichnet</span>
+        <span class="fn">triangle</span>(<span class="num">70</span>, <span class="num">120</span>, <span class="num">290</span>, <span class="num">120</span>, <span class="num">180</span>, <span class="num">40</span>);
+
+        <span class="comment">// Tür und Fenster liegen ganz vorn</span>
+        <span class="fn">rect</span>(<span class="num">155</span>, <span class="num">180</span>, <span class="num">50</span>, <span class="num">70</span>);
+        <span class="fn">rect</span>(<span class="num">110</span>, <span class="num">150</span>, <span class="num">30</span>, <span class="num">30</span>);
+        <span class="fn">rect</span>(<span class="num">220</span>, <span class="num">150</span>, <span class="num">30</span>, <span class="num">30</span>);</code></pre>
+                  </div>
+
+                  <div class="callout">
+                    <span class="icon">M</span>
+                    <p><strong>Merksatz:</strong> Processing arbeitet von oben nach unten. Die zuletzt gezeichnete Form liegt ganz vorn.</p>
+                  </div>
+                  <a class="back-top" href="#top">↑ Nach oben</a>
+                </div>
+              </article>
+
+              <article class="chapter" id="kapitel-13">
+                <header class="chapter-head">
+                  <span class="chapter-number">1.2</span>
+                  <div>
+                    <h2>Weitere Formen</h2>
+                    <p>Ellipsensegmente und frei zusammengesetzte Vielecke</p>
+                  </div>
+                </header>
+                <div class="chapter-body">
+                  <h3 id="ellipsensegmente">1.2.1 Teile einer Ellipse mit <code>arc()</code></h3>
+                  <p>Mit <code>arc()</code> wird nur ein Ausschnitt einer Ellipse gezeichnet. Zu Mittelpunkt, Breite und Höhe kommen ein Start- und ein Endwinkel hinzu.</p>
+                  <div class="syntax-card">
+                    <h4>Allgemeiner Aufbau</h4>
+                    <div class="syntax-line">arc(x, y, breite, hoehe, startwinkel, endwinkel);</div>
+                    <p>Der Winkel 0° zeigt vom Mittelpunkt nach rechts. Wegen der nach unten laufenden y-Achse werden die Winkel auf dem Bildschirm im Uhrzeigersinn sichtbar.</p>
+                  </div>
+
+                  <div class="visual">
+                    <div class="visual-title">Winkel bei arc()</div>
+                    <svg viewBox="0 0 700 390" role="img" aria-labelledby="arc-title arc-desc">
+                      <title id="arc-title">Winkelorientierung für arc</title>
+                      <desc id="arc-desc">Null Grad liegt rechts, neunzig Grad unten, einhundertachtzig Grad links und zweihundertsiebzig Grad oben.</desc>
+                      <rect width="700" height="390" fill="#f4f8fb"/>
+                      <circle cx="350" cy="195" r="125" fill="none" stroke="#cbdbe7" stroke-width="3" stroke-dasharray="7 7"/>
+                      <path d="M 458.25 257.5 A 125 125 0 1 1 458.25 132.5" fill="none" stroke="#1769aa" stroke-width="14" stroke-linecap="round"/>
+                      <line x1="350" y1="195" x2="475" y2="195" stroke="#102a43" stroke-width="3"/>
+                      <line x1="350" y1="195" x2="458.25" y2="257.5" stroke="#e05252" stroke-width="3"/>
+                      <line x1="350" y1="195" x2="458.25" y2="132.5" stroke="#e05252" stroke-width="3"/>
+                      <circle cx="350" cy="195" r="6" fill="#102a43"/>
+                      <g font-family="system-ui, sans-serif" fill="#102a43" font-size="18" font-weight="700">
+                        <text x="486" y="201">0°</text>
+                        <text x="335" y="350">90°</text>
+                        <text x="180" y="201">180°</text>
+                        <text x="326" y="45">270°</text>
+                        <text x="470" y="273" fill="#b84040">30°</text>
+                        <text x="468" y="126" fill="#b84040">330°</text>
+                      </g>
+                    </svg>
+                    <p class="visual-note">Gezeigt ist ein Bogen von 30° bis 330°. Start- und Endpunkt sind rot markiert.</p>
+                  </div>
+
+                  <p>Processing rechnet intern mit dem <strong>Bogenmaß</strong>. Für den Einstieg ist <code>radians()</code> besonders lesbar: Die Funktion wandelt Grad in Bogenmaß um.</p>
+                  <div class="codebox">
+                    <div class="codebar"><span>Beispiel: Ellipsensegment</span><button class="copy" type="button">Code kopieren</button></div>
+                    <pre><code><span class="fn">size</span>(<span class="num">300</span>, <span class="num">220</span>);
+        <span class="fn">background</span>(<span class="num">245</span>);
+
+        <span class="fn">arc</span>(<span class="num">150</span>, <span class="num">110</span>, <span class="num">180</span>, <span class="num">120</span>,
+            <span class="fn">radians</span>(<span class="num">30</span>), <span class="fn">radians</span>(<span class="num">330</span>));</code></pre>
+                  </div>
+                  <p>Alternativ entspricht ein Vollkreis <code>2 * PI</code>. So lässt sich 30° auch als <code>PI / 6</code> angeben.</p>
+
+                  <h3 id="vielecke">1.2.2 Beliebige Vielecke mit <code>beginShape()</code></h3>
+                  <p>Ein <strong>Polygon</strong> ist ein Vieleck. Processing verbindet dazu mehrere selbst festgelegte Eckpunkte. Jeder Eckpunkt wird mit <code>vertex(x, y)</code> angegeben.</p>
+
+                  <div class="codebox">
+                    <div class="codebar"><span>Beispiel: ein unregelmäßiges Fünfeck</span><button class="copy" type="button">Code kopieren</button></div>
+                    <pre><code><span class="fn">size</span>(<span class="num">320</span>, <span class="num">260</span>);
+        <span class="fn">background</span>(<span class="num">245</span>);
+
+        <span class="fn">beginShape</span>();
+        <span class="fn">vertex</span>(<span class="num">160</span>, <span class="num">30</span>);  <span class="comment">// 1. Ecke</span>
+        <span class="fn">vertex</span>(<span class="num">270</span>, <span class="num">100</span>); <span class="comment">// 2. Ecke</span>
+        <span class="fn">vertex</span>(<span class="num">225</span>, <span class="num">220</span>); <span class="comment">// 3. Ecke</span>
+        <span class="fn">vertex</span>(<span class="num">85</span>, <span class="num">210</span>);  <span class="comment">// 4. Ecke</span>
+        <span class="fn">vertex</span>(<span class="num">45</span>, <span class="num">90</span>);   <span class="comment">// 5. Ecke</span>
+        <span class="fn">endShape</span>(<span class="const">CLOSE</span>);</code></pre>
+                  </div>
+
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>Befehl</th><th>Aufgabe</th></tr></thead>
+                      <tbody>
+                        <tr><td><code>beginShape();</code></td><td>Startet die Beschreibung einer neuen Form.</td></tr>
+                        <tr><td><code>vertex(x, y);</code></td><td>Fügt einen Eckpunkt hinzu. Die Reihenfolge bestimmt die Verbindungslinien.</td></tr>
+                        <tr><td><code>endShape(CLOSE);</code></td><td>Beendet und schließt die Form: Der letzte Punkt wird mit dem ersten verbunden.</td></tr>
+                        <tr><td><code>endShape();</code></td><td>Beendet die Form, ohne die letzte Verbindung automatisch zu zeichnen.</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="callout">
+                    <span class="icon">M</span>
+                    <p><strong>Merksatz:</strong> <code>beginShape()</code> öffnet die Form, <code>vertex()</code> setzt ihre Ecken und <code>endShape(CLOSE)</code> schließt sie.</p>
+                  </div>
+                  <a class="back-top" href="#top">↑ Nach oben</a>
+                </div>
+              </article>
+
+              <article class="chapter" id="kapitel-14">
+                <header class="chapter-head">
+                  <span class="chapter-number">1.3</span>
+                  <div>
+                    <h2>Kontur, Füllung und Farben</h2>
+                    <p>Graustufen, RGB-Farben und Transparenz</p>
+                  </div>
+                </header>
+                <div class="chapter-body">
+                  <h3 id="graustufen">1.3.1 Graustufen von 0 bis 255</h3>
+                  <p>Eine einzelne Zahl beschreibt eine Graustufe. <code>0</code> bedeutet schwarz, <code>255</code> bedeutet weiß. Werte dazwischen ergeben verschiedene Grautöne. Als Merkhilfe kannst du dir die Zahl als Lichtmenge vorstellen.</p>
+                  <div class="visual">
+                    <div class="visual-title">Graustufen</div>
+                    <svg viewBox="0 0 700 185" role="img" aria-label="Graustufen von Schwarz bis Weiß">
+                      <defs><linearGradient id="gray" x1="0" x2="1"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>
+                      <rect x="55" y="45" width="590" height="70" rx="12" fill="url(#gray)" stroke="#9ab0c1"/>
+                      <g font-family="system-ui, sans-serif" font-weight="750" font-size="18" fill="#102a43">
+                        <text x="48" y="150">0 · schwarz</text><text x="312" y="150">128</text><text x="548" y="150">255 · weiß</text>
+                      </g>
+                    </svg>
+                  </div>
+
+                  <h3 id="fuellung-kontur">1.3.2 Füllung und Kontur</h3>
+                  <p><code>fill()</code> legt die Farbe im Inneren einer Form fest. <code>stroke()</code> legt die Konturfarbe fest, <code>strokeWeight()</code> ihre Dicke in Pixeln.</p>
+                  <div class="syntax-grid">
+                    <section class="syntax-card"><h4><code>fill(80);</code></h4><p>Die folgenden Flächen werden dunkelgrau gefüllt.</p></section>
+                    <section class="syntax-card"><h4><code>stroke(255);</code></h4><p>Die folgenden Konturen werden weiß.</p></section>
+                    <section class="syntax-card"><h4><code>strokeWeight(5);</code></h4><p>Die folgenden Konturen werden 5 Pixel dick.</p></section>
+                    <section class="syntax-card"><h4><code>noFill();</code></h4><p>Die folgenden Formen erhalten keine Füllung.</p></section>
+                    <section class="syntax-card"><h4><code>noStroke();</code></h4><p>Die folgenden Formen erhalten keine Kontur.</p></section>
+                  </div>
+
+                  <div class="callout warning">
+                    <span class="icon">!</span>
+                    <p><strong>Die Gestaltung bleibt aktiv:</strong> Ein Farbbefehl gilt für alle Formen, die danach gezeichnet werden – bis ein neuer Farbbefehl ihn ersetzt.</p>
+                  </div>
+
+                  <div class="codebox">
+                    <div class="codebar"><span>Beispiel: Stile nacheinander verändern</span><button class="copy" type="button">Code kopieren</button></div>
+                    <pre><code><span class="fn">size</span>(<span class="num">520</span>, <span class="num">220</span>);
+        <span class="fn">background</span>(<span class="num">235</span>);
+
+        <span class="fn">fill</span>(<span class="num">60</span>);          <span class="comment">// dunkelgraue Füllung</span>
+        <span class="fn">stroke</span>(<span class="num">255</span>);       <span class="comment">// weiße Kontur</span>
+        <span class="fn">strokeWeight</span>(<span class="num">5</span>);
+        <span class="fn">circle</span>(<span class="num">100</span>, <span class="num">110</span>, <span class="num">120</span>);
+
+        <span class="fn">noStroke</span>();        <span class="comment">// Kontur ab jetzt aus</span>
+        <span class="fn">fill</span>(<span class="num">150</span>);
+        <span class="fn">rect</span>(<span class="num">210</span>, <span class="num">50</span>, <span class="num">110</span>, <span class="num">120</span>);
+
+        <span class="fn">noFill</span>();          <span class="comment">// Füllung ab jetzt aus</span>
+        <span class="fn">stroke</span>(<span class="num">0</span>);         <span class="comment">// Kontur wieder an</span>
+        <span class="fn">strokeWeight</span>(<span class="num">3</span>);
+        <span class="fn">triangle</span>(<span class="num">385</span>, <span class="num">170</span>, <span class="num">465</span>, <span class="num">170</span>, <span class="num">425</span>, <span class="num">45</span>);</code></pre>
+                  </div>
+
+                  <h3 id="zeichenflaeche">1.3.3 Größe und Hintergrund des Zeichenfensters</h3>
+                  <p><code>size(breite, hoehe)</code> bestimmt die Größe des Fensters. <code>background()</code> füllt das gesamte Fenster mit einer Farbe und übermalt dabei alles, was bereits zu sehen war.</p>
+                  <div class="codebox">
+                    <div class="codebar"><span>Die ersten Zeilen eines einfachen Programms</span><button class="copy" type="button">Code kopieren</button></div>
+                    <pre><code><span class="fn">size</span>(<span class="num">600</span>, <span class="num">400</span>);  <span class="comment">// 600 Pixel breit, 400 Pixel hoch</span>
+        <span class="fn">background</span>(<span class="num">245</span>); <span class="comment">// fast weißer Hintergrund</span>
+
+        <span class="fn">circle</span>(<span class="num">300</span>, <span class="num">200</span>, <span class="num">140</span>);</code></pre>
+                  </div>
+                  <div class="callout error">
+                    <span class="icon">×</span>
+                    <p><strong><code>background()</code> nicht ans Ende setzen:</strong> Dann wird die gesamte vorherige Zeichnung übermalt. In einfachen Programmen steht der Hintergrund vor den Formen.</p>
+                  </div>
+
+                  <h3 id="rgb">1.3.4 RGB-Farben</h3>
+                  <p>Farben entstehen aus drei Anteilen: <strong>Rot, Grün und Blau</strong>. Jeder Anteil kann einen Wert von 0 bis 255 besitzen. Die Reihenfolge ist immer <strong>R – G – B</strong>.</p>
+                  <div class="swatches" aria-label="Beispiele für RGB-Farben">
+                    <div class="swatch red"><span>255, 0, 0</span></div>
+                    <div class="swatch green"><span>0, 255, 0</span></div>
+                    <div class="swatch blue"><span>0, 0, 255</span></div>
+                    <div class="swatch mix"><span>128, 60, 210</span></div>
+                  </div>
+
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>Befehl</th><th>Wirkung</th></tr></thead>
+                      <tbody>
+                        <tr><td><code>fill(255, 0, 0);</code></td><td>rote Füllung</td></tr>
+                        <tr><td><code>stroke(0, 0, 255);</code></td><td>blaue Kontur</td></tr>
+                        <tr><td><code>background(240, 245, 255);</code></td><td>sehr heller, leicht blauer Hintergrund</td></tr>
+                        <tr><td><code>fill(255, 255, 0);</code></td><td>Gelb durch Rot + Grün</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <h3 id="transparenz">1.3.5 Transparenz mit dem Alpha-Wert</h3>
+                  <p>Ein zusätzlicher Wert steuert die Deckkraft. Dieser <strong>Alpha-Wert</strong> reicht ebenfalls von 0 bis 255:</p>
+                  <ul>
+                    <li><code>255</code>: vollständig deckend</li>
+                    <li><code>0</code>: vollständig durchsichtig</li>
+                    <li>Werte dazwischen: teilweise transparent</li>
+                  </ul>
+                  <div class="codebox">
+                    <div class="codebar"><span>Beispiel: überlagerte, transparente Kreise</span><button class="copy" type="button">Code kopieren</button></div>
+                    <pre><code><span class="fn">size</span>(<span class="num">420</span>, <span class="num">260</span>);
+        <span class="fn">background</span>(<span class="num">245</span>);
+        <span class="fn">noStroke</span>();
+
+        <span class="fn">fill</span>(<span class="num">255</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">150</span>);  <span class="comment">// Rot + Alpha</span>
+        <span class="fn">circle</span>(<span class="num">160</span>, <span class="num">130</span>, <span class="num">150</span>);
+
+        <span class="fn">fill</span>(<span class="num">0</span>, <span class="num">90</span>, <span class="num">255</span>, <span class="num">150</span>); <span class="comment">// Blau + Alpha</span>
+        <span class="fn">circle</span>(<span class="num">255</span>, <span class="num">130</span>, <span class="num">150</span>);</code></pre>
+                  </div>
+                  <p>Bei einer Graustufe besteht die Kurzform aus zwei Werten: <code>fill(grauwert, alpha)</code>. Bei einer RGB-Farbe sind es vier Werte: <code>fill(rot, gruen, blau, alpha)</code>.</p>
+
+                  <h3 id="farbbeispiel">1.3.6 Ein vollständiges Farb-Beispiel</h3>
+                  <div class="codebox">
+                    <div class="codebar"><span>Beispiel: farbige Landschaft</span><button class="copy" type="button">Code kopieren</button></div>
+                    <pre><code><span class="fn">size</span>(<span class="num">600</span>, <span class="num">360</span>);
+        <span class="fn">background</span>(<span class="num">180</span>, <span class="num">225</span>, <span class="num">255</span>); <span class="comment">// Himmel</span>
+
+        <span class="fn">noStroke</span>();
+        <span class="fn">fill</span>(<span class="num">255</span>, <span class="num">205</span>, <span class="num">55</span>);       <span class="comment">// Sonne</span>
+        <span class="fn">circle</span>(<span class="num">500</span>, <span class="num">80</span>, <span class="num">90</span>);
+
+        <span class="fn">fill</span>(<span class="num">65</span>, <span class="num">155</span>, <span class="num">90</span>);        <span class="comment">// Wiese</span>
+        <span class="fn">rect</span>(<span class="num">0</span>, <span class="num">240</span>, <span class="num">600</span>, <span class="num">120</span>);
+
+        <span class="fn">fill</span>(<span class="num">215</span>, <span class="num">80</span>, <span class="num">65</span>);        <span class="comment">// Haus</span>
+        <span class="fn">rect</span>(<span class="num">180</span>, <span class="num">170</span>, <span class="num">170</span>, <span class="num">120</span>);
+
+        <span class="fn">fill</span>(<span class="num">70</span>, <span class="num">75</span>, <span class="num">95</span>);         <span class="comment">// Dach</span>
+        <span class="fn">triangle</span>(<span class="num">155</span>, <span class="num">170</span>, <span class="num">375</span>, <span class="num">170</span>, <span class="num">265</span>, <span class="num">85</span>);
+
+        <span class="fn">stroke</span>(<span class="num">255</span>);                   <span class="comment">// Fenster</span>
+        <span class="fn">strokeWeight</span>(<span class="num">4</span>);
+        <span class="fn">fill</span>(<span class="num">120</span>, <span class="num">210</span>, <span class="num">245</span>);
+        <span class="fn">rect</span>(<span class="num">215</span>, <span class="num">205</span>, <span class="num">45</span>, <span class="num">45</span>);</code></pre>
+                  </div>
+
+                  <div class="callout">
+                    <span class="icon">M</span>
+                    <p><strong>Merksatz:</strong> Erst Stil festlegen, dann Form zeichnen. <code>fill()</code>, <code>stroke()</code> und <code>strokeWeight()</code> wirken immer auf die danach folgenden Formen.</p>
+                  </div>
+                  <a class="back-top" href="#top">↑ Nach oben</a>
+                </div>
+              </article>
+
+              <section class="intro-card" id="fehler">
+                <h2>1.4 Typische Fehler - schnell erkannt</h2>
+                <div class="mistakes">
+                  <div class="mistake"><strong>Die Form sitzt zu tief.</strong><p>Der y-Wert wächst nach unten, nicht nach oben.</p></div>
+                  <div class="mistake"><strong>Processing meldet einen Syntaxfehler.</strong><p>Prüfe Semikolon, Klammern, Kommata und die Schreibweise des Befehls.</p></div>
+                  <div class="mistake"><strong>Breite und Position wirken vertauscht.</strong><p>Vergleiche Anzahl und Reihenfolge der Parameter mit der Befehlstabelle.</p></div>
+                  <div class="mistake"><strong>Alle Formen haben dieselbe Farbe.</strong><p>Ein <code>fill()</code>-Befehl bleibt aktiv, bis ein neuer folgt.</p></div>
+                  <div class="mistake"><strong>Die Zeichnung ist verschwunden.</strong><p>Ein später <code>background()</code>-Befehl hat sie wahrscheinlich übermalt.</p></div>
+                  <div class="mistake"><strong>Das Vieleck ist offen.</strong><p>Verwende <code>endShape(CLOSE)</code>, wenn letzter und erster Punkt verbunden werden sollen.</p></div>
+                  <div class="mistake"><strong>Ein Teil liegt hinter einer anderen Form.</strong><p>Ändere die Reihenfolge der Zeichenbefehle.</p></div>
+                </div>
+              </section>
+
+              <section class="summary" id="kurzfassung">
+                <h2>1.5 Das Wichtigste auf einen Blick</h2>
+                <div class="summary-body">
+                  <ul>
+                    <li>Der Ursprung <code>(0, 0)</code> liegt links oben.</li>
+                    <li>x wächst nach rechts, y wächst nach unten.</li>
+                    <li>Parameter stehen in Klammern und werden durch Kommata getrennt.</li>
+                    <li>Ein Semikolon beendet eine Anweisung.</li>
+                    <li>Später gezeichnete Formen liegen weiter vorn.</li>
+                    <li><code>arc()</code> zeichnet einen Teil einer Ellipse.</li>
+                    <li>Vielecke entstehen mit <code>beginShape()</code>, <code>vertex()</code> und <code>endShape()</code>.</li>
+                    <li>Graustufen reichen von 0 bis 255.</li>
+                    <li>RGB-Farben bestehen aus Rot, Grün und Blau.</li>
+                    <li>Der Alpha-Wert steuert die Deckkraft.</li>
+                    <li>Gestaltungsbefehle gelten für alle nachfolgenden Formen.</li>
+                  </ul>
+                </div>
+        
+              </section>
+    
+        <nav class="part-nav" aria-label="Navigation">
+          <a href="#teil-2">Weiter zu Kapitel 2: Interaktion →</a>
+        </nav>
+      </section>
+
+      <section class="part" id="teil-2">
+        <header class="part-head">
+          <p class="part-eyebrow">Kapitel 2 von 4</p>
+          <h2 class="part-title">Interaktion</h2>
+          <p class="part-lead">Programme, die fortlaufend arbeiten und auf Maus oder Tastatur reagieren.</p>
+        </header>
+              <section class="intro-card" aria-labelledby="ziele-2">
+                <h2 id="ziele-2">Was lernst du in diesem Kapitel?</h2>
+                <p>Bisher hat Processing ein Bild gezeichnet und war danach fertig. Jetzt lernst du Programme kennen, die weiterlaufen und auf Eingaben reagieren.</p>
+                <div class="goal-grid">
+                  <div class="goal"><strong>1</strong><span>statischen und aktiven Modus unterscheiden</span></div>
+                  <div class="goal"><strong>2</strong><span><code>setup()</code> und <code>draw()</code> richtig einsetzen</span></div>
+                  <div class="goal"><strong>3</strong><span>die Mausposition zum Zeichnen verwenden</span></div>
+                  <div class="goal"><strong>4</strong><span>auf Tastendruck und Mausklick reagieren</span></div>
+                </div>
+                <div class="note"><strong>Vorwissen:</strong> Du solltest einfache Formen zeichnen sowie Füll- und Hintergrundfarben festlegen können.</div>
+              </section>
+
+              <section class="chapter" id="sec-21">
+                <div class="chapter-head">
+                  <span class="chapter-number">2.1</span>
+                  <h2>Programmablauf: statisch und aktiv</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-211">
+                    <h3>2.1.1 Statischer Modus</h3>
+                    <p>Im statischen Modus arbeitet Processing die Befehle <strong>einmal von oben nach unten</strong> ab. Nach der letzten Zeile ist das Programm beendet. So waren die Programme aus Kapitel 1 aufgebaut.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Beispiel: ein fertiges Bild</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="fn">size</span>(<span class="num">400</span>, <span class="num">300</span>);
+        <span class="fn">background</span>(<span class="num">230</span>);
+        <span class="fn">fill</span>(<span class="num">40</span>, <span class="num">130</span>, <span class="num">210</span>);
+        <span class="fn">ellipse</span>(<span class="num">200</span>, <span class="num">150</span>, <span class="num">100</span>, <span class="num">100</span>);</code></pre>
+                    </div>
+                    <p>Jede Zeile wird genau einmal ausgeführt. Der Kreis kann sich danach nicht bewegen und das Programm kann noch nicht auf Eingaben reagieren.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-212">
+                    <h3>2.1.2 Aktiver Modus mit <code>setup()</code> und <code>draw()</code></h3>
+                    <p>Für Bewegung und Interaktion braucht Processing den <strong>aktiven Modus</strong>. Dabei übernehmen zwei besondere Bereiche unterschiedliche Aufgaben:</p>
+                    <div class="flow" aria-label="Ablauf im aktiven Modus">
+                      <div class="flow-box"><strong>Start</strong>Programm beginnt</div>
+                      <div class="flow-arrow" aria-hidden="true">→</div>
+                      <div class="flow-box"><strong><code>setup()</code></strong>einmal ausführen</div>
+                      <div class="flow-arrow" aria-hidden="true">→</div>
+                      <div class="flow-box"><strong><code>draw()</code></strong>immer wieder ausführen</div>
+                    </div>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Grundgerüst des aktiven Modus</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">400</span>, <span class="num">300</span>);  <span class="com">// Wird einmal ausgeführt</span>
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">230</span>);  <span class="com">// Wird ständig wiederholt</span>
+          <span class="fn">ellipse</span>(mouseX, mouseY, <span class="num">40</span>, <span class="num">40</span>);
+        }</code></pre>
+                    </div>
+                    <div class="explain">
+                      <div><strong><code>setup()</code></strong><br>Hier stehen Einstellungen, die nur am Anfang benötigt werden, zum Beispiel die Fenstergröße.</div>
+                      <div><strong><code>draw()</code></strong><br>Dieser Code wird wieder und wieder ausgeführt, bis das Programm gestoppt wird.</div>
+                    </div>
+                    <div class="remember"><strong>Merke:</strong> Erst läuft <code>setup()</code> einmal. Danach läuft <code>draw()</code> in einer ständigen Wiederholung.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-213">
+                    <h3>2.1.3 Code-Blöcke und geschweifte Klammern</h3>
+                    <p>Die geschweiften Klammern <code>{</code> und <code>}</code> schließen einen <strong>Code-Block</strong> ein. Sie zeigen Processing, welche Befehle zusammengehören.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Ein Code-Block</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {          <span class="com">// Block beginnt</span>
+          <span class="fn">size</span>(<span class="num">400</span>, <span class="num">300</span>);      <span class="com">// Gehört zu setup()</span>
+          <span class="fn">strokeWeight</span>(<span class="num">3</span>);     <span class="com">// Gehört ebenfalls dazu</span>
+        }                       <span class="com">// Block endet</span></code></pre>
+                    </div>
+                    <p>Die Befehle innerhalb eines Blocks werden eingerückt. Das verändert die Ausführung nicht, macht den Code aber deutlich leichter lesbar. Processing kann über <strong>Bearbeiten → Autoformatierung</strong> automatisch einrücken.</p>
+                    <div class="warning"><strong>Nicht mischen:</strong> Sobald du <code>setup()</code> oder <code>draw()</code> verwendest, gehören alle ausführbaren Zeichenbefehle in einen passenden Code-Block.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-214">
+                    <h3>2.1.4 Frame Rate</h3>
+                    <p>Ein einzelner Durchlauf von <code>draw()</code> heißt <strong>Frame</strong>. Processing versucht normalerweise, etwa 60 Frames pro Sekunde darzustellen. Diese Häufigkeit heißt <strong>Frame Rate</strong>.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Langsame Wiederholung sichtbar machen</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">400</span>, <span class="num">300</span>);
+          <span class="fn">frameRate</span>(<span class="num">2</span>);  <span class="com">// Höchstens zwei Frames pro Sekunde</span>
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">println</span>(<span class="string">"draw wird ausgeführt"</span>);
+        }</code></pre>
+                    </div>
+                    <p>Der Befehl <code>frameRate(2)</code> legt eine Obergrenze von zwei Durchläufen pro Sekunde fest. Für die meisten Programme musst du die voreingestellte Frame Rate nicht verändern.</p>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-22">
+                <div class="chapter-head">
+                  <span class="chapter-number">2.2</span>
+                  <h2>Interaktion mit der Maus</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-221">
+                    <h3>2.2.1 Die aktuelle Mausposition</h3>
+                    <p>Processing stellt die aktuelle Position des Mauszeigers automatisch bereit:</p>
+                    <table class="command-table">
+                      <thead><tr><th>Begriff</th><th>Bedeutung</th></tr></thead>
+                      <tbody>
+                        <tr><td><code>mouseX</code></td><td>aktuelle x-Koordinate der Maus</td></tr>
+                        <tr><td><code>mouseY</code></td><td>aktuelle y-Koordinate der Maus</td></tr>
+                      </tbody>
+                    </table>
+                    <p>Du kannst beide Wörter überall dort einsetzen, wo Processing eine Zahl erwartet. Ihr Wert ändert sich passend zur Mausposition.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Ein Kreis folgt der Maus</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">350</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);              <span class="com">// Altes Bild übermalen</span>
+          <span class="fn">fill</span>(<span class="num">30</span>, <span class="num">150</span>, <span class="num">210</span>);
+          <span class="fn">ellipse</span>(mouseX, mouseY, <span class="num">50</span>, <span class="num">50</span>); <span class="com">// Maus bestimmt die Position</span>
+        }</code></pre>
+                    </div>
+                    <div class="note"><strong>Noch kein Variablenkapitel:</strong> <code>mouseX</code> und <code>mouseY</code> sind Variablen, die Processing für dich verwaltet. Im Moment genügt es, ihre Bedeutung zu kennen.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-222">
+                    <h3>2.2.2 Bewegung oder Spur?</h3>
+                    <p>Ob eine Form scheinbar bewegt wird oder eine Spur hinterlässt, hängt davon ab, ob der Hintergrund in jedem Frame neu gezeichnet wird.</p>
+                    <div class="explain">
+                      <div><strong><code>background()</code> in <code>draw()</code></strong><br>Das vorige Bild wird ständig übermalt. Man sieht nur die aktuelle Position.</div>
+                      <div><strong>Kein <code>background()</code> in <code>draw()</code></strong><br>Die alten Zeichnungen bleiben sichtbar. Es entsteht eine Spur.</div>
+                    </div>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Mit der Maus Punkte zeichnen</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">350</span>);
+          <span class="fn">background</span>(<span class="num">255</span>);  <span class="com">// Nur einmal löschen</span>
+          <span class="fn">strokeWeight</span>(<span class="num">5</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">point</span>(mouseX, mouseY); <span class="com">// Jeder Punkt bleibt erhalten</span>
+        }</code></pre>
+                    </div>
+                    <div class="remember"><strong>Merke:</strong> Die Position von <code>background()</code> entscheidet mit darüber, ob frühere Zeichnungen verschwinden oder sichtbar bleiben.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-223">
+                    <h3>2.2.3 Die vorherige Mausposition</h3>
+                    <p>Zwischen einzelnen Punkten können bei schnellen Mausbewegungen Lücken entstehen. Für eine geschlossene Linie verbindet man die vorige mit der aktuellen Mausposition.</p>
+                    <table class="command-table">
+                      <thead><tr><th>Begriff</th><th>Bedeutung</th></tr></thead>
+                      <tbody>
+                        <tr><td><code>pmouseX</code></td><td>x-Koordinate der Maus im vorherigen Frame</td></tr>
+                        <tr><td><code>pmouseY</code></td><td>y-Koordinate der Maus im vorherigen Frame</td></tr>
+                      </tbody>
+                    </table>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Eine durchgehende Linie zeichnen</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">350</span>);
+          <span class="fn">background</span>(<span class="num">255</span>);
+          <span class="fn">strokeWeight</span>(<span class="num">3</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">line</span>(pmouseX, pmouseY, mouseX, mouseY);
+          <span class="com">// Linie von der vorherigen zur aktuellen Position</span>
+        }</code></pre>
+                    </div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-23">
+                <div class="chapter-head">
+                  <span class="chapter-number">2.3</span>
+                  <h2>Interaktion mit Tasten und Mausklicks</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-231">
+                    <h3>2.3.1 Auf einen Tastendruck reagieren</h3>
+                    <p>Der Code-Block von <code>keyPressed()</code> wird genau dann ausgeführt, wenn eine beliebige Taste der Tastatur gedrückt wird.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Tastendruck färbt den Hintergrund schwarz</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">350</span>);
+          <span class="fn">background</span>(<span class="num">220</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="com">// Bleibt leer, hält das Programm aber aktiv</span>
+        }
+
+        <span class="kw">void</span> <span class="fn">keyPressed</span>() {
+          <span class="fn">background</span>(<span class="num">0</span>); <span class="com">// Wird bei einem Tastendruck ausgeführt</span>
+        }</code></pre>
+                    </div>
+                    <p>Welche Taste gedrückt wurde, unterscheiden wir an dieser Stelle noch nicht. Dafür wären zusätzliche Abfragen nötig.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-232">
+                    <h3>2.3.2 Auf einen Mausklick reagieren</h3>
+                    <p>Für einen Mausklick gibt es den passenden Code-Block <code>mousePressed()</code>. Er wird bei jedem Drücken einer Maustaste einmal ausgeführt.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Mausklick zeichnet einen Kreis</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">350</span>);
+          <span class="fn">background</span>(<span class="num">245</span>);
+          <span class="fn">fill</span>(<span class="num">240</span>, <span class="num">90</span>, <span class="num">70</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="com">// Kein background(): gezeichnete Kreise bleiben sichtbar</span>
+        }
+
+        <span class="kw">void</span> <span class="fn">mousePressed</span>() {
+          <span class="fn">ellipse</span>(mouseX, mouseY, <span class="num">40</span>, <span class="num">40</span>);
+          <span class="com">// Ein Kreis an der angeklickten Position</span>
+        }</code></pre>
+                    </div>
+                  </section>
+
+                  <section class="lesson" id="sec-233">
+                    <h3>2.3.3 Zwei Arten der Interaktion</h3>
+                    <p>Die bisherigen Beispiele zeigen zwei verschiedene Arten, wie ein Programm auf die Nutzerin oder den Nutzer reagieren kann:</p>
+                    <table class="command-table">
+                      <thead><tr><th>Art</th><th>Wann reagiert das Programm?</th><th>Beispiele</th></tr></thead>
+                      <tbody>
+                        <tr><td><strong>kontinuierlich</strong></td><td>fortlaufend in jedem Frame</td><td><code>mouseX</code>, <code>mouseY</code></td></tr>
+                        <tr><td><strong>punktuell</strong></td><td>genau beim Eintreten eines Ereignisses</td><td><code>keyPressed()</code>, <code>mousePressed()</code></td></tr>
+                      </tbody>
+                    </table>
+                    <p>Ein solches punktuelles Ereignis nennt man auch <strong>Event</strong>. Processing ruft den passenden Code-Block automatisch auf, sobald das Event eintritt.</p>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-24">
+                <div class="chapter-head">
+                  <span class="chapter-number">2.4</span>
+                  <h2>Typische Fehler</h2>
+                </div>
+                <div class="chapter-body mistakes">
+                  <article class="mistake">
+                    <h3>Befehle stehen außerhalb der Code-Blöcke</h3>
+                    <p>Im aktiven Modus dürfen Zeichenbefehle nicht lose zwischen <code>setup()</code>, <code>draw()</code> und den Ereignisfunktionen stehen. Verschiebe sie in den passenden Block.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Eine geschweifte Klammer fehlt</h3>
+                    <p>Jede öffnende Klammer <code>{</code> benötigt eine schließende Klammer <code>}</code>. Nutze die Autoformatierung, um die Blockstruktur besser zu erkennen.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Die Zeichnung hinterlässt ungewollt eine Spur</h3>
+                    <p>Setze <code>background()</code> an den Anfang von <code>draw()</code>, wenn das vorige Bild in jedem Frame gelöscht werden soll.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Die Zeichnung verschwindet sofort wieder</h3>
+                    <p>Ein <code>background()</code> in <code>draw()</code> übermalt auch Formen, die bei einem Klick gezeichnet wurden. Entferne es dort, wenn die Formen sichtbar bleiben sollen.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Groß- und Kleinschreibung stimmen nicht</h3>
+                    <p><code>mouseX</code>, <code>mouseY</code>, <code>pmouseX</code>, <code>keyPressed()</code> und <code>mousePressed()</code> müssen exakt geschrieben werden.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Ein Tastendruck oder Mausklick bewirkt nichts</h3>
+                    <p>Füge eine <code>draw()</code>-Funktion hinzu, damit das Programm aktiv bleibt. Sie darf leer sein.</p>
+                  </article>
+                </div>
+              </section>
+
+              <section class="summary" id="sec-25">
+                <h2>2.5 Kurzfassung</h2>
+                <div class="summary-grid">
+                  <div class="summary-item"><strong>Statischer Modus</strong>Alle Befehle laufen einmal von oben nach unten.</div>
+                  <div class="summary-item"><strong>Aktiver Modus</strong><code>setup()</code> läuft einmal, <code>draw()</code> immer wieder.</div>
+                  <div class="summary-item"><strong>Mausposition</strong><code>mouseX</code> und <code>mouseY</code> liefern die aktuellen Koordinaten.</div>
+                  <div class="summary-item"><strong>Vorige Position</strong><code>pmouseX</code> und <code>pmouseY</code> gehören zum vorherigen Frame.</div>
+                  <div class="summary-item"><strong>Tastendruck</strong>Der Block <code>keyPressed()</code> läuft bei einem Tastendruck.</div>
+                  <div class="summary-item"><strong>Mausklick</strong>Der Block <code>mousePressed()</code> läuft bei einem Mausklick.</div>
+                </div>
+                <a class="back-top" href="#teil-2">↑ Zurück zum Kapitelanfang</a>
+              </section>
+    
+        <nav class="part-nav" aria-label="Navigation">
+          <a href="#teil-3">Weiter zu Kapitel 3: Variablen →</a>
+        </nav>
+      </section>
+
+      <section class="part" id="teil-3">
+        <header class="part-head">
+          <p class="part-eyebrow">Kapitel 3 von 4</p>
+          <h2 class="part-title">Variablen</h2>
+          <p class="part-lead">Werte speichern, gezielt verändern und in mehreren Code-Blöcken verwenden.</p>
+        </header>
+              <section class="intro-card" aria-labelledby="ziele-3">
+                <h2 id="ziele-3">Was lernst du in diesem Kapitel?</h2>
+                <p>In Kapitel 2 hast du bereits Variablen wie <code>mouseX</code> und <code>mouseY</code> verwendet. Jetzt legst du eigene Variablen an und steuerst damit Positionen, Größen, Farben und Bewegungen.</p>
+                <div class="goal-grid">
+                  <div class="goal"><strong>1</strong><span>Variablen deklarieren, initialisieren und verwenden</span></div>
+                  <div class="goal"><strong>2</strong><span>passende Datentypen auswählen</span></div>
+                  <div class="goal"><strong>3</strong><span>Variablenwerte berechnen und verändern</span></div>
+                  <div class="goal"><strong>4</strong><span>globale und lokale Variablen unterscheiden</span></div>
+                </div>
+                <div class="note"><strong>Vorwissen:</strong> Du solltest Formen und Farben aus Kapitel 1 sowie <code>setup()</code>, <code>draw()</code> und Ereignisfunktionen aus Kapitel 2 kennen.</div>
+              </section>
+
+              <section class="chapter" id="sec-31">
+                <div class="chapter-head">
+                  <span class="chapter-number">3.1</span>
+                  <h2>Variablen verstehen</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-311">
+                    <h3>3.1.1 Das Grundprinzip</h3>
+                    <p>Eine Variable ist ein <strong>benannter Speicherplatz</strong>. Dort kann ein Programm einen Wert ablegen und später wieder verwenden. Der gespeicherte Wert darf sich während des Programmlaufs ändern.</p>
+                    <div class="variable-model" aria-label="Bestandteile einer Variablen">
+                      <div class="variable-part"><span>Datentyp</span><strong><code>int</code></strong></div>
+                      <div class="variable-part"><span>Name</span><strong><code>kreisX</code></strong></div>
+                      <div class="variable-part"><span>Wert</span><strong><code>120</code></strong></div>
+                    </div>
+                    <p>Die vollständige Zeile <code>int kreisX = 120;</code> bedeutet: Lege eine Variable für ganze Zahlen an, nenne sie <code>kreisX</code> und speichere darin den Wert 120.</p>
+                    <div class="remember"><strong>Merke:</strong> Jede Variable besitzt mindestens einen Datentyp und einen Namen. Sobald ihr ein Wert zugewiesen wurde, besitzt sie zusätzlich einen aktuellen Inhalt.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-312">
+                    <h3>3.1.2 Eine Variable deklarieren</h3>
+                    <p>Bevor eine eigene Variable verwendet werden kann, muss sie angelegt werden. Dieser Schritt heißt <strong>Deklaration</strong>.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Deklaration</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> kreisX;          <span class="com">// Variable für eine ganze Zahl</span>
+        <span class="kw">float</span> geschwindigkeit; <span class="com">// Variable für eine Kommazahl</span></code></pre>
+                    </div>
+                    <p>Das allgemeine Muster lautet:</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Allgemeiner Aufbau</span></div>
+                      <pre><code>DATENTYP variablenName;</code></pre>
+                    </div>
+                    <p>Durch die Deklaration weiß Processing, wie die Variable heißt und welche Art von Wert dort gespeichert werden darf.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-313">
+                    <h3>3.1.3 Einen Wert zuweisen und initialisieren</h3>
+                    <p>Mit einer <strong>Zuweisung</strong> wird ein Wert in einer Variablen gespeichert. Links steht immer die Variable, rechts der neue Wert oder eine Rechnung.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Zuweisungen</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code>kreisX = <span class="num">120</span>;                <span class="com">// einfacher Wert</span>
+        geschwindigkeit = <span class="num">1.5</span>;     <span class="com">// Kommazahl mit Punkt</span>
+        kreisX = <span class="num">50</span> + <span class="num">20</span> * <span class="num">2</span>;      <span class="com">// zuerst rechnen, dann speichern</span></code></pre>
+                    </div>
+                    <div class="warning"><strong>Das Gleichheitszeichen ist hier kein Vergleich:</strong> <code>kreisX = 120;</code> bedeutet nicht „kreisX ist gleich 120“, sondern „Speichere 120 in kreisX“.</div>
+                    <p>Deklaration und erste Zuweisung können in einer Zeile stehen. Diese erste Wertvergabe nennt man <strong>Initialisierung</strong>.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Deklaration und Initialisierung</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> kreisX = <span class="num">120</span>;
+        <span class="kw">float</span> geschwindigkeit = <span class="num">1.5</span>;</code></pre>
+                    </div>
+                  </section>
+
+                  <section class="lesson" id="sec-314">
+                    <h3>3.1.4 Eine Variable verwenden</h3>
+                    <p>Steht ein Variablenname in einem Befehl, setzt Processing an dieser Stelle den <strong>aktuellen Wert</strong> der Variable ein. Dies nennt man auch Substitution.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Variablen steuern eine Zeichnung</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> kreisX = <span class="num">120</span>;
+        <span class="kw">int</span> kreisY = <span class="num">150</span>;
+        <span class="kw">int</span> durchmesser = <span class="num">80</span>;
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+          <span class="fn">fill</span>(<span class="num">35</span>, <span class="num">145</span>, <span class="num">210</span>);
+          <span class="fn">ellipse</span>(kreisX, kreisY, durchmesser, durchmesser);
+        }</code></pre>
+                    </div>
+                    <p>Beim Ausführen der Ellipse setzt Processing beispielsweise 120 für <code>kreisX</code> und 80 für <code>durchmesser</code> ein. Ändert sich später ein Wert, verwendet der nächste Durchlauf automatisch den neuen Wert.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-315">
+                    <h3>3.1.5 Erlaubte und sinnvolle Variablennamen</h3>
+                    <p>Ein guter Name verrät, wofür eine Variable verwendet wird. <code>ballGeschwindigkeit</code> ist deshalb hilfreicher als <code>bg</code>.</p>
+                    <table class="command-table">
+                      <thead><tr><th>Regel</th><th>Beispiel</th></tr></thead>
+                      <tbody>
+                        <tr><td>mit einem Kleinbuchstaben beginnen</td><td><code>kreisX</code></td></tr>
+                        <tr><td>keine Leerzeichen oder Bindestriche verwenden</td><td><code>ballGroesse</code></td></tr>
+                        <tr><td>nicht mit einer Ziffer beginnen</td><td><code>spieler2</code>, nicht <code>2spieler</code></td></tr>
+                        <tr><td>keine reservierten Wörter wie <code>int</code> verwenden</td><td><code>anzahl</code></td></tr>
+                        <tr><td>Groß- und Kleinschreibung beachten</td><td><code>kreisX</code> ist nicht <code>kreisx</code></td></tr>
+                        <tr><td>Umlaute und ß im Code vermeiden</td><td><code>groesse</code> statt <code>größe</code></td></tr>
+                        <tr><td>mehrere Wörter in lowerCamelCase verbinden</td><td><code>hintergrundFarbe</code></td></tr>
+                      </tbody>
+                    </table>
+                    <div class="note"><strong>Konvention:</strong> Namen wie <code>kreisX</code> oder <code>maximaleGeschwindigkeit</code> sind nicht nur erlaubt, sondern auch gut lesbar. Unterstriche und Dollarzeichen wären teilweise möglich, werden in unserem Kurs aber nicht benötigt.</div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-32">
+                <div class="chapter-head">
+                  <span class="chapter-number">3.2</span>
+                  <h2>Datentypen</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-321">
+                    <h3>3.2.1 Ganze Zahlen und Kommazahlen</h3>
+                    <p>Der Datentyp legt fest, welche Werte in einer Variablen gespeichert werden dürfen. Für unsere Programme sind zunächst zwei Zahlentypen besonders wichtig:</p>
+                    <table class="command-table">
+                      <thead><tr><th>Datentyp</th><th>Geeignet für</th><th>Beispiele</th></tr></thead>
+                      <tbody>
+                        <tr><td><code>int</code></td><td>ganze Zahlen ohne Nachkommastellen</td><td><code>-3</code>, <code>0</code>, <code>250</code></td></tr>
+                        <tr><td><code>float</code></td><td>Zahlen mit Nachkommastellen</td><td><code>1.5</code>, <code>-0.25</code>, <code>80.0</code></td></tr>
+                      </tbody>
+                    </table>
+                    <div class="code-card">
+                      <div class="code-bar"><span>int und float</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> anzahlKreise = <span class="num">4</span>;
+        <span class="kw">float</span> tempo = <span class="num">1.5</span>;
+        <span class="kw">float</span> mitte = <span class="num">75.0</span> / <span class="num">2</span>;</code></pre>
+                    </div>
+                    <div class="warning"><strong>Kommazahlen mit Punkt:</strong> Schreibe im Programm <code>1.5</code> und nicht <code>1,5</code>. Das Komma trennt in Processing die Parameter eines Befehls.</div>
+                    <div class="note"><strong>Weitere Zahlentypen:</strong> Es gibt unter anderem <code>byte</code>, <code>short</code>, <code>long</code> und <code>double</code>. Für unsere aktuellen Processing-Programme genügen meistens <code>int</code> und <code>float</code>.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-322">
+                    <h3>3.2.2 Wahrheitswerte und einzelne Zeichen</h3>
+                    <table class="command-table">
+                      <thead><tr><th>Datentyp</th><th>Bedeutung</th><th>Beispiel</th></tr></thead>
+                      <tbody>
+                        <tr><td><code>boolean</code></td><td>Wahrheitswert: wahr oder falsch</td><td><code>boolean lichtAn = true;</code></td></tr>
+                        <tr><td><code>char</code></td><td>genau ein Zeichen</td><td><code>char taste = 'a';</code></td></tr>
+                      </tbody>
+                    </table>
+                    <div class="code-card">
+                      <div class="code-bar"><span>boolean und char ausgeben</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">boolean</span> programmLaeuft = <span class="kw">true</span>;
+        <span class="kw">char</span> startTaste = <span class="string">'s'</span>;
+
+        <span class="fn">println</span>(programmLaeuft);
+        <span class="fn">println</span>(startTaste);</code></pre>
+                    </div>
+                    <p>Ein <code>char</code> steht in <strong>einfachen</strong> Anführungszeichen. Wahrheitswerte werden im nächsten Kapitel besonders wichtig, wenn Bedingungen hinzukommen.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-323">
+                    <h3>3.2.3 Text mit <code>String</code></h3>
+                    <p>Ein <code>String</code> speichert eine Zeichenkette, also Text. Der Typ beginnt mit einem Großbuchstaben und der Text steht in doppelten Anführungszeichen.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Text speichern und verbinden</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">String</span> objektName = <span class="string">"Ball"</span>;
+        <span class="kw">int</span> positionX = <span class="num">120</span>;
+
+        <span class="fn">println</span>(objektName + <span class="string">" steht bei x = "</span> + positionX);</code></pre>
+                    </div>
+                    <p>Das Pluszeichen verbindet hier Textstücke und Variablenwerte. Die Konsole zeigt:</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Ausgabe</span></div>
+                      <pre><code>Ball steht bei x = 120</code></pre>
+                    </div>
+                    <p>Das Verbinden von Zeichenketten nennt man <strong>String-Konkatenation</strong>.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-324">
+                    <h3>3.2.4 Datentypen umwandeln</h3>
+                    <p>Manchmal besitzt ein Wert nicht den benötigten Datentyp. Mit <code>int()</code> und <code>float()</code> kann ein Zahlenwert gezielt umgewandelt werden.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Zahlen umwandeln</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">float</span> zufallsWert = <span class="fn">random</span>(<span class="num">100</span>); <span class="com">// zum Beispiel 63.84</span>
+        <span class="kw">int</span> ganzeZahl = <span class="fn">int</span>(zufallsWert); <span class="com">// daraus wird 63</span>
+
+        <span class="kw">int</span> anzahl = <span class="num">5</span>;
+        <span class="kw">float</span> haelfte = <span class="fn">float</span>(anzahl) / <span class="num">2</span>; <span class="com">// ergibt 2.5</span></code></pre>
+                    </div>
+                    <p><code>int()</code> schneidet den Nachkommaanteil ab; es wird nicht automatisch auf die nächste ganze Zahl gerundet.</p>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-33">
+                <div class="chapter-head">
+                  <span class="chapter-number">3.3</span>
+                  <h2>Variablenwerte verarbeiten und verändern</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-331">
+                    <h3>3.3.1 So wird eine Zuweisung verarbeitet</h3>
+                    <p>Bei einer Zuweisung arbeitet Processing immer in derselben Reihenfolge: Zuerst werden die Variablen auf der rechten Seite durch ihre aktuellen Werte ersetzt. Danach wird gerechnet. Erst zuletzt wird das Ergebnis links gespeichert.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Beispiel</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> a = <span class="num">5</span>;
+        <span class="kw">int</span> b = <span class="num">0</span>;
+
+        b = a + <span class="num">10</span>;</code></pre>
+                    </div>
+                    <div class="process-steps" aria-label="Verarbeitung der Zuweisung">
+                      <div class="process-step"><strong>Variablenwert einsetzen:</strong> Aus <code>b = a + 10;</code> wird <code>b = 5 + 10;</code>.</div>
+                      <div class="process-step"><strong>Rechnung ausführen:</strong> Aus <code>b = 5 + 10;</code> wird <code>b = 15;</code>.</div>
+                      <div class="process-step"><strong>Ergebnis speichern:</strong> Die Variable <code>b</code> erhält den neuen Wert 15.</div>
+                    </div>
+                    <p>Bei längeren Rechnungen gelten die bekannten Regeln: Klammern sowie Punktrechnung werden vor Strichrechnung verarbeitet.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-332">
+                    <h3>3.3.2 Einen vorhandenen Wert verändern</h3>
+                    <p>Damit eine Variable beispielsweise um 1 wächst, muss der berechnete neue Wert wieder in derselben Variable gespeichert werden.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Wert erhöhen</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> x = <span class="num">10</span>;
+        x = x + <span class="num">1</span>;  <span class="com">// x erhält den neuen Wert 11</span></code></pre>
+                    </div>
+                    <div class="explain">
+                      <div><strong>Keine Veränderung</strong><br><code>x + 1;</code> berechnet zwar einen Wert, speichert ihn aber nirgends.</div>
+                      <div><strong>Wert verändert</strong><br><code>x = x + 1;</code> berechnet den neuen Wert und weist ihn wieder <code>x</code> zu.</div>
+                    </div>
+                    <div class="note"><strong>Kurzschreibweise:</strong> <code>x++;</code> erhöht <code>x</code> ebenfalls um 1. Für den Anfang ist <code>x = x + 1;</code> oft verständlicher, weil die Zuweisung sichtbar bleibt.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-333">
+                    <h3>3.3.3 Ausführungsreihenfolge im aktiven Modus</h3>
+                    <p>Globale Variablen ergänzen den bekannten Ablauf aus Kapitel 2. Processing verarbeitet ein aktives Programm in dieser Reihenfolge:</p>
+                    <div class="flow" aria-label="Ausführungsreihenfolge im aktiven Modus">
+                      <div class="flow-box"><strong>1. Globale Variablen</strong>anlegen und initialisieren</div>
+                      <div class="flow-arrow" aria-hidden="true">→</div>
+                      <div class="flow-box"><strong>2. <code>setup()</code></strong>einmal ausführen</div>
+                      <div class="flow-arrow" aria-hidden="true">→</div>
+                      <div class="flow-box"><strong>3. <code>draw()</code></strong>immer wieder ausführen</div>
+                    </div>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Werte Schritt für Schritt verfolgen</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> punktestand = <span class="num">0</span>; <span class="com">// zuerst: globale Initialisierung</span>
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">println</span>(punktestand); <span class="com">// Ausgabe: 0</span>
+          punktestand = punktestand + <span class="num">1</span>;
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">println</span>(punktestand); <span class="com">// 1, danach 101, 201, ...</span>
+          punktestand = punktestand + <span class="num">100</span>;
+        }</code></pre>
+                    </div>
+                    <div class="remember"><strong>Merke:</strong> Eine globale Initialisierung geschieht nur einmal beim Programmstart. Eine Zuweisung in <code>draw()</code> wird dagegen in jedem Frame erneut ausgeführt.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-334">
+                    <h3>3.3.4 Animation mit einer Variablen</h3>
+                    <p>Eine Animation entsteht, wenn <code>draw()</code> ein Objekt zeichnet und anschließend eine seiner Eigenschaften verändert. Im nächsten Frame wird das Objekt mit dem neuen Wert gezeichnet.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Ein Ball bewegt sich nach rechts</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">float</span> ballX = <span class="num">0</span>;
+        <span class="kw">float</span> tempo = <span class="num">1.5</span>;
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);           <span class="com">// altes Bild löschen</span>
+          <span class="fn">fill</span>(<span class="num">240</span>, <span class="num">100</span>, <span class="num">60</span>);
+          <span class="fn">ellipse</span>(ballX, <span class="num">150</span>, <span class="num">50</span>, <span class="num">50</span>);
+          ballX = ballX + tempo;       <span class="com">// Position für den nächsten Frame</span>
+        }</code></pre>
+                    </div>
+                    <div class="explain">
+                      <div><strong><code>ballX</code></strong><br>speichert die aktuelle x-Koordinate des Balls.</div>
+                      <div><strong><code>tempo</code></strong><br>legt fest, um wie viele Pixel sich die Position pro Frame verändert.</div>
+                    </div>
+                    <p>Die häufig benötigte Geschwindigkeit steht nur an einer Stelle. Wird <code>tempo</code> auf 4 gesetzt, bewegt sich der Ball schneller.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-335">
+                    <h3>3.3.5 Variablen durch Events verändern</h3>
+                    <p>Ereignisfunktionen können Variablen verändern. <code>draw()</code> verwendet danach in allen folgenden Frames die neuen Werte.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Tastatur und Maus ändern den Hintergrund</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> rot = <span class="num">230</span>;
+        <span class="kw">int</span> gruen = <span class="num">230</span>;
+        <span class="kw">int</span> blau = <span class="num">230</span>;
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(rot, gruen, blau); <span class="com">// aktuelle Werte verwenden</span>
+          <span class="fn">fill</span>(<span class="num">255</span>);
+          <span class="fn">rect</span>(<span class="num">190</span>, <span class="num">100</span>, <span class="num">120</span>, <span class="num">100</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">keyPressed</span>() {
+          rot = <span class="num">210</span>; gruen = <span class="num">50</span>; blau = <span class="num">50</span>; <span class="com">// rot</span>
+        }
+
+        <span class="kw">void</span> <span class="fn">mousePressed</span>() {
+          rot = <span class="num">45</span>; gruen = <span class="num">170</span>; blau = <span class="num">90</span>; <span class="com">// grün</span>
+        }</code></pre>
+                    </div>
+                    <p>Die Ereignisfunktionen zeichnen hier nichts. Sie verändern nur Daten. Die gesamte Darstellung bleibt in <code>draw()</code> und wird dort mit den jeweils aktuellen Farbwerten aufgebaut.</p>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-34">
+                <div class="chapter-head">
+                  <span class="chapter-number">3.4</span>
+                  <h2>Globale und lokale Variablen</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-341">
+                    <h3>3.4.1 Globale Variablen</h3>
+                    <p>Eine globale Variable wird außerhalb von <code>setup()</code>, <code>draw()</code> und den Ereignisfunktionen deklariert – üblicherweise ganz oben im Programm. Sie kann in allen Code-Blöcken verwendet und verändert werden.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Eine Variable in mehreren Code-Blöcken</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">float</span> ballX = <span class="num">0</span>; <span class="com">// global: überall sichtbar</span>
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">245</span>);
+          <span class="fn">ellipse</span>(ballX, <span class="num">150</span>, <span class="num">50</span>, <span class="num">50</span>);
+          ballX = ballX + <span class="num">2</span>;
+        }
+
+        <span class="kw">void</span> <span class="fn">keyPressed</span>() {
+          ballX = <span class="num">0</span>; <span class="com">// Ball zurücksetzen</span>
+        }</code></pre>
+                    </div>
+                    <p><code>ballX</code> muss global sein, weil <code>draw()</code> und <code>keyPressed()</code> auf denselben gespeicherten Wert zugreifen.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-342">
+                    <h3>3.4.2 Lokale Variablen</h3>
+                    <p>Eine lokale Variable wird innerhalb eines Code-Blocks deklariert. Sie ist nur dort verfügbar und eignet sich für Zwischenergebnisse, die außerhalb dieses Blocks nicht benötigt werden.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Lokales Zwischenergebnis in draw()</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">float</span> ballX = <span class="num">20</span>; <span class="com">// global</span>
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+          <span class="kw">float</span> durchmesser = ballX / <span class="num">2</span> + <span class="num">20</span>; <span class="com">// lokal</span>
+          <span class="fn">ellipse</span>(ballX, <span class="num">150</span>, durchmesser, durchmesser);
+          ballX = ballX + <span class="num">1</span>;
+        }</code></pre>
+                    </div>
+                    <p><code>durchmesser</code> wird nur für die Zeichnung in <code>draw()</code> benötigt. Nach jedem Durchlauf endet seine Gültigkeit; im nächsten Frame wird die lokale Variable neu angelegt und neu berechnet.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-343">
+                    <h3>3.4.3 Skopus: Wo gilt eine Variable?</h3>
+                    <p>Der <strong>Skopus</strong> – englisch <em>scope</em> – ist der Bereich, in dem eine Variable sichtbar und verwendbar ist.</p>
+                    <table class="command-table">
+                      <thead><tr><th>Variable</th><th>Deklaration</th><th>Skopus</th></tr></thead>
+                      <tbody>
+                        <tr><td>global</td><td>außerhalb aller Code-Blöcke</td><td>gesamtes Programm</td></tr>
+                        <tr><td>lokal</td><td>innerhalb eines Code-Blocks</td><td>von der Deklaration bis zur schließenden Klammer des Blocks</td></tr>
+                      </tbody>
+                    </table>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Außerhalb des Skopus</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="kw">int</span> startX = <span class="num">50</span>; <span class="com">// nur in setup() bekannt</span>
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">ellipse</span>(startX, <span class="num">100</span>, <span class="num">40</span>, <span class="num">40</span>);
+          <span class="com">// Fehler: startX ist hier unbekannt</span>
+        }</code></pre>
+                    </div>
+                    <p>Soll <code>startX</code> sowohl in <code>setup()</code> als auch in <code>draw()</code> benutzt werden, muss die Variable global deklariert werden.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-344">
+                    <h3>3.4.4 Überschatten vermeiden</h3>
+                    <p>Wird innerhalb eines Blocks eine neue lokale Variable mit demselben Namen wie eine globale Variable deklariert, verdeckt die lokale Variable vorübergehend die globale. Dies nennt man <strong>Überschatten</strong>.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Fehler durch Überschatten</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">float</span> ballX = <span class="num">0</span>; <span class="com">// globale Variable</span>
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+          <span class="kw">float</span> ballX = <span class="num">100</span>; <span class="com">// neue lokale Variable!</span>
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">ellipse</span>(ballX, <span class="num">150</span>, <span class="num">40</span>, <span class="num">40</span>);
+          <span class="com">// Verwendet weiterhin das globale ballX mit dem Wert 0</span>
+        }</code></pre>
+                    </div>
+                    <p>In <code>setup()</code> wurde versehentlich ein zweites <code>ballX</code> angelegt. Die globale Variable bleibt unverändert. Richtig ist eine normale Zuweisung ohne erneuten Datentyp:</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Korrektur</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">500</span>, <span class="num">300</span>);
+          ballX = <span class="num">100</span>; <span class="com">// vorhandene globale Variable verändern</span>
+        }</code></pre>
+                    </div>
+                    <div class="remember"><strong>Merke:</strong> Der Datentyp steht nur dort, wo eine neue Variable deklariert wird. Bei einer späteren Zuweisung wird nur der Variablenname geschrieben.</div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-35">
+                <div class="chapter-head">
+                  <span class="chapter-number">3.5</span>
+                  <h2>Typische Fehler</h2>
+                </div>
+                <div class="chapter-body mistakes">
+                  <article class="mistake">
+                    <h3>Die Variable wurde nicht deklariert</h3>
+                    <p>Bevor du <code>tempo</code> verwendest, muss eine passende Deklaration wie <code>float tempo = 2.5;</code> vorhanden sein.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Der Datentyp passt nicht zum Wert</h3>
+                    <p><code>int tempo = 1.5;</code> funktioniert nicht, weil <code>int</code> keine Nachkommastellen speichert. Verwende <code>float</code>.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Eine Kommazahl wurde mit Komma geschrieben</h3>
+                    <p>Schreibe <code>1.5</code> statt <code>1,5</code>. Das Dezimaltrennzeichen im Programmcode ist der Punkt.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Der Wert wird berechnet, aber nicht gespeichert</h3>
+                    <p><code>x + 1;</code> verändert <code>x</code> nicht. Benötigt wird die Zuweisung <code>x = x + 1;</code>.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Eine lokale Variable wird außerhalb ihres Blocks verwendet</h3>
+                    <p>Prüfe die geschweiften Klammern. Eine in <code>setup()</code> deklarierte lokale Variable ist in <code>draw()</code> nicht sichtbar.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Eine globale Variable wird versehentlich überschattet</h3>
+                    <p>Schreibe bei einer späteren Zuweisung nicht erneut den Datentyp. <code>ballX = 100;</code> verändert die vorhandene Variable; <code>float ballX = 100;</code> legt eine neue lokale Variable an.</p>
+                  </article>
+                  <article class="mistake">
+                    <h3>Groß- und Kleinschreibung wurden vertauscht</h3>
+                    <p><code>kreisX</code>, <code>KreisX</code> und <code>kreisx</code> sind drei verschiedene Namen. Verwende einen Namen im gesamten Programm einheitlich.</p>
+                  </article>
+                </div>
+              </section>
+
+              <section class="summary" id="sec-36">
+                <h2>3.6 Kurzfassung</h2>
+                <div class="summary-grid">
+                  <div class="summary-item"><strong>Variable</strong>Ein benannter Speicherplatz für einen veränderbaren Wert.</div>
+                  <div class="summary-item"><strong>Deklaration</strong><code>int x;</code> legt eine neue Variable mit Datentyp und Namen an.</div>
+                  <div class="summary-item"><strong>Initialisierung</strong><code>int x = 10;</code> deklariert die Variable und weist ihr den ersten Wert zu.</div>
+                  <div class="summary-item"><strong>Zuweisung</strong>Erst wird die rechte Seite ausgewertet, dann wird das Ergebnis links gespeichert.</div>
+                  <div class="summary-item"><strong>Wichtige Datentypen</strong><code>int</code>, <code>float</code>, <code>boolean</code>, <code>char</code> und <code>String</code>.</div>
+                  <div class="summary-item"><strong>Animation</strong>Eine globale Variable wird in <code>draw()</code> gezeichnet und anschließend verändert.</div>
+                  <div class="summary-item"><strong>Globale Variable</strong>Steht außerhalb der Code-Blöcke und ist im gesamten Programm sichtbar.</div>
+                  <div class="summary-item"><strong>Lokale Variable</strong>Gilt nur von ihrer Deklaration bis zum Ende des zugehörigen Code-Blocks.</div>
+                  <div class="summary-item"><strong>Skopus</strong>Der Bereich, in dem eine Variable gültig und verwendbar ist.</div>
+                  <div class="summary-item"><strong>Überschatten</strong>Eine lokale Variable verdeckt eine gleichnamige globale Variable. Gleiche Namen deshalb vermeiden.</div>
+                </div>
+                <a class="back-top" href="#teil-3">↑ Zurück zum Kapitelanfang</a>
+              </section>
+    
+        <nav class="part-nav" aria-label="Navigation">
+          <a href="#teil-4">Weiter zu Kapitel 4: Bedingungen und Entscheidungen →</a>
+        </nav>
+      </section>
+
+      <section class="part" id="teil-4">
+        <header class="part-head">
+          <p class="part-eyebrow">Kapitel 4 von 4</p>
+          <h2 class="part-title">Bedingungen und Entscheidungen</h2>
+          <p class="part-lead">Mit <code>if</code>, <code>else</code> und Wahrheitswerten entscheidet dein Programm, welcher Code ausgeführt wird.</p>
+        </header>
+              <section class="intro-card" aria-labelledby="ziele-4">
+                <h2 id="ziele-4">Was lernst du in diesem Kapitel?</h2>
+                <p>Bisher wurden die Anweisungen in deinen Programmen meistens Zeile für Zeile ausgeführt. Nun lernt dein Programm, auf Situationen zu reagieren und zwischen verschiedenen Möglichkeiten zu entscheiden.</p>
+                <div class="goal-grid">
+                  <div class="goal"><strong>1</strong><span>Bedingungen mit <code>if</code>, <code>else</code> und <code>else if</code> formulieren</span></div>
+                  <div class="goal"><strong>2</strong><span>Vergleiche sowie UND, ODER und NICHT verwenden</span></div>
+                  <div class="goal"><strong>3</strong><span>Zustände in booleschen Variablen speichern und umschalten</span></div>
+                  <div class="goal"><strong>4</strong><span>zwischen verschiedenen Tastatur- und Maustasten unterscheiden</span></div>
+                </div>
+                <div class="note"><strong>Vorwissen:</strong> Du solltest Formen und Farben aus Kapitel 1, die Interaktion aus Kapitel 2 und eigene Variablen aus Kapitel 3 sicher verwenden können.</div>
+                <div class="remember"><strong>Abgrenzung:</strong> Die Kollisionserkennung gehört noch nicht zu unserem Kapitel 4 und wird deshalb hier nicht behandelt.</div>
+              </section>
+
+              <section class="chapter" id="sec-41">
+                <div class="chapter-head">
+                  <div class="chapter-number">4.1</div>
+                  <h2>Einfache Bedingungen mit if und else</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-411">
+                    <h3>4.1.1 Kontrollfluss: Nicht immer läuft alles gleich ab</h3>
+                    <p>Normalerweise arbeitet Processing den Code von oben nach unten ab. Eine Bedingung kann diesen <strong>Kontrollfluss</strong> verändern: Ein Code-Block wird nur dann ausgeführt, wenn die geprüfte Aussage wahr ist.</p>
+                    <div class="flow">
+                      <div class="flow-box"><strong>Bedingung prüfen</strong>Ist die Aussage wahr?</div>
+                      <div class="flow-arrow">→</div>
+                      <div class="flow-box"><strong>true</strong>Code-Block ausführen</div>
+                      <div class="flow-arrow">→</div>
+                      <div class="flow-box"><strong>danach</strong>normal weiterarbeiten</div>
+                    </div>
+                    <p>Ist die Bedingung <code>false</code>, überspringt Processing den zugehörigen Block. Anschließend läuft das Programm unterhalb der Bedingung normal weiter.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-412">
+                    <h3>4.1.2 Aufbau einer if-Anweisung</h3>
+                    <div class="variable-model">
+                      <div class="variable-part"><span>Schlüsselwort</span><strong>if</strong></div>
+                      <div class="variable-part"><span>Prüfung</span><strong>(Bedingung)</strong></div>
+                      <div class="variable-part"><span>Aktion</span><strong>{ Code-Block }</strong></div>
+                    </div>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Grundform einer if-Anweisung</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">if</span> (Bedingung) {
+          <span class="com">// Wird nur bei true ausgeführt</span>
+          Anweisung;
+        }</code></pre>
+                    </div>
+                    <p>Im nächsten Beispiel wird der Kreis rechts von der Fenstermitte orange. Links bleibt er blau.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Beispiel: Farbe abhängig von mouseX</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">600</span>, <span class="num">400</span>);
+          <span class="fn">noStroke</span>();
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+          <span class="fn">fill</span>(<span class="num">40</span>, <span class="num">150</span>, <span class="num">220</span>); <span class="com">// zunächst blau</span>
+
+          <span class="kw">if</span> (mouseX &gt; width / <span class="num">2</span>) {
+            <span class="fn">fill</span>(<span class="num">255</span>, <span class="num">140</span>, <span class="num">40</span>); <span class="com">// rechts: orange</span>
+          }
+
+          <span class="fn">ellipse</span>(mouseX, mouseY, <span class="num">70</span>, <span class="num">70</span>);
+        }</code></pre>
+                    </div>
+                    <figure class="flowchart">
+                      <div class="flowchart-scroll">
+                        <svg viewBox="0 0 760 450" role="img" aria-labelledby="fc-if-title fc-if-desc">
+                          <title id="fc-if-title">Flussdiagramm zur einfachen if-Anweisung</title>
+                          <desc id="fc-if-desc">Processing setzt zunächst Blau. Wenn mouseX größer als die halbe Fensterbreite ist, wird Orange gesetzt. Andernfalls bleibt Blau erhalten. Danach wird der Kreis gezeichnet.</desc>
+                          <defs>
+                            <marker id="arrow-if" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                              <path class="fc-arrow" d="M0,0 L0,6 L9,3 z"></path>
+                            </marker>
+                          </defs>
+                          <ellipse class="fc-start" cx="380" cy="38" rx="112" ry="28"></ellipse>
+                          <text x="380" y="38">Blau einstellen</text>
+                          <path class="fc-line" marker-end="url(#arrow-if)" d="M380 66 V92"></path>
+
+                          <polygon class="fc-decision" points="380,92 530,165 380,238 230,165"></polygon>
+                          <text x="380" y="153">mouseX &gt;</text>
+                          <text x="380" y="178">width / 2?</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-if)" d="M530 165 H565"></path>
+                          <text class="fc-label" x="548" y="146">true</text>
+                          <rect class="fc-process" x="565" y="132" width="155" height="66" rx="12"></rect>
+                          <text x="642" y="155">Orange</text>
+                          <text x="642" y="178">einstellen</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-if)" d="M230 165 H195"></path>
+                          <text class="fc-label" x="212" y="146">false</text>
+                          <rect class="fc-process" x="40" y="132" width="155" height="66" rx="12"></rect>
+                          <text x="117" y="155">Blau bleibt</text>
+                          <text x="117" y="178">eingestellt</text>
+
+                          <rect class="fc-end" x="280" y="350" width="200" height="64" rx="30"></rect>
+                          <text x="380" y="382">Kreis zeichnen</text>
+                          <path class="fc-line" marker-end="url(#arrow-if)" d="M117 198 V382 H270"></path>
+                          <path class="fc-line" marker-end="url(#arrow-if)" d="M642 198 V382 H490"></path>
+                        </svg>
+                      </div>
+                      <figcaption>Passend zum Code: Nur bei <code>true</code> wird die Farbe auf Orange geändert. Bei <code>false</code> wird der if-Block übersprungen.</figcaption>
+                    </figure>
+                    <div class="explain">
+                      <div><strong>Vor der Bedingung:</strong> Die Füllfarbe wird in jedem Durchlauf auf Blau gesetzt.</div>
+                      <div><strong>Bei true:</strong> Die orange Farbe ersetzt Blau, bevor der Kreis gezeichnet wird.</div>
+                    </div>
+                  </section>
+
+                  <section class="lesson" id="sec-413">
+                    <h3>4.1.3 Vergleichsoperatoren</h3>
+                    <p>Eine Bedingung ist ein <strong>boolescher Ausdruck</strong>. Das bedeutet: Das Ergebnis ist immer entweder <code>true</code> oder <code>false</code>.</p>
+                    <table class="command-table">
+                      <thead><tr><th>Operator</th><th>Bedeutung</th><th>Beispiel</th></tr></thead>
+                      <tbody>
+                        <tr><td><code>&gt;</code></td><td>größer als</td><td><code>x &gt; 100</code></td></tr>
+                        <tr><td><code>&lt;</code></td><td>kleiner als</td><td><code>x &lt; 100</code></td></tr>
+                        <tr><td><code>&gt;=</code></td><td>größer oder gleich</td><td><code>punkte &gt;= 50</code></td></tr>
+                        <tr><td><code>&lt;=</code></td><td>kleiner oder gleich</td><td><code>alter &lt;= 18</code></td></tr>
+                        <tr><td><code>==</code></td><td>gleich</td><td><code>x == 100</code></td></tr>
+                        <tr><td><code>!=</code></td><td>ungleich</td><td><code>x != 100</code></td></tr>
+                      </tbody>
+                    </table>
+                    <div class="remember"><strong>Wichtig für Processing:</strong> Tippe die Operatoren immer mit den einzelnen Tastaturzeichen: <code>&gt;=</code>, <code>&lt;=</code> und <code>!=</code>. Die mathematischen Einzelzeichen ≥, ≤ und ≠ gehören nicht in den Quellcode.</div>
+                    <div class="warning"><strong>Zuweisung oder Vergleich?</strong> <code>x = 100;</code> speichert einen Wert. <code>x == 100</code> prüft dagegen, ob der aktuelle Wert 100 ist. Für den Gleichheitsvergleich brauchst du zwei Gleichheitszeichen.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-414">
+                    <h3>4.1.4 Code-Blöcke und Einrückung</h3>
+                    <p>Die geschweiften Klammern fassen mehrere Anweisungen zu einem <strong>Code-Block</strong> zusammen. Alle Anweisungen im Block gehören zur Bedingung.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Mehrere Anweisungen im if-Block</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">if</span> (mousePressed) {
+          <span class="fn">fill</span>(<span class="num">255</span>, <span class="num">80</span>, <span class="num">80</span>);
+          <span class="fn">strokeWeight</span>(<span class="num">5</span>);
+          <span class="fn">ellipse</span>(mouseX, mouseY, <span class="num">100</span>, <span class="num">100</span>);
+        }</code></pre>
+                    </div>
+                    <p>Rücke die Zeilen im Block ein. Die Einrückung ändert zwar nicht die Bedeutung des Programms, macht aber sofort sichtbar, welche Zeilen zusammengehören. Processing kann den Code über <strong>Bearbeiten → Autoformatierung</strong> oder mit <strong>Strg+T</strong> automatisch einrücken.</p>
+                    <div class="note"><strong>Verschachtelte Bedingungen:</strong> Ein Code-Block darf eine weitere <code>if</code>-Anweisung enthalten. Die zweite Bedingung wird dann nur geprüft, wenn Processing den äußeren Block ausführt.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-415">
+                    <h3>4.1.5 if–else: Zwei mögliche Wege</h3>
+                    <p>Mit <code>else</code> legst du fest, was geschehen soll, wenn die Bedingung falsch ist. Bei einer <code>if–else</code>-Anweisung wird immer genau einer der beiden Blöcke ausgeführt.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Links blau, rechts orange</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+
+          <span class="kw">if</span> (mouseX &gt; width / <span class="num">2</span>) {
+            <span class="fn">fill</span>(<span class="num">255</span>, <span class="num">140</span>, <span class="num">40</span>); <span class="com">// Bedingung ist wahr</span>
+          } <span class="kw">else</span> {
+            <span class="fn">fill</span>(<span class="num">40</span>, <span class="num">150</span>, <span class="num">220</span>); <span class="com">// Bedingung ist falsch</span>
+          }
+
+          <span class="fn">ellipse</span>(mouseX, mouseY, <span class="num">70</span>, <span class="num">70</span>);
+        }</code></pre>
+                    </div>
+                    <figure class="flowchart">
+                      <div class="flowchart-scroll">
+                        <svg viewBox="0 0 760 430" role="img" aria-labelledby="fc-else-title fc-else-desc">
+                          <title id="fc-else-title">Flussdiagramm zur if-else-Anweisung</title>
+                          <desc id="fc-else-desc">Die Mausposition wird geprüft. Bei true wird Orange eingestellt, bei false Blau. Danach wird der Kreis gezeichnet.</desc>
+                          <defs>
+                            <marker id="arrow-else" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                              <path class="fc-arrow" d="M0,0 L0,6 L9,3 z"></path>
+                            </marker>
+                          </defs>
+                          <ellipse class="fc-start" cx="380" cy="38" rx="112" ry="28"></ellipse>
+                          <text x="380" y="38">Bedingung prüfen</text>
+                          <path class="fc-line" marker-end="url(#arrow-else)" d="M380 66 V88"></path>
+
+                          <polygon class="fc-decision" points="380,88 530,160 380,232 230,160"></polygon>
+                          <text x="380" y="148">mouseX &gt;</text>
+                          <text x="380" y="173">width / 2?</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-else)" d="M530 160 H565"></path>
+                          <text class="fc-label" x="548" y="141">true</text>
+                          <rect class="fc-process" x="565" y="127" width="155" height="66" rx="12"></rect>
+                          <text x="642" y="150">Orange</text>
+                          <text x="642" y="173">einstellen</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-else)" d="M230 160 H195"></path>
+                          <text class="fc-label" x="212" y="141">false</text>
+                          <rect class="fc-process" x="40" y="127" width="155" height="66" rx="12"></rect>
+                          <text x="117" y="150">Blau</text>
+                          <text x="117" y="173">einstellen</text>
+
+                          <rect class="fc-end" x="280" y="330" width="200" height="64" rx="30"></rect>
+                          <text x="380" y="362">Kreis zeichnen</text>
+                          <path class="fc-line" marker-end="url(#arrow-else)" d="M117 193 V362 H270"></path>
+                          <path class="fc-line" marker-end="url(#arrow-else)" d="M642 193 V362 H490"></path>
+                        </svg>
+                      </div>
+                      <figcaption>Bei <code>if–else</code> gibt es zwei Wege. Einer der beiden Farbblöcke wird in jedem Durchlauf ausgeführt.</figcaption>
+                    </figure>
+                    <div class="remember"><strong>Zusammengehörig:</strong> Zwischen dem schließenden <code>}</code> des if-Blocks und <code>else</code> darf keine weitere Anweisung stehen.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-416">
+                    <h3>4.1.6 Beispiel: Ein Ball erscheint wieder links</h3>
+                    <p>Der Ball bewegt sich nach rechts. Sobald seine Position größer als die Fensterbreite ist, wird <code>ballX</code> wieder auf 0 gesetzt.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Bewegung mit Rücksprung</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> ballX = <span class="num">0</span>;
+        <span class="kw">int</span> geschwindigkeit = <span class="num">4</span>;
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">600</span>, <span class="num">300</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+          <span class="fn">ellipse</span>(ballX, height / <span class="num">2</span>, <span class="num">40</span>, <span class="num">40</span>);
+
+          ballX = ballX + geschwindigkeit;
+
+          <span class="kw">if</span> (ballX &gt; width) {
+            ballX = <span class="num">0</span>; <span class="com">// links neu beginnen</span>
+          }
+        }</code></pre>
+                    </div>
+                    <div class="note"><strong>Warum nicht <code>ballX == width</code>?</strong> Bei einer Geschwindigkeit von 4 kann der Wert über die exakte Fensterbreite springen. <code>&gt;</code> oder <code>&gt;=</code> funktioniert deshalb zuverlässiger.</div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-42">
+                <div class="chapter-head">
+                  <div class="chapter-number">4.2</div>
+                  <h2>Mehrere Fälle mit else if</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-421">
+                    <h3>4.2.1 Mehr als zwei Möglichkeiten</h3>
+                    <p>Mit <code>else if</code> kannst du weitere Bedingungen ergänzen. Processing prüft sie von oben nach unten. Sobald eine Bedingung wahr ist, wird ihr Block ausgeführt und die restliche Kette übersprungen.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Allgemeiner Aufbau</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">if</span> (Bedingung1) {
+          <span class="com">// erster Fall</span>
+        } <span class="kw">else if</span> (Bedingung2) {
+          <span class="com">// zweiter Fall</span>
+        } <span class="kw">else</span> {
+          <span class="com">// alle übrigen Fälle</span>
+        }</code></pre>
+                    </div>
+                    <div class="remember"><strong>Genau ein Weg:</strong> In einer zusammenhängenden <code>if–else if–else</code>-Kette wird höchstens ein Code-Block ausgeführt.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-422">
+                    <h3>4.2.2 Die Reihenfolge der Bedingungen ist wichtig</h3>
+                    <p>Beginne bei gestaffelten Grenzwerten mit dem strengsten beziehungsweise größten Wert. Sonst kann ein allgemeiner Fall einen genaueren Fall abfangen.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Bewertung nach Punktzahl</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> punkte = <span class="num">84</span>;
+
+        <span class="kw">if</span> (punkte &gt;= <span class="num">90</span>) {
+          <span class="fn">println</span>(<span class="string">"sehr gut"</span>);
+        } <span class="kw">else if</span> (punkte &gt;= <span class="num">75</span>) {
+          <span class="fn">println</span>(<span class="string">"gut"</span>);
+        } <span class="kw">else if</span> (punkte &gt;= <span class="num">50</span>) {
+          <span class="fn">println</span>(<span class="string">"bestanden"</span>);
+        } <span class="kw">else</span> {
+          <span class="fn">println</span>(<span class="string">"nicht bestanden"</span>);
+        }</code></pre>
+                    </div>
+                    <p>Bei 84 Punkten ist die erste Bedingung falsch, die zweite aber wahr. Deshalb wird <code>"gut"</code> ausgegeben; die weiteren Bedingungen werden nicht mehr geprüft.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-423">
+                    <h3>4.2.3 Beispiel: Drei Bildschirmbereiche</h3>
+                    <p>Die Mausposition entscheidet, welche Hintergrundfarbe angezeigt wird.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Linkes, mittleres und rechtes Drittel</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">600</span>, <span class="num">300</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="kw">if</span> (mouseX &lt; width / <span class="num">3</span>) {
+            <span class="fn">background</span>(<span class="num">120</span>, <span class="num">190</span>, <span class="num">240</span>); <span class="com">// links</span>
+          } <span class="kw">else if</span> (mouseX &lt; <span class="num">2</span> * width / <span class="num">3</span>) {
+            <span class="fn">background</span>(<span class="num">120</span>, <span class="num">210</span>, <span class="num">160</span>); <span class="com">// Mitte</span>
+          } <span class="kw">else</span> {
+            <span class="fn">background</span>(<span class="num">255</span>, <span class="num">180</span>, <span class="num">90</span>); <span class="com">// rechts</span>
+          }
+        }</code></pre>
+                    </div>
+                    <figure class="flowchart">
+                      <div class="flowchart-scroll">
+                        <svg viewBox="0 0 820 590" role="img" aria-labelledby="fc-elseif-title fc-elseif-desc">
+                          <title id="fc-elseif-title">Flussdiagramm zur else-if-Kette mit drei Bildschirmbereichen</title>
+                          <desc id="fc-elseif-desc">Zuerst wird geprüft, ob die Maus im linken Drittel ist. Falls nicht, wird das mittlere Drittel geprüft. Abhängig vom Ergebnis wird Blau, Grün oder Orange als Hintergrund gesetzt.</desc>
+                          <defs>
+                            <marker id="arrow-elseif" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                              <path class="fc-arrow" d="M0,0 L0,6 L9,3 z"></path>
+                            </marker>
+                          </defs>
+                          <ellipse class="fc-start" cx="300" cy="38" rx="116" ry="28"></ellipse>
+                          <text x="300" y="38">draw()-Durchlauf</text>
+                          <path class="fc-line" marker-end="url(#arrow-elseif)" d="M300 66 V82"></path>
+
+                          <polygon class="fc-decision" points="300,82 438,145 300,208 162,145"></polygon>
+                          <text x="300" y="133">mouseX &lt;</text>
+                          <text x="300" y="158">width / 3?</text>
+                          <path class="fc-line" marker-end="url(#arrow-elseif)" d="M438 145 H510"></path>
+                          <text class="fc-label" x="474" y="126">true</text>
+                          <rect class="fc-process" x="510" y="112" width="220" height="66" rx="12"></rect>
+                          <text x="620" y="136">Blauen Hintergrund</text>
+                          <text x="620" y="159">einstellen</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-elseif)" d="M300 208 V238"></path>
+                          <text class="fc-label" x="330" y="223">false</text>
+                          <polygon class="fc-decision" points="300,238 438,301 300,364 162,301"></polygon>
+                          <text x="300" y="289">mouseX &lt;</text>
+                          <text x="300" y="314">2 × width / 3?</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-elseif)" d="M438 301 H510"></path>
+                          <text class="fc-label" x="474" y="282">true</text>
+                          <rect class="fc-process" x="510" y="268" width="220" height="66" rx="12"></rect>
+                          <text x="620" y="292">Grünen Hintergrund</text>
+                          <text x="620" y="315">einstellen</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-elseif)" d="M162 301 H150"></path>
+                          <text class="fc-label" x="120" y="246">false</text>
+                          <rect class="fc-process" x="10" y="268" width="140" height="66" rx="12"></rect>
+                          <text x="80" y="292">Orange</text>
+                          <text x="80" y="315">einstellen</text>
+
+                          <rect class="fc-end" x="235" y="490" width="250" height="64" rx="30"></rect>
+                          <text x="360" y="522">Nächster Durchlauf</text>
+                          <path class="fc-line" marker-end="url(#arrow-elseif)" d="M620 178 H760 V522 H495"></path>
+                          <path class="fc-line" marker-end="url(#arrow-elseif)" d="M620 334 V462 H485 V480"></path>
+                          <path class="fc-line" marker-end="url(#arrow-elseif)" d="M80 334 V522 H225"></path>
+                        </svg>
+                      </div>
+                      <figcaption>Die zweite Bedingung wird nur geprüft, wenn die erste <code>false</code> ergeben hat. Dadurch erreicht Processing genau einen der drei Farbblöcke.</figcaption>
+                    </figure>
+                    <div class="note"><strong>Warum genügt im zweiten Fall <code>mouseX &lt; 2 * width / 3</code>?</strong> Dieser Fall wird nur geprüft, wenn das linke Drittel bereits ausgeschlossen wurde.</div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-43">
+                <div class="chapter-head">
+                  <div class="chapter-number">4.3</div>
+                  <h2>Boolesche Ausdrücke verknüpfen</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-431">
+                    <h3>4.3.1 Logisches UND: &amp;&amp;</h3>
+                    <p>Ein logisches UND ist nur dann wahr, wenn <strong>beide</strong> Teilaussagen wahr sind. In Processing schreibst du dafür <code>&amp;&amp;</code>.</p>
+                    <table class="command-table">
+                      <thead><tr><th>A</th><th>B</th><th><code>A &amp;&amp; B</code></th></tr></thead>
+                      <tbody>
+                        <tr><td>true</td><td>true</td><td><strong>true</strong></td></tr>
+                        <tr><td>true</td><td>false</td><td>false</td></tr>
+                        <tr><td>false</td><td>true</td><td>false</td></tr>
+                        <tr><td>false</td><td>false</td><td>false</td></tr>
+                      </tbody>
+                    </table>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Ein Wert liegt zwischen zwei Grenzen</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> x = <span class="num">150</span>;
+
+        <span class="kw">if</span> (x &gt; <span class="num">100</span> &amp;&amp; x &lt; <span class="num">300</span>) {
+          <span class="fn">println</span>(<span class="string">"x liegt im Bereich"</span>);
+        }</code></pre>
+                    </div>
+                    <div class="warning"><strong>Nicht wie in Mathematik schreiben:</strong> <code>100 &lt; x &lt; 300</code> ist in Processing keine geeignete Bereichsprüfung. Formuliere zwei Vergleiche und verbinde sie mit <code>&amp;&amp;</code>.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-432">
+                    <h3>4.3.2 Logisches ODER: ||</h3>
+                    <p>Ein logisches ODER ist wahr, sobald <strong>mindestens eine</strong> Teilaussage wahr ist. Das Zeichen <code>|</code> erreichst du unter Windows meist mit <strong>Alt Gr + &lt;</strong>.</p>
+                    <table class="command-table">
+                      <thead><tr><th>A</th><th>B</th><th><code>A || B</code></th></tr></thead>
+                      <tbody>
+                        <tr><td>true</td><td>true</td><td><strong>true</strong></td></tr>
+                        <tr><td>true</td><td>false</td><td><strong>true</strong></td></tr>
+                        <tr><td>false</td><td>true</td><td><strong>true</strong></td></tr>
+                        <tr><td>false</td><td>false</td><td>false</td></tr>
+                      </tbody>
+                    </table>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Außerhalb des Fensters</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">if</span> (ballX &lt; <span class="num">0</span> || ballX &gt; width) {
+          <span class="fn">println</span>(<span class="string">"Der Ball ist außerhalb."</span>);
+        }</code></pre>
+                    </div>
+                  </section>
+
+                  <section class="lesson" id="sec-433">
+                    <h3>4.3.3 Logisches NICHT: !</h3>
+                    <p>Das Ausrufezeichen kehrt einen Wahrheitswert um: Aus <code>true</code> wird <code>false</code> und aus <code>false</code> wird <code>true</code>.</p>
+                    <table class="command-table">
+                      <thead><tr><th>A</th><th><code>!A</code></th></tr></thead>
+                      <tbody>
+                        <tr><td>true</td><td>false</td></tr>
+                        <tr><td>false</td><td><strong>true</strong></td></tr>
+                      </tbody>
+                    </table>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Beispiel: nicht pausiert</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">boolean</span> pausiert = <span class="kw">false</span>;
+
+        <span class="kw">if</span> (!pausiert) {
+          <span class="fn">println</span>(<span class="string">"Die Animation läuft."</span>);
+        }</code></pre>
+                    </div>
+                  </section>
+
+                  <section class="lesson" id="sec-434">
+                    <h3>4.3.4 Klammern und Priorität</h3>
+                    <p>Processing wertet zuerst <code>!</code>, dann <code>&amp;&amp;</code> und zuletzt <code>||</code> aus. Setze bei gemischten Ausdrücken trotzdem Klammern. Dadurch wird deine Absicht deutlich und Fehler lassen sich leichter vermeiden.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Lesbar geklammerte Bedingung</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">if</span> ((punkte &gt;= <span class="num">50</span> &amp;&amp; anwesend) || sonderregel) {
+          <span class="fn">println</span>(<span class="string">"Bedingung erfüllt"</span>);
+        }</code></pre>
+                    </div>
+                    <div class="explain">
+                      <div><strong>Normalfall:</strong> Mindestens 50 Punkte <em>und</em> Anwesenheit sind erforderlich.</div>
+                      <div><strong>Alternative:</strong> Eine aktive Sonderregel reicht ebenfalls aus.</div>
+                    </div>
+                  </section>
+
+                  <section class="lesson" id="sec-435">
+                    <h3>4.3.5 Beispiel: Ein Ball prallt an beiden Rändern ab</h3>
+                    <p>Am linken oder rechten Rand soll die Bewegungsrichtung wechseln. Beide Fälle führen dieselbe Anweisung aus und können deshalb mit ODER verbunden werden.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Richtungswechsel am Fensterrand</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> ballX = <span class="num">100</span>;
+        <span class="kw">int</span> geschwindigkeit = <span class="num">4</span>;
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">600</span>, <span class="num">300</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+          <span class="fn">ellipse</span>(ballX, height / <span class="num">2</span>, <span class="num">40</span>, <span class="num">40</span>);
+
+          ballX = ballX + geschwindigkeit;
+
+          <span class="kw">if</span> (ballX &lt; <span class="num">0</span> || ballX &gt; width) {
+            geschwindigkeit = -geschwindigkeit; <span class="com">// Richtung umkehren</span>
+          }
+        }</code></pre>
+                    </div>
+                    <div class="note"><strong>Vorzeichen umkehren:</strong> Aus 4 wird −4, beim nächsten Randkontakt wieder 4. Dadurch bewegt sich der Ball abwechselnd nach rechts und links.</div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-44">
+                <div class="chapter-head">
+                  <div class="chapter-number">4.4</div>
+                  <h2>Boolesche Variablen</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-441">
+                    <h3>4.4.1 true und false speichern</h3>
+                    <p>Eine Variable vom Datentyp <code>boolean</code> kann genau zwei Werte speichern: <code>true</code> oder <code>false</code>. Sie eignet sich besonders für Zustände mit zwei Möglichkeiten.</p>
+                    <table class="command-table">
+                      <thead><tr><th>Zustand</th><th>Mögliche Variable</th></tr></thead>
+                      <tbody>
+                        <tr><td>Animation läuft oder pausiert</td><td><code>boolean laeuft = true;</code></td></tr>
+                        <tr><td>Objekt sichtbar oder unsichtbar</td><td><code>boolean sichtbar = true;</code></td></tr>
+                        <tr><td>Licht an oder aus</td><td><code>boolean lichtAn = false;</code></td></tr>
+                      </tbody>
+                    </table>
+                  </section>
+
+                  <section class="lesson" id="sec-442">
+                    <h3>4.4.2 Eine boolesche Variable direkt als Bedingung</h3>
+                    <p>Eine boolesche Variable ist bereits eine vollständige Bedingung. Du musst sie nicht noch mit <code>true</code> vergleichen.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Play und Pause</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> ballX = <span class="num">0</span>;
+        <span class="kw">boolean</span> laeuft = <span class="kw">true</span>;
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+          <span class="fn">ellipse</span>(ballX, <span class="num">100</span>, <span class="num">40</span>, <span class="num">40</span>);
+
+          <span class="kw">if</span> (laeuft) {
+            ballX = ballX + <span class="num">3</span>;
+          }
+        }</code></pre>
+                    </div>
+                    <div class="remember"><strong>Kürzer und klarer:</strong> Schreibe <code>if (laeuft)</code> statt <code>if (laeuft == true)</code>.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-443">
+                    <h3>4.4.3 Einen Zustand umschalten</h3>
+                    <p>Mit dem NICHT-Operator kannst du einen Zustand bei jedem Tastendruck umkehren. Diese Technik nennt man auch <strong>Toggle</strong>.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Zwischen Play und Pause wechseln</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">void</span> <span class="fn">keyPressed</span>() {
+          laeuft = !laeuft; <span class="com">// true wird false und umgekehrt</span>
+        }</code></pre>
+                    </div>
+                    <div class="process-steps">
+                      <div class="process-step"><code>laeuft</code> enthält zunächst beispielsweise <code>true</code>.</div>
+                      <div class="process-step"><code>!laeuft</code> ergibt dann <code>false</code>.</div>
+                      <div class="process-step">Das Ergebnis wird wieder in <code>laeuft</code> gespeichert.</div>
+                    </div>
+                  </section>
+
+                  <section class="lesson" id="sec-444">
+                    <h3>4.4.4 Das Ergebnis eines Ausdrucks speichern</h3>
+                    <p>Auch das Ergebnis eines Vergleichs oder einer Verknüpfung kann in einer booleschen Variablen gespeichert werden.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Bereichsergebnis merken</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> ballX = <span class="num">180</span>;
+        <span class="kw">boolean</span> imBereich = <span class="kw">false</span>;
+
+        imBereich = ballX &gt; <span class="num">100</span> &amp;&amp; ballX &lt; <span class="num">300</span>;
+
+        <span class="kw">if</span> (imBereich) {
+          <span class="fn">println</span>(<span class="string">"Der Ball liegt im markierten Bereich."</span>);
+        }</code></pre>
+                    </div>
+                    <p>Die Variable macht eine längere Bedingung lesbarer und erlaubt es, das Ergebnis später an einer anderen Stelle erneut zu verwenden.</p>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-45">
+                <div class="chapter-head">
+                  <div class="chapter-number">4.5</div>
+                  <h2>Tastatur- und Maustasten unterscheiden</h2>
+                </div>
+                <div class="chapter-body">
+                  <section class="lesson" id="sec-451">
+                    <h3>4.5.1 Einmalige oder kontinuierliche Reaktion</h3>
+                    <p>Für Tastatur und Maus gibt es jeweils zwei unterschiedliche Möglichkeiten. Entscheidend ist, ob eine Aktion einmal beim Drücken oder dauerhaft während des Gedrückthaltens stattfinden soll.</p>
+                    <table class="command-table">
+                      <thead><tr><th>Gewünschte Reaktion</th><th>Tastatur</th><th>Maus</th></tr></thead>
+                      <tbody>
+                        <tr><td>einmal beim Drücken</td><td><code>keyPressed()</code></td><td><code>mousePressed()</code></td></tr>
+                        <tr><td>solange gedrückt</td><td><code>keyPressed</code> in <code>draw()</code></td><td><code>mousePressed</code> in <code>draw()</code></td></tr>
+                      </tbody>
+                    </table>
+                    <div class="warning"><strong>Klammern beachten:</strong> <code>keyPressed()</code> ist eine Ereignisfunktion. <code>keyPressed</code> ohne Klammern ist eine boolesche Systemvariable. Dasselbe gilt für <code>mousePressed()</code> und <code>mousePressed</code>.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-452">
+                    <h3>4.5.2 Buchstaben und andere Zeichen mit key</h3>
+                    <p>Die Systemvariable <code>key</code> enthält die zuletzt gedrückte Zeichentaste. Ein einzelnes Zeichen hat den Datentyp <code>char</code> und steht in <strong>einfachen</strong> Anführungszeichen.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Auf a und d reagieren</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> x = <span class="num">300</span>;
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+          <span class="fn">ellipse</span>(x, <span class="num">150</span>, <span class="num">40</span>, <span class="num">40</span>);
+
+          <span class="kw">if</span> (keyPressed) {
+            <span class="kw">if</span> (key == <span class="string">'a'</span>) {
+              x = x - <span class="num">3</span>; <span class="com">// nach links</span>
+            }
+            <span class="kw">if</span> (key == <span class="string">'d'</span>) {
+              x = x + <span class="num">3</span>; <span class="com">// nach rechts</span>
+            }
+          }
+        }</code></pre>
+                    </div>
+                    <div class="note"><strong>Groß- und Kleinschreibung:</strong> <code>'a'</code> und <code>'A'</code> sind zwei verschiedene Zeichen.</div>
+                  </section>
+
+                  <section class="lesson" id="sec-453">
+                    <h3>4.5.3 Pfeiltasten mit keyCode</h3>
+                    <p>Pfeiltasten erzeugen kein normales Schriftzeichen. Deshalb vergleichst du die Systemvariable <code>keyCode</code> mit Konstanten wie <code>LEFT</code>, <code>RIGHT</code>, <code>UP</code> oder <code>DOWN</code>.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Flüssige Steuerung mit Pfeiltasten</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> x = <span class="num">300</span>;
+
+        <span class="kw">void</span> <span class="fn">setup</span>() {
+          <span class="fn">size</span>(<span class="num">600</span>, <span class="num">300</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+          <span class="fn">ellipse</span>(x, <span class="num">150</span>, <span class="num">40</span>, <span class="num">40</span>);
+
+          <span class="kw">if</span> (keyPressed &amp;&amp; key == CODED) {
+            <span class="kw">if</span> (keyCode == LEFT) {
+              x = x - <span class="num">3</span>;
+            } <span class="kw">else if</span> (keyCode == RIGHT) {
+              x = x + <span class="num">3</span>;
+            }
+          }
+        }</code></pre>
+                    </div>
+                    <figure class="flowchart">
+                      <div class="flowchart-scroll">
+                        <svg viewBox="0 0 880 700" role="img" aria-labelledby="fc-keys-title fc-keys-desc">
+                          <title id="fc-keys-title">Flussdiagramm zur Steuerung mit Pfeiltasten</title>
+                          <desc id="fc-keys-desc">Zuerst wird geprüft, ob eine codierte Taste gedrückt ist. Danach wird zwischen linker und rechter Pfeiltaste unterschieden. Die x-Position wird entsprechend verändert oder bleibt unverändert.</desc>
+                          <defs>
+                            <marker id="arrow-keys" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                              <path class="fc-arrow" d="M0,0 L0,6 L9,3 z"></path>
+                            </marker>
+                          </defs>
+                          <ellipse class="fc-start" cx="360" cy="38" rx="116" ry="28"></ellipse>
+                          <text x="360" y="38">draw()-Durchlauf</text>
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M360 66 V86"></path>
+
+                          <polygon class="fc-decision" points="360,86 525,158 360,230 195,158"></polygon>
+                          <text x="360" y="145">Taste gedrückt und</text>
+                          <text x="360" y="171">Sondertaste?</text>
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M195 158 H100 V427"></path>
+                          <text class="fc-label" x="163" y="139">false</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M360 230 V254"></path>
+                          <text class="fc-label" x="390" y="240">true</text>
+                          <polygon class="fc-decision" points="360,254 505,318 360,382 215,318"></polygon>
+                          <text x="360" y="318">keyCode == LEFT?</text>
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M505 318 H570"></path>
+                          <text class="fc-label" x="538" y="299">true</text>
+                          <rect class="fc-process" x="570" y="285" width="200" height="66" rx="12"></rect>
+                          <text x="670" y="318">x = x − 3</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M360 382 V406"></path>
+                          <text class="fc-label" x="390" y="392">false</text>
+                          <polygon class="fc-decision" points="360,406 505,470 360,534 215,470"></polygon>
+                          <text x="360" y="470">keyCode == RIGHT?</text>
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M505 470 H570"></path>
+                          <text class="fc-label" x="538" y="451">true</text>
+                          <rect class="fc-process" x="570" y="437" width="200" height="66" rx="12"></rect>
+                          <text x="670" y="470">x = x + 3</text>
+
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M215 470 H180"></path>
+                          <text class="fc-label" x="197" y="451">false</text>
+                          <rect class="fc-process" x="20" y="437" width="160" height="66" rx="12"></rect>
+                          <text class="fc-small" x="100" y="461">Position</text>
+                          <text class="fc-small" x="100" y="484">bleibt gleich</text>
+
+                          <rect class="fc-end" x="260" y="610" width="200" height="64" rx="30"></rect>
+                          <text x="360" y="642">Kreis zeichnen</text>
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M670 351 H820 V642 H470"></path>
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M670 503 V642 H470"></path>
+                          <path class="fc-line" marker-end="url(#arrow-keys)" d="M100 503 V642 H250"></path>
+                        </svg>
+                      </div>
+                      <figcaption>Die verschachtelten Bedingungen bilden genau den Aufbau des Codes ab: erst Tastendruck prüfen, anschließend die konkrete Pfeiltaste unterscheiden.</figcaption>
+                    </figure>
+                    <p>Weil die Abfrage in <code>draw()</code> steht, bewegt sich der Kreis flüssig, solange eine Pfeiltaste gehalten wird.</p>
+                  </section>
+
+                  <section class="lesson" id="sec-454">
+                    <h3>4.5.4 Maustasten mit mouseButton</h3>
+                    <p>Innerhalb von <code>mousePressed()</code> kannst du mit <code>mouseButton</code> zwischen linker, rechter und mittlerer Maustaste unterscheiden.</p>
+                    <div class="code-card">
+                      <div class="code-bar"><span>Farbe mit Maustasten wählen</span><button class="copy-code" type="button">Code kopieren</button></div>
+                      <pre><code><span class="kw">int</span> rot = <span class="num">40</span>;
+        <span class="kw">int</span> gruen = <span class="num">150</span>;
+        <span class="kw">int</span> blau = <span class="num">220</span>;
+
+        <span class="kw">void</span> <span class="fn">draw</span>() {
+          <span class="fn">background</span>(<span class="num">235</span>);
+          <span class="fn">fill</span>(rot, gruen, blau);
+          <span class="fn">ellipse</span>(width / <span class="num">2</span>, height / <span class="num">2</span>, <span class="num">100</span>, <span class="num">100</span>);
+        }
+
+        <span class="kw">void</span> <span class="fn">mousePressed</span>() {
+          <span class="kw">if</span> (mouseButton == LEFT) {
+            rot = <span class="num">40</span>; gruen = <span class="num">150</span>; blau = <span class="num">220</span>;
+          } <span class="kw">else if</span> (mouseButton == RIGHT) {
+            rot = <span class="num">255</span>; gruen = <span class="num">140</span>; blau = <span class="num">40</span>;
+          }
+        }</code></pre>
+                    </div>
+                    <div class="remember"><strong>Mögliche Werte:</strong> Für <code>mouseButton</code> stehen die Konstanten <code>LEFT</code>, <code>RIGHT</code> und <code>CENTER</code> zur Verfügung.</div>
+                    <div class="note"><strong>Hinweis:</strong> Auf einem Touchpad oder Tablet steht nicht immer eine rechte oder mittlere Maustaste zur Verfügung. Die linke Maustaste beziehungsweise ein normaler Klick funktioniert am zuverlässigsten.</div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="chapter" id="sec-46">
+                <div class="chapter-head">
+                  <div class="chapter-number">4.6</div>
+                  <h2>Typische Fehler</h2>
+                </div>
+                <div class="chapter-body">
+                  <div class="mistakes">
+                    <article class="mistake">
+                      <h3>Ein Gleichheitszeichen statt zwei</h3>
+                      <p><code>x = 100</code> ist eine Zuweisung. Eine Gleichheitsprüfung wird mit <code>x == 100</code> geschrieben.</p>
+                    </article>
+                    <article class="mistake">
+                      <h3>Semikolon direkt hinter der Bedingung</h3>
+                      <p>Schreibe nicht <code>if (x &gt; 100);</code>. Das Semikolon beendet die Anweisung zu früh; der folgende Block gehört dann nicht wie beabsichtigt zum <code>if</code>.</p>
+                    </article>
+                    <article class="mistake">
+                      <h3>Geschweifte Klammern fehlen oder stehen falsch</h3>
+                      <p>Markiere jeden Code-Block mit <code>{</code> und <code>}</code> und lasse den Code automatisch formatieren. So werden falsche Verschachtelungen sichtbar.</p>
+                    </article>
+                    <article class="mistake">
+                      <h3>else if in ungünstiger Reihenfolge</h3>
+                      <p>Prüfe genaue oder hohe Grenzwerte zuerst. Eine früh erfüllte Bedingung verhindert, dass spätere Bedingungen noch geprüft werden.</p>
+                    </article>
+                    <article class="mistake">
+                      <h3>UND und ODER verwechselt</h3>
+                      <p><code>&amp;&amp;</code> verlangt zwei wahre Teilaussagen. Bei <code>||</code> reicht eine wahre Teilaussage.</p>
+                    </article>
+                    <article class="mistake">
+                      <h3>keyPressed() und keyPressed verwechselt</h3>
+                      <p>Mit Klammern ist es eine Ereignisfunktion. Ohne Klammern ist es ein Wahrheitswert, der während des Gedrückthaltens abgefragt werden kann.</p>
+                    </article>
+                    <article class="mistake">
+                      <h3>Falsche Anführungszeichen bei key</h3>
+                      <p><code>key</code> enthält ein einzelnes Zeichen. Deshalb vergleichst du mit <code>'a'</code> und nicht mit <code>"a"</code>.</p>
+                    </article>
+                    <article class="mistake">
+                      <h3>Eine exakte Position wird nie erreicht</h3>
+                      <p>Bei größeren Bewegungsschritten kann ein Wert über eine Grenze springen. Verwende am Rand meist <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code> oder <code>&lt;=</code> statt <code>==</code>.</p>
+                    </article>
+                  </div>
+                </div>
+              </section>
+
+              <section class="summary" id="sec-47">
+                <h2>4.7 Kurzfassung</h2>
+                <div class="summary-grid">
+                  <div class="summary-item"><strong>if</strong>Der Code-Block wird nur ausgeführt, wenn die Bedingung <code>true</code> ist.</div>
+                  <div class="summary-item"><strong>if–else</strong>Genau einer von zwei Code-Blöcken wird ausgeführt.</div>
+                  <div class="summary-item"><strong>else if</strong>Mehrere Bedingungen werden von oben nach unten geprüft.</div>
+                  <div class="summary-item"><strong>Vergleich</strong><code>==</code> prüft Gleichheit; <code>=</code> weist einen Wert zu.</div>
+                  <div class="summary-item"><strong>UND</strong><code>&amp;&amp;</code> ist nur wahr, wenn beide Teilaussagen wahr sind.</div>
+                  <div class="summary-item"><strong>ODER</strong><code>||</code> ist wahr, wenn mindestens eine Teilaussage wahr ist.</div>
+                  <div class="summary-item"><strong>NICHT</strong><code>!</code> kehrt einen Wahrheitswert um.</div>
+                  <div class="summary-item"><strong>boolean</strong>Speichert genau einen der Werte <code>true</code> oder <code>false</code>.</div>
+                  <div class="summary-item"><strong>Umschalten</strong><code>zustand = !zustand;</code> wechselt zwischen zwei Zuständen.</div>
+                  <div class="summary-item"><strong>Tastatur</strong><code>key</code> prüft Zeichentasten, <code>keyCode</code> besondere Tasten.</div>
+                  <div class="summary-item"><strong>Ereignis</strong><code>keyPressed()</code> und <code>mousePressed()</code> reagieren einmal beim Drücken.</div>
+                  <div class="summary-item"><strong>Dauerhafte Abfrage</strong><code>keyPressed</code> und <code>mousePressed</code> werden in <code>draw()</code> geprüft.</div>
+                </div>
+                <a class="back-top" href="#teil-4">↑ Zurück zum Kapitelanfang</a>
+              </section>
+    
+        <nav class="part-nav" aria-label="Navigation">
+          <a href="#tutorial-ueberblick">↑ Zurück zum Überblick</a>
+        </nav>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const toggles = Array.from(document.querySelectorAll('.toc-toggle'));
+
+      const setGroup = (button, open) => {
+        const submenu = document.getElementById(button.getAttribute('aria-controls'));
+        if (!submenu) return;
+        button.setAttribute('aria-expanded', String(open));
+        submenu.hidden = !open;
+      };
+
+      const siblingToggles = (button) => {
+        const item = button.parentElement;
+        const list = item && item.parentElement;
+        if (!list) return [];
+        return Array.from(list.children)
+          .filter((li) => li !== item)
+          .map((li) => li.querySelector(':scope > .toc-toggle'))
+          .filter(Boolean);
+      };
+
+      toggles.forEach((button) => {
+        button.addEventListener('click', () => {
+          const willOpen = button.getAttribute('aria-expanded') !== 'true';
+          siblingToggles(button).forEach((other) => {
+            if (other !== button) setGroup(other, false);
+          });
+          setGroup(button, willOpen);
+        });
+      });
+
+      const openAncestors = (link) => {
+        let node = link;
+        while (node) {
+          if (node.classList && node.classList.contains('toc-sub')) {
+            const owner = node.previousElementSibling;
+            if (owner && owner.classList.contains('toc-toggle')) setGroup(owner, true);
+          }
+          node = node.parentElement;
+        }
+      };
+
+      const markActive = () => {
+        const hash = window.location.hash.slice(1);
+        document.querySelectorAll('.toc a').forEach((link) => {
+          link.classList.toggle('is-active', hash !== '' && link.getAttribute('href') === '#' + hash);
+        });
+      };
+
+      const openCurrent = () => {
+        const hash = window.location.hash.slice(1);
+        if (!hash) return;
+        const link = document.querySelector('.toc a[href="#' + CSS.escape(hash) + '"]');
+        if (!link) return;
+        openAncestors(link);
+        markActive();
+      };
+
+      window.addEventListener('hashchange', openCurrent);
+      openCurrent();
+
+      document.querySelectorAll('.copy, .copy-code').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const box = button.closest('.codebox, .code-card');
+          const code = box ? box.querySelector('code').innerText : '';
+          const original = button.textContent;
+          try {
+            await navigator.clipboard.writeText(code);
+            button.textContent = 'Kopiert ✓';
+          } catch (error) {
+            button.textContent = 'Markieren & kopieren';
+          }
+          window.setTimeout(() => { button.textContent = original; }, 1800);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
